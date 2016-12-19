@@ -1,3 +1,4 @@
 ﻿  exam_0.cpp
+d:\park_seongho\c\exam_0\exam_0\exam_0.cpp(13): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   exam_0.vcxproj -> D:\park_seongho\c\exam_0\Debug\exam_0.exe
   exam_0.vcxproj -> D:\park_seongho\c\exam_0\Debug\exam_0.pdb (Full PDB)
