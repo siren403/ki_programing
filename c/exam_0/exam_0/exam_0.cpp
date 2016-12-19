@@ -57,7 +57,13 @@ int main()
 
 	while (1)
 	{
-		tInput = scanf_s("%d", &tInput);
+	
+		scanf_s("%d", &tInput);
+
+		if (9 == tInput)
+		{
+			break;
+		}
 	}
 
 	printf("==================\n");
