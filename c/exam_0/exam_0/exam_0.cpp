@@ -7,16 +7,17 @@
 //#include <random>
 #include <stdlib.h>
 
+//함수선언
+
+
 int main()
 {
 
 	srand(time(NULL));
 
-
 	//printf("Hello World\n");
 
 	//연산자
-	/*
 	int tA = 0;
 	int tB = 0;
 
@@ -39,30 +40,38 @@ int main()
 
 	tResult = (float)tA / tB;
 	printf("%f\n", tResult);
-	*/
+	
 
 	//반복문
 	/*
 	int ti = 0;
 	int tj = 0;
-	int tResult = 0;
+	//int tResult = 0;
 
-	for (ti = 1; ti <= 9; ti++)
+	for (ti = 1; ti < 8; ti+=3)
 	{
+
 		for (tj = 1; tj <= 9; tj++) 
 		{
-			tResult = ti * tj;
+			//tResult += ti;
 
-			printf("%d * %d", ti, tj);
-			printf("= %d", tResult);
-			printf("\n");
-		
+			//printf("%d * %d", ti, tj);
+			//printf(" = %d", tResult);
+			//printf("\n");
+			
+			printf("%d * %d = %d\t%d * %d = %d\t%d * %d = %d\n",
+				ti,tj,ti*tj,
+				ti+1,tj,(ti+1)*tj,
+				ti+2,tj,(ti+2)*tj);
 		}
+
+		printf("====================\n");
 	}
 	*/
 
 
 	//기본 미션
+	/*
 	int tInput = 0;
 	int ti = 0;
 	int tResult = 0;
@@ -119,10 +128,10 @@ int main()
 	}
 
 	printf("==================\n");
-
-	//int tInput = 0;
-	//scanf_s("%d", &tInput);
-
+	*/
+	int tInput = 0;
+	scanf_s("%d", &tInput);
+	
     return 0;
 }
 
