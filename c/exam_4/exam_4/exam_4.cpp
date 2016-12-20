@@ -19,9 +19,11 @@
 
 */
 
-int DoAlphaGoAction();
+int DoAlphaGoAction(int tMin, int tMax);
 int CheckWinner(int tPlayer, int tAlphaGo);
 void ShowAction(int tAction);
+void ShowWinner(int tWinner);
+
 
 int main()
 {
@@ -48,30 +50,16 @@ int main()
 			} while (0 > tPlayer || 3 <= tPlayer);//가위,바위,보 이외는 재입력
 
 
-			tAlphaGo = DoAlphaGoAction();
-
+			tAlphaGo = DoAlphaGoAction(0, 2);
 
 			printf("===플레이어===\n");
 			ShowAction(tPlayer);
 			printf("===알파고===\n");
 			ShowAction(tAlphaGo);
 
-
 			tWinner = CheckWinner(tPlayer, tAlphaGo);
 
-			switch (tWinner)
-			{
-			case 0:
-				printf("\n비겼습니다.\n");
-				break;
-			case 1:
-				printf("\n이겼습니다.\n");
-				break;
-			case 2:
-				printf("\n졌습니다.\n");
-				break;
-			}
-
+			ShowWinner(tWinner);
 		
 		}
 		else if (2 == tPlayer)
@@ -85,11 +73,11 @@ int main()
 }
 
 
-int DoAlphaGoAction()
+int DoAlphaGoAction(int tMin, int tMax)
 {
 	int tResult = 0;
 
-	tResult = rand() % 3 + 0;
+	tResult = rand() % (tMax + 1) + tMin;
 
 	return tResult;
 }
@@ -111,15 +99,26 @@ void ShowAction(int tAction)
 	}
 }
 
+//게임 결과에 따라 메세지 출력
+void ShowWinner(int tWinner)
+{
+	switch (tWinner)
+	{
+	case 0:
+		printf("\n비겼습니다.\n\n");
+		break;
+	case 1:
+		printf("\n이겼습니다.\n\n");
+		break;
+	case -1:
+		printf("\n졌습니다.\n\n");
+		break;
+	}
+}
 
-/*
-승자 판정
 
-Return:
-	1 Player Win
-	0 Draw
-	-1 AlphaGo Win
-*/
+
+//승자 판정
 int CheckWinner(int tPlayer, int tAlphaGo) 
 {
 	int tWinner = 0;
@@ -128,18 +127,14 @@ int CheckWinner(int tPlayer, int tAlphaGo)
 
 	switch (tResult)
 	{
-	case 0:
+	case 0://비김
 		tWinner = 0;
 		break;
-	case 1:
-		tWinner = 1;
-		break;
+	case 1://승리
 	case -2:
 		tWinner = 1;
 		break;
-	case -1:
-		tWinner = -1;
-		break;
+	case -1://패배
 	case 2:
 		tWinner = -1;
 		break;

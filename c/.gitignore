@@ -6,7 +6,9 @@
 Debug
 ipch
 *.db
-
+*.vcxproj
+*.vcxproj.filters
+*.sln
 
 ### C ###
 # Prerequisites
