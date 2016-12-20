@@ -2,9 +2,9 @@
 # Created by https://www.gitignore.io/api/c
 
 *.opendb
-/.vs
-/Debug
-/ipch
+.vs
+Debug
+ipch
 *.db
 
 
