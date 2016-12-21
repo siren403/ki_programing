@@ -58,12 +58,13 @@ int main()
 			}
 			else
 			{
-				//틀림 카운트 감소
+				//카운트 감소
 				tCurrentCount--;
 			
 				if (0 < tCurrentCount)
 				{
 					ShowHint(tPlayer, tAlphago, tAlphagoMaximumNumber);
+					EvaluateWithRetryCount(tCurrentCount);
 				}
 				else
 				{
@@ -134,5 +135,5 @@ char IsContinue()
 }
 void EvaluateWithRetryCount(int tCount)
 {
-
+	printf("기회가 %d번 남았습니다.", tCount);
 }

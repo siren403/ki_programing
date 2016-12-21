@@ -5,10 +5,8 @@
 .vs
 Debug
 ipch
-*.db
 *.vcxproj
-*.vcxproj.filters
-*.sln
+*.filters
 
 ### C ###
 # Prerequisites
