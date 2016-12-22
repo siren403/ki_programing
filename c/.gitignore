@@ -5,8 +5,7 @@
 .vs
 Debug
 ipch
-*.vcxproj
-*.filters
+
 
 ### C ###
 # Prerequisites
