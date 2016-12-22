@@ -30,7 +30,7 @@ int main()
 	SRectangle *tRectA = NULL;
 	SRectangle *tRectB = NULL;
 
-	tRectA = new SRectangle();
+	tRectA = new SRectangle();	
 	tRectB = new SRectangle();
 
 
