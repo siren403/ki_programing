@@ -12,9 +12,9 @@
 
 //State Values
 #define TITLE 0
-#define PLAY 1
-#define QUIT 2
-#define INIT 3
+#define INIT 1
+#define PLAY 2
+#define QUIT 3
 
 //Player,Monsters Kind
 #define KIND_PLAYER 11
@@ -76,16 +76,14 @@ int main()
 	Slime *tNormalSlime = NULL;
 	Slime *tBossSlime = NULL;
 
+
 	tPlayer = new Player();
 	tNormalSlime = new Slime();
 	tBossSlime = new Slime();
 
-	tPlayer->mHealth = 5;
 
-	tNormalSlime->mHealth = 5;
 	tNormalSlime->mDoBattle = DoNormalBattle;//주사위 게임
 
-	tBossSlime->mHealth = 10;
 	tBossSlime->mDoBattle = DoBossBattle;//가위,바위,보
 
 
@@ -97,12 +95,15 @@ int main()
 			tGameState = DisplayTitle();
 			break;
 		case INIT://재시작 시 초기화 값
+			tPlayer->mHealth = 5;
 			tPlayer->mCurrentHealth = tPlayer->mHealth;
 			tPlayer->mPower = 1;
 
+			tNormalSlime->mHealth = 5;
 			tNormalSlime->mCurrentHealth = tNormalSlime->mHealth;
 			tNormalSlime->mPower = 1;
 
+			tBossSlime->mHealth = 10;
 			tBossSlime->mCurrentHealth = tBossSlime->mHealth;
 			tBossSlime->mPower = 2;
 
@@ -406,6 +407,8 @@ char DoNormalBattle(Player *tPlayer, Slime *tSlime)
 		printf("================================================");
 		printf("\n\n");
 		tDiceNumber = DoThrowDice(6);
+
+		tDiceNumber = 4;//테스트
 
 		printf("\n\t   ");
 		printf("주사위 -> ");
