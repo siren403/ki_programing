@@ -7,6 +7,9 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define YES 'y'
+#define NO 'n'
+
 //State Values
 #define TITLE 0
 #define PLAY 1
@@ -41,7 +44,7 @@ struct Slime
 	char(*mDoBattle)(Player *tPlayer,Slime *tSlime) = NULL;
 };
 
-int DrawTitle();
+int DisplayTitle();
 void PlayerToMove(Player *tPlayer, int tMap[],int tIndex);
 void DrawMap(int tMap[]);
 char CheckSlimeEncount(Player *tPlayer, int tMap[]);
@@ -55,17 +58,18 @@ char DoBossBattle(Player *tPlayer, Slime *tSlime);
 char CheckCompareCard(int tPlayerCard, int tSlimeCard);
 void DisplayCard(int tCardValue);
 
-void DisplayHealth(int tHealth, int tCurrentHealth);
+void DisplayGauge(int tCurrentValue, int tMaxValue);
 
 
 int main()
 {
+	
 	srand(time(NULL));
 
 	int tGameState = TITLE;//게임시작 시 타이틀 상태
 	int tMap[MAP_LENGTH] = { 0 };//지정한 맵길이로 요소들 초기화
 	int tInput = 0;//Input입력 받는 변수
-	char tIsContinue = 'y';
+	char tIsContinue = YES;
 
 	Player *tPlayer = NULL;
 	Slime *tNormalSlime = NULL;
@@ -83,14 +87,13 @@ int main()
 	tBossSlime->mHealth = 10;
 	tBossSlime->mDoBattle = DoBossBattle;//가위,바위,보
 
-	
 
-	while ('n' != tIsContinue)
+	while (NO != tIsContinue)
 	{
 		switch (tGameState)
 		{
 		case TITLE://타이틀
-			tGameState = DrawTitle();
+			tGameState = DisplayTitle();
 			break;
 		case INIT://재시작 시 초기화 값
 			tPlayer->mCurrentHealth = tPlayer->mHealth;
@@ -116,7 +119,7 @@ int main()
 		case PLAY:
 			DrawMap(tMap);
 
-			if (CheckSlimeEncount(tPlayer, tMap))//Encount
+			if (CheckSlimeEncount(tPlayer, tMap))//적과 마주침
 			{
 				int tSlimeKind = 0;
 				Slime *tSlime = NULL;
@@ -126,12 +129,12 @@ int main()
 
 				if (tSlimeKind == KIND_NORMAL_SLIME)
 				{
-					printf("야생의 일반 슬라임이 나타났다.\n");
+					printf("\t[ 일반 슬라임이 나타났다. ]\n\n");
 					tSlime = tNormalSlime;
 				}
 				else if (tSlimeKind == KIND_BOSS_SLIME)
 				{
-					printf("야생의 보스 슬라임이 나타났다.\n");
+					printf("\t[ 보스 슬라임이 나타났다. ]\n\n");
 					tSlime = tBossSlime;
 				}
 
@@ -141,11 +144,14 @@ int main()
 				if (tInput == 1)
 				{
 					int tBattleResult = 0;
-					printf("전투가 시작했다!!\n");
+					//printf("\t[ 전투가 시작했다!! ]\n\n");
 					tBattleResult = tSlime->mDoBattle(tPlayer, tSlime);
 
 					if (tBattleResult == 1)//승리
 					{
+						//용사 체력 회복
+						tPlayer->mCurrentHealth = tPlayer->mHealth;
+
 						//슬라임이 있던 위치 초기화
 						tMap[tPlayer->mPosition + 1] = 0;
 						//다음 위치로 이동
@@ -153,25 +159,25 @@ int main()
 					}
 					else if (tBattleResult == 0)//패배
 					{
-						printf("용사는 죽었다...\n\n\n");
+						printf("\n\n\t\t[ 용사는 죽었다... ]\n\n\n");
 						
 						tGameState = QUIT;
 					}
 
-					printf("Input Any Key\n\n\n");
+					printf("Input Any Key\n");
 					cin >> tInput;
 				}
 				else if (tInput == 2)
 				{
-					printf("용사는 도망쳤다...\n");
+					printf("\t[ 용사는 도망쳤다... ]\n");
 					PlayerToMove(tPlayer, tMap, tPlayer->mPosition - 1);
 				}
 			}
-			else
+			else//적과 마주치지 않음
 			{
 				if (tPlayer->mPosition != MAP_LENGTH - 1)//맵 끝에 도달하지 않았으면
 				{
-					printf("어떻게 할까?\n");
+					printf("\t[ 어떻게 할까? ]\n\n");
 					printf("1.전진하기\n2.돌아가기\n");
 					cin >> tInput;
 
@@ -186,7 +192,7 @@ int main()
 				}
 				else
 				{
-					printf("게임을 클리어하였습니다.\n");
+					printf("\t[ 게임을 클리어하였습니다. ]\n\n");
 					printf("Input Any Key\n");
 					cin >> tInput;
 					tGameState = QUIT;
@@ -195,9 +201,9 @@ int main()
 
 			break;
 		case QUIT://종료
-			printf("계속하시겠습니까?(y/n): ");
+			printf("\n\n\n계속하시겠습니까?(y/n): ");
 			cin >> tIsContinue;
-			if ('y' == tIsContinue)
+			if (YES == tIsContinue)
 			{
 				tGameState = 0;
 			}
@@ -225,11 +231,12 @@ int main()
 	return 0;
 }
 
-int DrawTitle()
+int DisplayTitle()
 {
 	int tInput = 0;
 
-	printf("용사는 일차원\n\n");
+
+	printf("\n\n\t[ 용사는 일차원 ]\n\n\n");
 	printf("1.게임 시작\n");
 	printf("2.종료\n");
 
@@ -259,8 +266,8 @@ void PlayerToMove(Player *tPlayer, int tMap[], int tIndex)
 	{
 		int tInput = 0;
 
-		printf("이동 할 수 없다....\n");
-		printf("[Input Any Key] 계속\n");
+		printf("\t[ 이동 할 수 없다... ]\n");
+		printf("Input Any Key\n");
 		cin >> tInput;
 	}
 
@@ -270,31 +277,31 @@ void DrawMap(int tMap[])
 {
 	int ti = 0;
 
-	printf("==========================================");
-	printf("=========================================");
+	printf("====================================");
+	printf("====================================");
 	printf("\n==");
 	for (ti = 0; ti < MAP_LENGTH; ti++)
 	{
 		switch (tMap[ti])
 		{
 		case KIND_PLAYER:
-			printf("[   PLAYER   ]==");
+			printf("[  PLAYER  ]==");
 			break;
 		case KIND_NORMAL_SLIME:
-			printf("[    SLIME   ]==");
+			printf("[  SLIME   ]==");
 			break;
 		case KIND_BOSS_SLIME:
-			printf("[ BOSS SLIME ]==");
+			printf("[BOSS SLIME]==");
 			break;
 		case 0://없음
 		default:
-			printf("[            ]==");
+			printf("[          ]==");
 			break;
 		}
 	}
 	printf("\n");
-	printf("==========================================");
-	printf("=========================================");
+	printf("====================================");
+	printf("====================================");
 	printf("\n\n");
 
 }
@@ -328,39 +335,42 @@ char DoNormalBattle(Player *tPlayer, Slime *tSlime)
 
 	char tResult = 0;
 
-	printf("주사위 배틀\n\n");
-	printf("눈금이 4이상이면 용사가 공격!\n");
-	printf("눈금이 3이하면 슬라임이 공격한다.\n");
+	printf("\t\t[주사위 배틀]\n");
+	printf("\t눈금이 4이상이면 용사가 공격!\n");
+	printf("\t눈금이 3이하면 슬라임이 공격한다.\n\n");
 
 	while (1)
 	{
-		printf("[용사]");
-		DisplayHealth(tPlayer->mHealth, tPlayer->mCurrentHealth);
+		printf("\t[용사]");
+		DisplayGauge(tPlayer->mCurrentHealth, tPlayer->mHealth);
 		printf(" VS ");
 		printf("[슬라임]");
-		DisplayHealth(tSlime->mHealth, tSlime->mCurrentHealth);
+		DisplayGauge(tSlime->mCurrentHealth, tSlime->mHealth);
 		printf("\n\n");
 
 		printf("1. 주사위를 던진다.\n");
 		cin >> tInput;
 
-		//tDiceNumber = DoThrowDice(6);
-		tDiceNumber = 4;
+		printf("================================================\n\n");
+		tDiceNumber = DoThrowDice(6);
 
-		printf("눈금 : %d\n", tDiceNumber);
+		printf("\n\t   주사위 -> ");
+		DisplayGauge(tDiceNumber, 6);
+		printf("\n\n");
 
 		if (4 <= tDiceNumber)//4이상 승리
 		{
-			printf("공격!!! ");
-			printf("용사가 적에게 %d만큼 피해를 입혔다.\n", tPlayer->mPower);
+			printf("\t공격!!!");
+			printf("용사가 적에게 %d만큼 피해를 입혔다.\n\n", tPlayer->mPower);
 			DoAttack(tPlayer->mPower,&tSlime->mCurrentHealth);
 			if (tSlime->mCurrentHealth == 0)
 			{
-				printf("슬라임을 잡았다!!\n");
+				printf("\n\t\t[ 슬라임을 잡았다!! ]\n\n");
 
-				if (DoThrowDice(3) <= 1)
+				if (DoThrowDice(3) <= 3)
 				{
-					printf("용사가 강해졌다.\n");
+					printf("\t\t[ 용사가 강해졌다. ]\n\n");
+					tPlayer->mHealth += 2;
 					tPlayer->mPower += 2;
 				}
 				tResult = 1;
@@ -369,13 +379,14 @@ char DoNormalBattle(Player *tPlayer, Slime *tSlime)
 		}
 		else if (3 >= tDiceNumber)//3이하 패배
 		{
-			printf("슬라임이 %d만큼 피해를 입혔다.\n", tSlime->mPower);
+			printf("\t슬라임이 %d만큼 피해를 입혔다.\n\n", tSlime->mPower);
 			DoAttack(tSlime->mPower, &tPlayer->mCurrentHealth);
 			if (tPlayer->mCurrentHealth == 0)
 			{
 				break;
 			}
 		}
+
 	}
 
 	return tResult;
@@ -399,54 +410,57 @@ char DoBossBattle(Player *tPlayer, Slime *tSlime)
 
 	char tResult = 0;
 
-	printf("가위,바위,보 게임\n\n");
-	printf("가위,바위,보를 내서 이긴쪽이 공격한다!\n\n");
+	printf("\n\t\t[ 가위,바위,보 게임 ]\n\n");
+	printf("\t가위,바위,보를 내서 이긴쪽이 공격한다!\n\n\n");
 
 	while (1)
 	{
 		printf("[용사]");
-		DisplayHealth(tPlayer->mHealth, tPlayer->mCurrentHealth);
+		DisplayGauge(tPlayer->mCurrentHealth, tPlayer->mHealth);
 		printf(" VS ");
 		printf("[보스 슬라임]");
-		DisplayHealth(tSlime->mHealth, tSlime->mCurrentHealth);
+		DisplayGauge(tSlime->mCurrentHealth, tSlime->mHealth);
 		printf("\n\n");
 
-		printf("[1]:가위, [2]:바위, [3]:보\n");
+		printf("[1]:가위, [2]:바위, [3]:보\n\n");
 		printf("선택하세요 : ");
 		cin >> tPlayerCard;
+		printf("\n================================================\n");
+
 
 		tSlimeCard = DoThrowDice(3);
 
 		tCompareResult = CheckCompareCard(tPlayerCard, tSlimeCard);
 
-		printf("\n");
+		printf("\n\t\t");
 		printf("[용사]");
 		DisplayCard(tPlayerCard);
 		printf(" vs ");
 		DisplayCard(tSlimeCard);
 		printf("[슬라임]");
-		printf("\n");
+		printf("\n\n");
 
+		
 		if (0 == tCompareResult)//무승부
 		{
-			printf("비겼습니다.\n");
+			printf("\t\t\t비겼습니다.\n\n");
 		}
 		else if (1 == tCompareResult)//승리
 		{
-			printf("승리!!! ");
-			printf("용사가 적에게 %d만큼 피해를 입혔다.\n", tPlayer->mPower);
+			printf("\t승리!!");
+			printf("용사가 적에게 %d만큼 피해를 입혔다.\n\n", tPlayer->mPower);
 			DoAttack(tPlayer->mPower, &tSlime->mCurrentHealth);
 			if (tSlime->mCurrentHealth == 0)
 			{
-				printf("보스 슬라임을 잡았다!!\n");
+				printf("\n\t\t[ 슬라임을 잡았다!! ]\n\n");
 				tResult = 1;
 				break;
 			}
 		}
 		else if (2 == tCompareResult)//패배
 		{
-			printf("패배... ");
-			printf("보스 슬라임이 %d만큼 피해를 입혔다.\n", tSlime->mPower);
+			printf("\t패배...");
+			printf("보스 슬라임이 %d만큼 피해를 입혔다.\n\n", tSlime->mPower);
 			DoAttack(tSlime->mPower, &tPlayer->mCurrentHealth);
 			if (tPlayer->mCurrentHealth == 0)
 			{
@@ -528,15 +542,15 @@ void DisplayCard(int tCardValue)
 }
 
 
-void DisplayHealth(int tHealth, int tCurrentHealth)
+void DisplayGauge(int tCurrentValue, int tMaxValue)
 {
 	int ti = 0;
 
-	for (ti = 0; ti < tCurrentHealth; ti++)
+	for (ti = 0; ti < tCurrentValue; ti++)
 	{
 		printf("■");
 	}
-	for (ti = 0; ti < tHealth - tCurrentHealth; ti++)
+	for (ti = 0; ti < tMaxValue - tCurrentValue; ti++)
 	{
 		printf("□");
 	}  
