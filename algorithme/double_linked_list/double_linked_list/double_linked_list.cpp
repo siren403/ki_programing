@@ -16,18 +16,58 @@ struct Node
 Node *tHead, *tEnd, *temp;
 Node *temp1, *temp2, *temp3, *temp4;
 
-void Intialize(void);
+void Initialize(void);
 void InsertNode(Node *);
 void DeleteNode(Node *);
 
 int main()
 {
-	
+	Node *ptr = NULL;
+	int i = 0;
+	Initialize();
+
+	cout << "노드 C의 삽입 전 " << endl;
+	ptr = tHead->Next;
+
+	for (i = 0; i < 4; i++)
+	{
+		cout << ptr->Data;
+		ptr = ptr->Next;
+	}
+
+	//삽입할 새로운 노드 생성
+	temp = new Node();
+	temp->Data = 'C';
+
+	//노드의 삽입
+	InsertNode(temp);
+
+	cout << "노드 C의 삽입 후 " << endl;
+	ptr = tHead->Next;
+
+	for (i = 0; i < 5; i++)
+	{
+		cout << ptr->Data;
+		ptr = ptr->Next;
+	}
+
+	//노드의 삭제
+	DeleteNode(temp);
+
+
+	cout << "노드 C의 삭제 후 " << endl;
+	ptr = tHead->Next;
+
+	for (i = 0; i < 4; i++)
+	{
+		cout << ptr->Data;
+		ptr = ptr->Next;
+	}
 
     return 0;
 }
 
-void Intialize(void)
+void Initialize(void)
 {
 
 	Node *ptr = NULL;
@@ -88,7 +128,6 @@ void InsertNode(Node *ptr)
 	indexptr->Next = ptr;
 	ptr->Prev = indexptr;
 }
-
 
 void DeleteNode(Node *ptr)
 {
