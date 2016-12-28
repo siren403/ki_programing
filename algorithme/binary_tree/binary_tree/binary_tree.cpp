@@ -2,20 +2,16 @@
 //
 
 #include "stdafx.h"
+#include "Tree.h"
+
 #include <iostream>
-
-struct Node
-{
-	char Data = 0;
-	Node *Left = NULL;
-	Node *Right = NULL;
-
-};
-
-using namespace std;
 
 int main()
 {
+	Tree tTree;
+
+	tTree.MakeTree();
+	tTree.Traverse();
 
 
     return 0;
