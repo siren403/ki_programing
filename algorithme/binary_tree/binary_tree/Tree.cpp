@@ -109,12 +109,14 @@ void Tree::MakeTree()
 	mRightChild->SetRight(mEndNode);
 
 	mParent->SetLeft(mLeftChild);
-	mParent->SetLeft(mRightChild);
+	mParent->SetRight(mRightChild);
 
 }
 
-void Tree::Traverse(Node * ptrNode)
+void Tree::Traverse()
 {
+	Node *ptrNode = mHeadNode->GetLeft();
+
 	mStack->Push(ptrNode);
 
 	while (!mStack->IsStackEmpty())
@@ -136,5 +138,5 @@ void Tree::Traverse(Node * ptrNode)
 
 void Tree::Visit(Node *ptrNode)
 {
-	cout << ptrNode->GetData() << " -> " << endl;
+	cout << ptrNode->GetData() << " -> " << ends;
 }

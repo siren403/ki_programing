@@ -18,7 +18,7 @@ public:
 	~Tree();
 
 	void MakeTree();
-	void Traverse(Node *ptrNode);
+	void Traverse();
 	void Visit(Node *);
 };
 

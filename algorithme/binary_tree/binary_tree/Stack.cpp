@@ -22,8 +22,10 @@ void Stack::InitializeStack()
 void Stack::Push(Node *ptrNode)
 {
 	mStackArray[mTop] = ptrNode;
-	mTop = (mTop++) % MAX;//??
-	cout << "mTop : " << mTop << endl;
+	//mTop = (mTop++) % MAX;//??
+	mTop = mTop % MAX;
+	mTop += 1;
+	//cout << "mTop : " << mTop << ends;
 }
 
 Node* Stack::Pop()
