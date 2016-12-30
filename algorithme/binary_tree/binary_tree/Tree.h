@@ -18,7 +18,14 @@ public:
 	~Tree();
 
 	void MakeTree();
-	void Traverse();
+	
+	void Traverse();//전위 순회
+	
+	void RecursiveTraverse(Node *ptrNode);//재귀호출 중위 순회
+	void StackTraverse();//스택 중위순회
+
 	void Visit(Node *);
+
+	Node *GetHeadNode();
 };
 

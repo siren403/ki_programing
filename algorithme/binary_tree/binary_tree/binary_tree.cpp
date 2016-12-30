@@ -6,12 +6,18 @@
 
 #include <iostream>
 
+using namespace std;
+
 int main()
 {
 	Tree tTree;
 
 	tTree.MakeTree();
-	tTree.Traverse();
+	//tTree.Traverse();
+
+	tTree.RecursiveTraverse(tTree.GetHeadNode()->GetLeft());
+	cout << endl;
+	tTree.StackTraverse();
 
 
     return 0;

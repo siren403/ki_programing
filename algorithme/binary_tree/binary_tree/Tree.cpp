@@ -134,9 +134,53 @@ void Tree::Traverse()
 			mStack->Push(ptrNode->GetLeft());
 		}
 	}
+
 }
+
+void Tree::RecursiveTraverse(Node *ptrNode)
+{
+	//Node *ptrNode = mHeadNode->GetLeft();
+	if (ptrNode != mEndNode)
+	{
+		RecursiveTraverse(ptrNode->GetLeft());
+		Visit(ptrNode);
+		RecursiveTraverse(ptrNode->GetRight());
+	}
+}
+
+void Tree::StackTraverse()
+{
+	int Finish = 0;
+	Node *ptrNode = mHeadNode->GetLeft();
+	do 
+	{
+		while (ptrNode != mEndNode)
+		{
+			mStack->Push(ptrNode);
+			ptrNode = ptrNode->GetLeft();
+		}
+
+		if (!mStack->IsStackEmpty())
+		{
+			ptrNode = mStack->Pop();
+			Visit(ptrNode);
+			ptrNode = ptrNode->GetRight();
+		}
+		else
+		{
+			Finish = 1;
+		}
+	} while (!Finish);
+}
+
+
 
 void Tree::Visit(Node *ptrNode)
 {
 	cout << ptrNode->GetData() << " -> " << ends;
+}
+
+Node * Tree::GetHeadNode()
+{
+	return mHeadNode;
 }
