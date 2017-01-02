@@ -3,21 +3,20 @@
 #include "stdafx.h"
 
 #include <conio.h>//console and port I/O 키입력
-#include <iostream>
 #include <Windows.h>
+#include <iostream>
 
 #include <time.h>
 
 #include "Player.h"
 #include "Enemy.h"
-#include "Bullet.h"
+#include "EnemyBullet.h"
+
+#include "gamesettings.h"
+
+
 
 using namespace std;
-
-#define WIDTH 80
-#define HEIGHT 24
-
-
 
 void ClearScreen(int tX, int tY);
 
@@ -25,32 +24,26 @@ void ClearScreen(int tX, int tY);
 int main()
 {
 	//Create
+
 	srand((unsigned int)time(NULL));
 
 	char tPixel[HEIGHT][WIDTH] = { 0 };
 
+
 	CPlayer tPlayer;
-	CEnemy tEnemy;
-	CBullet tPlayerBullet;
-	CBullet tEnemyBullet;
+	CEnemy tEnemys[TOTAL_ENEMY_COUNT];
 
 
 	int tRow = 0;
 	int tCol = 0;
-
+	int ti = 0;
 
 	//Setup
-	tPlayer.SetUp(WIDTH, HEIGHT);
-	tEnemy.SetUp(WIDTH, HEIGHT);
-	tPlayerBullet.SetUp(WIDTH, HEIGHT);
-	tEnemyBullet.SetUp(WIDTH, HEIGHT);
-
-	tEnemyBullet.SetX(WIDTH / 2);
-	tEnemyBullet.SetY(1);
-	tEnemyBullet.SetDir(CBullet::DIR_DOWN);
-	tPlayerBullet.SetX(WIDTH / 2);
-	tPlayerBullet.SetY(HEIGHT - 1 - 1);
-	tPlayerBullet.SetDir(CBullet::DIR_UP);
+	tPlayer.SetUp(WIDTH / 3, HEIGHT - 1);
+	tEnemys[0].SetUp(0 + 5, 0);
+	tEnemys[1].SetUp(WIDTH - 5, 0);
+	tEnemys[0].SetPlayer(&tPlayer);
+	tEnemys[1].SetPlayer(&tPlayer);
 
 
 	//Display Title
@@ -65,26 +58,11 @@ int main()
 	{
 		//Clean
 		tPlayer.Clean(*tPixel);
-		tEnemy.Clean(*tPixel);
-
-		tPlayerBullet.Clean(*tPixel);
-		tEnemyBullet.Clean(*tPixel);
-
-
-		//Update
-		int tFire = rand() % 6 + 1;
-		if (tEnemyBullet.GetIsLife() == false && 1 == tFire)
+		for (ti = 0; ti < TOTAL_ENEMY_COUNT; ti++)
 		{
-			//발사지점
-			tEnemyBullet.SetX(tEnemy.GetX());
-			tEnemyBullet.SetY(1);
+			tEnemys[ti].Clean(&tPixel[0][0]);
 
-			//발사됐는지 여부
-			tEnemyBullet.Shot();
 		}
-
-		tEnemy.Move();
-		
 		
 		tKey = 0;
 		if (0 != _kbhit())//입력된 키가 있으면
@@ -96,41 +74,26 @@ int main()
 			{
 			case 'Q':
 			case 'q':
-			{
 				tIsEnd = true;
+				break;
 			}
-			break;
-
-		
-			case 'M':
-			case 'm':
-			{
-				//발사지점
-				tPlayerBullet.SetX(tPlayer.GetX());
-				tPlayerBullet.SetY(HEIGHT - 1 - 1);
-
-				//발사됐는지 여부
-				tPlayerBullet.Shot();
-			}
-
-			}
-
-			tPlayer.MoveActorWithInput(tKey);
 		}
 
+		tPlayer.Update();
+		for (ti = 0; ti < TOTAL_ENEMY_COUNT; ti++)
+		{
+			tEnemys[ti].Update();
+		}
 
-		
-		tPlayerBullet.Move();
-		tEnemyBullet.Move();
 
 		//Display
 		ClearScreen(0, 0);
 
 		tPlayer.Display(*tPixel);
-		tEnemy.Display(*tPixel);
-
-		tPlayerBullet.Display(*tPixel);
-		tEnemyBullet.Display(*tPixel);
+		for (ti = 0; ti < TOTAL_ENEMY_COUNT; ti++)
+		{
+			tEnemys[ti].Display(&tPixel[0][0]);
+		}
 
 		for (tRow = 0; tRow < HEIGHT; tRow++)
 		{
@@ -138,6 +101,32 @@ int main()
 			{
 				cout << tPixel[tRow][tCol];
 			}
+		}
+
+		//collision
+
+		for (ti = 0; ti < TOTAL_ENEMY_COUNT; ti++)
+		{
+			if (true == tPlayer.DoCollisionBulletWithEnemy(&tEnemys[ti]))
+			{
+				//todo...
+
+				break;
+			}
+
+			//todo : boss...
+		}
+
+		for (ti = 0; ti < TOTAL_ENEMY_COUNT; ti++)
+		{
+			if (true == tEnemys[ti].DoCollisionBulletWithActor(&tPlayer))
+			{
+				//todo...
+
+				break;
+			}
+
+			//todo : boss...
 		}
 
 		if (true == tIsEnd)

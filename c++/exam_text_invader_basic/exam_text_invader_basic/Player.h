@@ -1,15 +1,28 @@
 #pragma once
 #include "Character.h"
+#include "PlayerBullet.h"
+#include "gamesettings.h"
+
+class CEnemy;
+
 class CPlayer :
 	public CCharacter
 {
+private:
+	char mKey = 0;
+	CPlayerBullet *mPlayerBullets = NULL;
+	int mCurBulletIndex = 0;
+
 public:
 	CPlayer();
-	~CPlayer();
+	virtual ~CPlayer();
 
-	virtual void SetUp(int tWidth, int tHeight) override;
+
 	virtual void Display(char *tpPixel) override;
+	virtual void Update() override;
+	virtual void Clean(char *tpPixel) override;
 
-	void MoveActorWithInput(char tKey);
+	bool DoCollisionBulletWithEnemy(CEnemy *pEnemy);
+
 };
 

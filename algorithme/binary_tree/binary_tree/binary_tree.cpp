@@ -17,7 +17,7 @@ int main()
 
 	tTree.RecursiveTraverse(tTree.GetHeadNode()->GetLeft());
 	cout << endl;
-	tTree.StackTraverse();
+	tTree.RearStackTraverse();
 
 
     return 0;

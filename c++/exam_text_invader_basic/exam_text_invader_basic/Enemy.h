@@ -1,22 +1,29 @@
 #pragma once
 #include "Character.h"
-
+#include "EnemyBullet.h"
 #define DIR_LEFT 0
 #define DIR_RIGHT 1
+
 
 class CEnemy :
 	public CCharacter
 {
-private:
-	int mDir = 0;
+protected:
+	CEnemyBullet *mEnemyBullets = NULL;
+	int mCurBulletIndex = 0;
+
+	unsigned int mDelay = 0;
+	unsigned int mTemp = 0;
+
 public:
 	CEnemy();
-	~CEnemy();
+	virtual ~CEnemy();
 
-	virtual void SetUp(int tWidth, int tHeight) override;
 	virtual void Display(char *tpPixel) override;
-
-	void Move();
-
+	virtual void Update() override;
+	virtual void Clean(char *tpPixel) override;
+	
+	void SetPlayer(CPlayer *tPlayer);
+	bool DoCollisionBulletWithActor(CPlayer *pPlayer);
 };
 

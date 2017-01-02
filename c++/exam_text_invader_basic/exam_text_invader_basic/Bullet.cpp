@@ -1,8 +1,11 @@
 #include "stdafx.h"
 #include "Bullet.h"
+#include "gamesettings.h"
+#include "Enemy.h"
 
 CBullet::CBullet()
 {
+	mMark = '*';
 }
 
 
@@ -12,48 +15,28 @@ CBullet::~CBullet()
 
 void CBullet::Display(char * tpPixel)
 {
-	char tChar = 0;
-
-	switch (mDir)
+	if (mIsAlive)
 	{
-	case DIR_DOWN:
-		tChar = '|';
-		break;
-	case DIR_UP:
-		tChar = '*';
-		break;
-	}
-
-	*(tpPixel + mY*mWidth + mX) = tChar;
-}
-
-void CBullet::Shot()
-{
-	mIsLife = true;
-}
-
-void CBullet::Move()
-{
-	if (true == mIsLife)
-	{
-		if (mY < mHeight - 1 || mY > 0)
-		{
-			mY = mY + mDir;
-		}
-		else
-		{
-			mIsLife = false;
-		}
+		*(tpPixel + mY*WIDTH + mX) = mMark;
 	}
 }
 
-void CBullet::SetDir(int tDir)
+void CBullet::SetPositionForFire(int tX, int tY)
 {
-	mDir = tDir;
+	mX = tX;
+	mY = tY;
 }
 
-bool CBullet::GetIsLife()
+
+
+void CBullet::SetAlive(bool tAlive)
 {
-	return mIsLife;
+	mIsAlive = tAlive;
+}
+
+
+bool CBullet::GetAlive()
+{
+	return mIsAlive;
 }
 

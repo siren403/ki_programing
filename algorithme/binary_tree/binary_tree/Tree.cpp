@@ -143,12 +143,13 @@ void Tree::RecursiveTraverse(Node *ptrNode)
 	if (ptrNode != mEndNode)
 	{
 		RecursiveTraverse(ptrNode->GetLeft());
-		Visit(ptrNode);
+		//Visit(ptrNode);//중위
 		RecursiveTraverse(ptrNode->GetRight());
+		Visit(ptrNode);//후위
 	}
 }
 
-void Tree::StackTraverse()
+void Tree::MediumStackTraverse()
 {
 	int Finish = 0;
 	Node *ptrNode = mHeadNode->GetLeft();
@@ -174,6 +175,62 @@ void Tree::StackTraverse()
 }
 
 
+
+
+void Tree::RearStackTraverse()
+{
+	int finish = 0;
+	Node *ptrNode = mHeadNode->GetLeft();
+	Node *ptrVisited = mEndNode;
+	Node *ptrPushed = mEndNode;
+
+	do
+	{
+		while (ptrNode != mEndNode && ptrNode != ptrVisited)
+		{
+			if (ptrNode != ptrPushed)
+			{
+				mStack->Push(ptrNode);
+			}
+
+			if (ptrNode->GetRight() != mEndNode)
+			{
+				mStack->Push(ptrNode->GetRight());
+			}
+			if (ptrNode->GetLeft() != mEndNode)
+			{
+				mStack->Push(ptrNode->GetLeft());
+			}
+
+			ptrPushed = ptrNode->GetLeft();
+			ptrNode = ptrNode->GetLeft();
+		}
+	
+		if (!mStack->IsStackEmpty())
+		{
+			ptrNode = mStack->Pop();
+
+			if (ptrNode->GetLeft() != mEndNode && ptrNode->GetRight() == mEndNode &&
+				ptrNode->GetLeft() != ptrVisited)
+			{
+				mStack->Push(ptrNode);
+				ptrNode = ptrNode->GetLeft();
+			}
+
+			if (ptrNode->GetRight() == mEndNode || ptrNode->GetRight() == ptrVisited)
+			{
+				Visit(ptrNode);
+				ptrVisited = ptrNode;
+			}
+		}
+		else
+		{
+			finish = 1;
+		}
+
+	} while (!finish);
+
+}
 
 void Tree::Visit(Node *ptrNode)
 {

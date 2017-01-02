@@ -144,10 +144,6 @@ int main()
 
 
 
-
-
-
-
 	int tInput = 0;
 	cin >> tInput;
 

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Character.h"
-
-
+#include "gamesettings.h"
+#include <math.h>
 CCharacter::CCharacter()
 {
 }
@@ -11,15 +11,19 @@ CCharacter::~CCharacter()
 {
 }
 
-void CCharacter::SetUp(int tWidth, int tHeight)
+void CCharacter::SetUp(int tX, int tY)
 {
-	mWidth = tWidth;
-	mHeight = tHeight;
+	mX = tX;
+	mY = tY;
+}
+
+void CCharacter::Update()
+{
 }
 
 void CCharacter::Clean(char * tpPixel)
 {
-	*(tpPixel + mY*mWidth + mX) = 0;
+	*(tpPixel + mY*WIDTH + mX) = 0;
 }
 
 int CCharacter::GetX()
