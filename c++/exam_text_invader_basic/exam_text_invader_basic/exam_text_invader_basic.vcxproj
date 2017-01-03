@@ -148,6 +148,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="EnemyBulletHoming.h" />
     <ClInclude Include="EnemyBulletNormal.h" />
+    <ClInclude Include="EnemyBulletPattern.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Enemy.h" />
@@ -162,6 +163,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="EnemyBulletHoming.cpp" />
     <ClCompile Include="EnemyBulletNormal.cpp" />
+    <ClCompile Include="EnemyBulletPattern.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="Enemy.cpp" />

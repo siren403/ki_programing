@@ -18,14 +18,14 @@ public:
 	virtual void Update();
 	virtual void Display(char *tpPixel) = 0;
 	virtual void Clean(char *tpPixel);
+	virtual void SetAlive(bool tAlive);
+	virtual bool GetAlive();
+
 
 	int GetX();
 	void SetX(int);
 	int GetY();
 	void SetY(int);
-
-	void SetAlive(bool tAlive);
-	bool GetAlive();
 
 	virtual void Destroy() = 0;
 };

@@ -3,6 +3,19 @@
 #include "config.h"
 #include "Enemy.h"
 
+bool CBullet::IsScreenOut()
+{
+	bool tResult = false;
+
+	if (mX < 0 || mX > WIDTH - 1
+		|| mY < 0 || mY > HEIGHT - 1)
+	{
+		tResult = true;
+	}
+
+	return false;
+}
+
 CBullet::CBullet()
 {
 }

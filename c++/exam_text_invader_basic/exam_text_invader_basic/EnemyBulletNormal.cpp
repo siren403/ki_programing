@@ -1,9 +1,21 @@
 #include "stdafx.h"
 #include "EnemyBulletNormal.h"
+#include <iostream>
 
+using namespace std;
 
 CEnemyBulletNormal::CEnemyBulletNormal()
 {
+	mSpeedPower = 2;
+	mDirX = 0;
+	mDirY = 1;
+}
+
+CEnemyBulletNormal::CEnemyBulletNormal(int tDirX, int tDirY, int tSpeedPower)
+{
+	mDirX = tDirX;
+	mDirY = tDirY;
+	mSpeedPower = tSpeedPower;
 }
 
 
@@ -15,11 +27,14 @@ void CEnemyBulletNormal::Update()
 {
 	if (mIsAlive)
 	{
-		mY = mY + 1;
+		mX = mX + mDirX * mSpeedPower;
+		mY = mY + mDirY * mSpeedPower;
+
+		if (IsScreenOut())
+		{
+			mIsAlive = false;
+			//cout << "Is Out Bullet" << endl;
+		}
 	}
 }
 
-bool CEnemyBulletNormal::DoCollisionWithActor(CActor * pPlayer)
-{
-	return CEnemyBullet::DoCollisionWithActor(pPlayer);
-}

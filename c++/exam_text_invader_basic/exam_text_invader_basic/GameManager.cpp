@@ -7,6 +7,9 @@
 
 #include <time.h>
 
+#include "EnemyBulletNormal.h"
+#include "EnemyBulletPattern.h"
+
 GameManager::GameManager()
 {
 	srand((unsigned int)time(NULL));
@@ -18,7 +21,7 @@ GameManager::GameManager()
 	mStateActions[GameManager::STATE_DISPLAY] = &GameManager::Display;
 	mStateActions[GameManager::STATE_QUIT] = &GameManager::Quit;
 
-	mCurrentState = GameManager::STATE_TITLE;
+	mCurrentState = GameManager::STATE_INIT;
 
 }
 
@@ -34,11 +37,17 @@ void GameManager::Init()
 
 	mEnemys.reserve(5);
 	mEnemys.push_back(new CEnemy());
-	//tEnemys[0]->SetUp(0 + 5, 0);
-	mEnemys[0]->SetUp(WIDTH / 3, 0);
+	mEnemys.back()->SetUp(WIDTH / 2, 0);
 
+	CEnemyBulletPattern *tpBulletPattern = NULL;
 
+	tpBulletPattern = new CEnemyBulletPattern();
+	tpBulletPattern
+		->AddBullet(new CEnemyBulletNormal(1, 1, 2))
+		.AddBullet(new CEnemyBulletNormal(-1, 1, 2))
+		.AddBullet(new CEnemyBulletNormal(0, 1, 2));
 
+	mEnemys.back()->AddBullet(tpBulletPattern);
 
 
 	mCurrentState = GameManager::STATE_TITLE;
@@ -147,8 +156,6 @@ void GameManager::Quit()
 	}
 
 	//delete ...
-
-
 }
 
 

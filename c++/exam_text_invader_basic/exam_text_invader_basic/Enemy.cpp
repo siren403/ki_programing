@@ -10,17 +10,9 @@
 CEnemy::CEnemy()
 {
 	mEnemyBullets.reserve(ENEMY_BULLET_COUNT);
-
-	int ti = 0;
-	for (ti = 0; ti < ENEMY_BULLET_COUNT; ti++)
-	{
-		mEnemyBullets.push_back(new CEnemyBulletNormal());
-		mEnemyBullets[ti]->SetAlive(false);
-	}
 	mCurBulletIndex = 0;
 
 	mDirX = DIR_RIGHT;
-	//-----------------------------------------
 
 }
 
@@ -32,7 +24,7 @@ CEnemy::~CEnemy()
 
 void CEnemy::Update()
 {
-	return;
+	//Move
 	if (DIR_RIGHT == mDirX)
 	{
 		if (mX < WIDTH - 1)
@@ -56,6 +48,11 @@ void CEnemy::Update()
 		}
 	}
 
+	//Shotting
+	if (mEnemyBullets.size() == 0)
+	{
+		return;
+	}
 
 
 	int ti = 0;
@@ -72,7 +69,7 @@ void CEnemy::Update()
 			mEnemyBullets[mCurBulletIndex]->SetPositionForFire(this->mX, this->mY + 1);
 			mEnemyBullets[mCurBulletIndex]->SetAlive(true);
 
-			if (mCurBulletIndex < ENEMY_BULLET_COUNT - 1)
+			if (mCurBulletIndex < mEnemyBullets.size() - 1)
 			{
 				mCurBulletIndex++;
 			}
@@ -85,7 +82,7 @@ void CEnemy::Update()
 		mDelay = mTemp;
 	}
 
-	for (ti = 0; ti < ENEMY_BULLET_COUNT; ti++)
+	for (ti = 0; ti < mEnemyBullets.size(); ti++)
 	{
 		mEnemyBullets[ti]->Update();
 	}
@@ -94,10 +91,13 @@ void CEnemy::Update()
 void CEnemy::Clean(char * tpPixel)
 {
 	CUnit::Clean(tpPixel);
-	int ti = 0;
-	for (ti = 0; ti < ENEMY_BULLET_COUNT; ti++)
+	if (mEnemyBullets.size() > 0)
 	{
-		mEnemyBullets[ti]->Clean(tpPixel);
+		int ti = 0;
+		for (ti = 0; ti < mEnemyBullets.size(); ti++)
+		{
+			mEnemyBullets[ti]->Clean(tpPixel);
+		}
 	}
 }
 
@@ -109,33 +109,53 @@ void CEnemy::Display(char * tpPixel)
 	{
 		*(tpPixel + mY * WIDTH + mX) = '#';
 	}
-	int ti = 0;
-	for (ti = 0; ti < ENEMY_BULLET_COUNT; ti++)
+	if (mEnemyBullets.size() > 0)
 	{
-		mEnemyBullets[ti]->Display(tpPixel);
+		int ti = 0;
+		for (ti = 0; ti < mEnemyBullets.size(); ti++)
+		{
+			mEnemyBullets[ti]->Display(tpPixel);
+		}
 	}
+
 }
 
 
 bool CEnemy::DoCollisionBulletWithActor(CActor * pPlayer)
 {
 	bool tResult = false;
-
-	int ti = 0;
-	for (ti = 0; ti < ENEMY_BULLET_COUNT; ti++)
+	if (mEnemyBullets.size() > 0)
 	{
-		tResult = mEnemyBullets[ti]->DoCollisionWithActor(pPlayer);
-		if (true == tResult)
+		int ti = 0;
+		
+		for (ti = 0; ti < mEnemyBullets.size(); ti++)
 		{
-			break;
+			tResult = mEnemyBullets[ti]->DoCollisionWithActor(pPlayer);
+			if (true == tResult)
+			{
+				break;
+			}
 		}
 	}
-
 	return tResult;
 }
 
+void CEnemy::AddBullet(CEnemyBullet * tpEnemyBullet)
+{
+	mEnemyBullets.push_back(tpEnemyBullet);
+	mEnemyBullets.back()->SetAlive(false);
+}
+
+
 void CEnemy::Destroy()
 {
+	int ti = 0;
+	for (ti = 0; ti < mEnemyBullets.size(); ti++)
+	{
+		mEnemyBullets[ti]->Destroy();
+	}
+	mEnemyBullets.clear();
+
 	delete this;
 }
 

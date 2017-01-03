@@ -16,20 +16,26 @@
     <Filter Include="Source Files\Enemys">
       <UniqueIdentifier>{7b036e5c-9e47-4bf8-9623-b7ca331160b5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\EnemyBullets">
-      <UniqueIdentifier>{5b656023-527f-4f11-a4ac-a1d1471c6e56}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Enemys">
       <UniqueIdentifier>{73b671b7-734c-4dda-b3e4-09f64b11395d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\EnemyBullets">
+    <Filter Include="Source Files\Bullet">
+      <UniqueIdentifier>{278c4956-7271-4d14-bf6c-1d1a75395aee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Bullet\EnemyBullets">
+      <UniqueIdentifier>{5b656023-527f-4f11-a4ac-a1d1471c6e56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Bullet\ActorBullets">
+      <UniqueIdentifier>{dea59484-925e-46cf-bc80-6effa0996ebb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Bullet">
+      <UniqueIdentifier>{ffae0367-8fec-4e3b-9ec5-e5c3c08acef8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Bullet\EnemyBullets">
       <UniqueIdentifier>{ff005068-6f1d-49b8-ba1e-43bb79a62973}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\ActorBullets">
+    <Filter Include="Header Files\Bullet\ActorBullets">
       <UniqueIdentifier>{2ea7bafb-0294-46a5-afe0-70dc783def0d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ActorBullets">
-      <UniqueIdentifier>{dea59484-925e-46cf-bc80-6effa0996ebb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -40,9 +46,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Actor.h">
@@ -61,16 +64,22 @@
       <Filter>Header Files\Enemys</Filter>
     </ClInclude>
     <ClInclude Include="EnemyBullet.h">
-      <Filter>Header Files\EnemyBullets</Filter>
+      <Filter>Header Files\Bullet\EnemyBullets</Filter>
     </ClInclude>
     <ClInclude Include="EnemyBulletHoming.h">
-      <Filter>Header Files\EnemyBullets</Filter>
+      <Filter>Header Files\Bullet\EnemyBullets</Filter>
     </ClInclude>
     <ClInclude Include="EnemyBulletNormal.h">
-      <Filter>Header Files\EnemyBullets</Filter>
+      <Filter>Header Files\Bullet\EnemyBullets</Filter>
     </ClInclude>
     <ClInclude Include="PlayerBullet.h">
-      <Filter>Header Files\ActorBullets</Filter>
+      <Filter>Header Files\Bullet\ActorBullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Header Files\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBulletPattern.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -78,9 +87,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="exam_text_invader_basic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Actor.cpp">
@@ -96,16 +102,22 @@
       <Filter>Source Files\Enemys</Filter>
     </ClCompile>
     <ClCompile Include="EnemyBullet.cpp">
-      <Filter>Source Files\EnemyBullets</Filter>
+      <Filter>Source Files\Bullet\EnemyBullets</Filter>
     </ClCompile>
     <ClCompile Include="EnemyBulletHoming.cpp">
-      <Filter>Source Files\EnemyBullets</Filter>
+      <Filter>Source Files\Bullet\EnemyBullets</Filter>
     </ClCompile>
     <ClCompile Include="EnemyBulletNormal.cpp">
-      <Filter>Source Files\EnemyBullets</Filter>
+      <Filter>Source Files\Bullet\EnemyBullets</Filter>
     </ClCompile>
     <ClCompile Include="PlayerBullet.cpp">
-      <Filter>Source Files\ActorBullets</Filter>
+      <Filter>Source Files\Bullet\ActorBullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source Files\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBulletPattern.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

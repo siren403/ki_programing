@@ -13,7 +13,7 @@ public:
 	virtual void Display(char *tpPixel) override;
 	//virtual void Update() override;
 
-	void SetPositionForFire(int tX, int tY);
+	virtual void SetPositionForFire(int tX, int tY);
 	virtual bool DoCollisionWithActor(CActor *pPlayer);
 
 };

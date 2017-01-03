@@ -22,12 +22,13 @@ private:
 		STATE_TITLE = 1,
 		STATE_UPDATE = 2,
 		STATE_DISPLAY = 3,
+
 		STATE_QUIT = 4,
 	};
 	
 	int mCurrentState = 0;
 	bool mIsPlaying = false;
-	StateAction mStateActions[4];
+	StateAction mStateActions[STATE_QUIT + 1];
 
 
 	int mRow = 0;

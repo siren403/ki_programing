@@ -11,6 +11,7 @@ class CEnemy :
 	public CUnit
 {
 protected:
+	//vector<vector<CEnemyBullet*>*> mBullets;
 
 	vector<CEnemyBullet*> mEnemyBullets;
 	int mCurBulletIndex = 0;
@@ -25,10 +26,11 @@ public:
 	virtual void Display(char *tpPixel) override;
 	virtual void Update() override;
 	virtual void Clean(char *tpPixel) override;
+	virtual void Destroy() override;
 	
 	bool DoCollisionBulletWithActor(CActor *pPlayer);
 
+	void AddBullet(CEnemyBullet *tpEnemyBullet);
 
-	virtual void Destroy() override;
 };
 

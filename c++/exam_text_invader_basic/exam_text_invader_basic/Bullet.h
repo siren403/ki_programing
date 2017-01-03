@@ -6,17 +6,17 @@ class CBullet :
 	public CUnit
 {
 protected:
-
+	bool IsScreenOut();
 public:
 	CBullet();
 	virtual ~CBullet();
 
 
 	virtual void Display(char *tpPixel) override;
+	virtual void Destroy() override;
 
 	void SetPositionForFire(int tX, int tY);
 
-	virtual void Destroy() override;
 
 };
 
