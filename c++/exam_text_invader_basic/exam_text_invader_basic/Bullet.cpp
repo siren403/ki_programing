@@ -13,7 +13,7 @@ bool CBullet::IsScreenOut()
 		tResult = true;
 	}
 
-	return false;
+	return tResult;
 }
 
 CBullet::CBullet()

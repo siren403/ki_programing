@@ -11,7 +11,7 @@ public:
 	virtual ~CEnemyBullet();
 
 	virtual void Display(char *tpPixel) override;
-	//virtual void Update() override;
+	virtual void Update() override;
 
 	virtual void SetPositionForFire(int tX, int tY);
 	virtual bool DoCollisionWithActor(CActor *pPlayer);

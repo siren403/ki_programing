@@ -29,6 +29,10 @@ void CEnemyBullet::Display(char * tpPixel)
 	}
 }
 
+void CEnemyBullet::Update()
+{
+}
+
 
 void CEnemyBullet::SetPositionForFire(int tX, int tY)
 {

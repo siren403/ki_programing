@@ -25,7 +25,7 @@ CEnemy::~CEnemy()
 void CEnemy::Update()
 {
 	//Move
-	if (DIR_RIGHT == mDirX)
+	/*if (DIR_RIGHT == mDirX)
 	{
 		if (mX < WIDTH - 1)
 		{
@@ -46,7 +46,7 @@ void CEnemy::Update()
 		{
 			mDirX = DIR_RIGHT;
 		}
-	}
+	}*/
 
 	//Shotting
 	if (mEnemyBullets.size() == 0)

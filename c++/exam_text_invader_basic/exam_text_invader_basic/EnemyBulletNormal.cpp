@@ -32,8 +32,10 @@ void CEnemyBulletNormal::Update()
 
 		if (IsScreenOut())
 		{
+
 			mIsAlive = false;
-			//cout << "Is Out Bullet" << endl;
+			mX = 0;
+			mY = 0;
 		}
 	}
 }

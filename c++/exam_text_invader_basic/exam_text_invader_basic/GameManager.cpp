@@ -10,9 +10,11 @@
 #include "EnemyBulletNormal.h"
 #include "EnemyBulletPattern.h"
 
+
 GameManager::GameManager()
 {
 	srand((unsigned int)time(NULL));
+	system("mode con: cols=80 lines=24");
 
 
 	mStateActions[GameManager::STATE_INIT] = &GameManager::Init;
@@ -33,7 +35,7 @@ GameManager::~GameManager()
 
 void GameManager::Init()
 {
-	mActor.SetUp(WIDTH / 3, HEIGHT - 1);
+	mActor.SetUp(WIDTH / 2, HEIGHT - 1);
 
 	mEnemys.reserve(5);
 	mEnemys.push_back(new CEnemy());
@@ -139,9 +141,10 @@ void GameManager::Display()
 		{
 			cout << tPixel[mRow][mCol];
 		}
+		cout << endl;
 	}
 
-
+	Sleep(1000/30);
 
 	mCurrentState = GameManager::STATE_UPDATE;
 }
@@ -187,6 +190,5 @@ void GameManager::ClearScreen(int tX, int tY)
 
 	SetConsoleCursorPosition(hOutput, cd);
 
-	SetConsoleCursorInfo(hOutput, &cci_old);
 }
 
