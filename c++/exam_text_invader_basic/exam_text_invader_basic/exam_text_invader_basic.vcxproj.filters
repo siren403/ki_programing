@@ -13,6 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Enemys">
+      <UniqueIdentifier>{7b036e5c-9e47-4bf8-9623-b7ca331160b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\EnemyBullets">
+      <UniqueIdentifier>{5b656023-527f-4f11-a4ac-a1d1471c6e56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Enemys">
+      <UniqueIdentifier>{73b671b7-734c-4dda-b3e4-09f64b11395d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\EnemyBullets">
+      <UniqueIdentifier>{ff005068-6f1d-49b8-ba1e-43bb79a62973}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ActorBullets">
+      <UniqueIdentifier>{2ea7bafb-0294-46a5-afe0-70dc783def0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ActorBullets">
+      <UniqueIdentifier>{dea59484-925e-46cf-bc80-6effa0996ebb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -24,29 +42,35 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Character.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Bullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gamesettings.h">
+    <ClInclude Include="Actor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyBulletLt.h">
+    <ClInclude Include="Unit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerBullet.h">
+    <ClInclude Include="config.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header Files\Enemys</Filter>
     </ClInclude>
     <ClInclude Include="EnemyBullet.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\EnemyBullets</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBulletHoming.h">
+      <Filter>Header Files\EnemyBullets</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBulletNormal.h">
+      <Filter>Header Files\EnemyBullets</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>Header Files\ActorBullets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -56,26 +80,32 @@
     <ClCompile Include="exam_text_invader_basic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Character.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyBulletLt.cpp">
+    <ClCompile Include="Actor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerBullet.cpp">
+    <ClCompile Include="Unit.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files\Enemys</Filter>
     </ClCompile>
     <ClCompile Include="EnemyBullet.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\EnemyBullets</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBulletHoming.cpp">
+      <Filter>Source Files\EnemyBullets</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBulletNormal.cpp">
+      <Filter>Source Files\EnemyBullets</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>Source Files\ActorBullets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

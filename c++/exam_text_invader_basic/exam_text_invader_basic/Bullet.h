@@ -1,13 +1,11 @@
 #pragma once
-#include "Character.h"
+#include "Unit.h"
 
 
 class CBullet :
-	public CCharacter
+	public CUnit
 {
 protected:
-	bool mIsAlive = false;
-	char mMark = 0;
 
 public:
 	CBullet();
@@ -18,7 +16,7 @@ public:
 
 	void SetPositionForFire(int tX, int tY);
 
-	void SetAlive(bool tAlive);
-	bool GetAlive();
+	virtual void Destroy() override;
+
 };
 

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "PlayerBullet.h"
-#include "gamesettings.h"
+#include "config.h"
 #include "Enemy.h"
 #include <iostream>
 
@@ -8,7 +8,6 @@ using namespace std;
 
 CPlayerBullet::CPlayerBullet()
 {
-	mMark = '*';
 	mX = WIDTH / 2;
 	mY = HEIGHT - 1 - 1;
 	mDirY = -1;
@@ -22,9 +21,17 @@ CPlayerBullet::~CPlayerBullet()
 }
 
 
+void CPlayerBullet::Display(char * tpPixel)
+{
+	if (mIsAlive)
+	{
+		*(tpPixel + mY*WIDTH + mX) = '*';
+	}
+}
+
 void CPlayerBullet::Update()
 {
-	if (true == mIsAlive)
+	if (mIsAlive)
 	{
 		if (mY < HEIGHT - 1 || mY > 0)
 		{

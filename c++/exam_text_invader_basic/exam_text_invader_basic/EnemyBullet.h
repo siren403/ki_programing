@@ -1,22 +1,20 @@
 #pragma once
 #include "Bullet.h"
 
-class CPlayer;
+class CActor;
 
 class CEnemyBullet :
 	public CBullet
 {
-protected:
-	CPlayer *mPlayer = NULL;
 public:
 	CEnemyBullet();
 	virtual ~CEnemyBullet();
 
+	virtual void Display(char *tpPixel) override;
 	//virtual void Update() override;
-	virtual void Update();
 
-	void SetTarget(CPlayer *tpPlayer);
 	void SetPositionForFire(int tX, int tY);
-	bool DoCollisionWithActor(CPlayer *pPlayer);
+	virtual bool DoCollisionWithActor(CActor *pPlayer);
+
 };
 

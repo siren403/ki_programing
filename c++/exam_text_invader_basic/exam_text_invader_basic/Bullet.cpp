@@ -1,11 +1,10 @@
 #include "stdafx.h"
 #include "Bullet.h"
-#include "gamesettings.h"
+#include "config.h"
 #include "Enemy.h"
 
 CBullet::CBullet()
 {
-	mMark = '*';
 }
 
 
@@ -17,7 +16,7 @@ void CBullet::Display(char * tpPixel)
 {
 	if (mIsAlive)
 	{
-		*(tpPixel + mY*WIDTH + mX) = mMark;
+		*(tpPixel + mY*WIDTH + mX) = '*';
 	}
 }
 
@@ -27,16 +26,9 @@ void CBullet::SetPositionForFire(int tX, int tY)
 	mY = tY;
 }
 
-
-
-void CBullet::SetAlive(bool tAlive)
+void CBullet::Destroy()
 {
-	mIsAlive = tAlive;
+	delete this;
 }
 
-
-bool CBullet::GetAlive()
-{
-	return mIsAlive;
-}
 

@@ -1,15 +1,18 @@
 #pragma once
-#include "Character.h"
+#include "Actor.h"
 #include "EnemyBullet.h"
+#include <vector>
 #define DIR_LEFT 0
 #define DIR_RIGHT 1
 
+using namespace std;
 
 class CEnemy :
-	public CCharacter
+	public CUnit
 {
 protected:
-	CEnemyBullet *mEnemyBullets = NULL;
+
+	vector<CEnemyBullet*> mEnemyBullets;
 	int mCurBulletIndex = 0;
 
 	unsigned int mDelay = 0;
@@ -23,7 +26,9 @@ public:
 	virtual void Update() override;
 	virtual void Clean(char *tpPixel) override;
 	
-	void SetPlayer(CPlayer *tPlayer);
-	bool DoCollisionBulletWithActor(CPlayer *pPlayer);
+	bool DoCollisionBulletWithActor(CActor *pPlayer);
+
+
+	virtual void Destroy() override;
 };
 
