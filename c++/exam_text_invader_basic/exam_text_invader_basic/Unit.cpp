@@ -46,6 +46,21 @@ void CUnit::SetY(int tY)
 	mY = tY;
 }
 
+float CUnit::GetSpeedPower()
+{
+	return mSpeedPower;
+}
+
+void CUnit::SetSpeedPower(float tSpeedPower)
+{
+	mSpeedPower = tSpeedPower;
+}
+
+void CUnit::SetDisplayMark(char tMark)
+{
+	mDisplayMark = tMark;
+}
+
 
 void CUnit::SetAlive(bool tAlive)
 {

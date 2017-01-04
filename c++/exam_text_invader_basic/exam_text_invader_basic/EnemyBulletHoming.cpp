@@ -35,8 +35,8 @@ void CEnemyBulletHoming::Update()
 	}
 }
 
-void CEnemyBulletHoming::SetTarget(CActor * tpPlayer)
+CEnemyBulletHoming * CEnemyBulletHoming::SetTarget(CActor * tpPlayer)
 {
 	mPlayer = tpPlayer;
-
+	return this;
 }

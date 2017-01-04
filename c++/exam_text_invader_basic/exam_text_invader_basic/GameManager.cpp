@@ -6,68 +6,67 @@
 #include <iostream>
 
 #include <time.h>
+#include "EnemyFactorySample1.h"
+#include "EnemyFactorySample2.h"
 
-#include "EnemyBulletNormal.h"
-#include "EnemyBulletPattern.h"
 
-
-GameManager::GameManager()
+CGameManager::CGameManager()
 {
 	srand((unsigned int)time(NULL));
-	system("mode con: cols=80 lines=24");
+	//system("mode con: cols=80 lines=24");
 
 
-	mStateActions[GameManager::STATE_INIT] = &GameManager::Init;
-	mStateActions[GameManager::STATE_TITLE] = &GameManager::Title;
-	mStateActions[GameManager::STATE_UPDATE] = &GameManager::Update;
-	mStateActions[GameManager::STATE_DISPLAY] = &GameManager::Display;
-	mStateActions[GameManager::STATE_QUIT] = &GameManager::Quit;
+	mStateActions[CGameManager::STATE_INIT] = &CGameManager::Init;
+	mStateActions[CGameManager::STATE_TITLE] = &CGameManager::Title;
+	mStateActions[CGameManager::STATE_UPDATE] = &CGameManager::Update;
+	mStateActions[CGameManager::STATE_DISPLAY] = &CGameManager::Display;
+	mStateActions[CGameManager::STATE_QUIT] = &CGameManager::Quit;
 
-	mCurrentState = GameManager::STATE_INIT;
+	mCurrentState = CGameManager::STATE_INIT;
 
 }
 
-GameManager::~GameManager()
+CGameManager::~CGameManager()
 {
 
 }
 
 
-void GameManager::Init()
+void CGameManager::Init()
 {
 	mActor.SetUp(WIDTH / 2, HEIGHT - 1);
 
-	mEnemys.reserve(5);
-	mEnemys.push_back(new CEnemy());
-	mEnemys.back()->SetUp(WIDTH / 2, 0);
+	mEnemyFactorys.reserve(5);
+	
+	mEnemyFactorys.push_back(new CEnemyFactorySample1());
+	mEnemyFactorys.push_back(new CEnemyFactorySample2());
 
-	CEnemyBulletPattern *tpBulletPattern = NULL;
-
-	tpBulletPattern = new CEnemyBulletPattern();
-	tpBulletPattern
-		->AddBullet(new CEnemyBulletNormal(1, 1, 2))
-		.AddBullet(new CEnemyBulletNormal(-1, 1, 2))
-		.AddBullet(new CEnemyBulletNormal(0, 1, 2));
-
-	mEnemys.back()->AddBullet(tpBulletPattern);
+	SetFactory(1);
 
 
-	mCurrentState = GameManager::STATE_TITLE;
+	if (mEnemyFactorys.size() > 0)
+	{
+		mCurrentState = CGameManager::STATE_TITLE;
+	}
+	else
+	{
+		mCurrentState = CGameManager::STATE_QUIT;
+	}
 }
 
-void GameManager::Title()
+void CGameManager::Title()
 {
 	cout << "스타워즈" << endl;
 	Sleep(1000);
-	mCurrentState = GameManager::STATE_UPDATE;
+	mCurrentState = CGameManager::STATE_UPDATE;
 }
-void GameManager::Update()
+void CGameManager::Update()
 {
 	mActor.Clean(*tPixel);
 	int ti = 0;
-	for (ti = 0; ti < mEnemys.size(); ti++)
+	for (ti = 0; ti < mEnemys->size(); ti++)
 	{
-		mEnemys[ti]->Clean(&tPixel[0][0]);
+		(*mEnemys)[ti]->Clean(&tPixel[0][0]);
 	}
 
 	mKey = 0;
@@ -80,35 +79,43 @@ void GameManager::Update()
 		{
 		case 'Q':
 		case 'q':
-			mCurrentState = GameManager::STATE_QUIT;
+			mCurrentState = CGameManager::STATE_QUIT;
 			return;
 		}
 	}
 
 	mActor.Update();
-	for (ti = 0; ti < mEnemys.size(); ti++)
+	for (ti = 0; ti < mEnemys->size(); ti++)
 	{
-		mEnemys[ti]->Update();
+		(*mEnemys)[ti]->Update();
+		if ((*mEnemys)[ti]->GetX() < 0)
+		{
+			(*mEnemys)[ti]->SetX(0);
+		}
+		else if ((*mEnemys)[ti]->GetX() > WIDTH - 1)
+		{
+			(*mEnemys)[ti]->SetX(WIDTH - 1);
+		}
 	}
 
 
 	//Collision
 
-	for (ti = 0; ti < mEnemys.size(); ti++)
+	for (ti = 0; ti < mEnemys->size(); ti++)
 	{
-		if (true == mActor.DoCollisionBulletWithEnemy(mEnemys[ti]))
+		if (true == mActor.DoCollisionBulletWithEnemy((*mEnemys)[ti]))
 		{
 			//todo...
-			mEnemys[ti]->SetAlive(false);
+			(*mEnemys)[ti]->SetAlive(false);
 			break;
 		}
 
 		//todo : boss...
 	}
 
-	for (ti = 0; ti < mEnemys.size(); ti++)
+	for (ti = 0; ti < mEnemys->size(); ti++)
 	{
-		if (true == mEnemys[ti]->DoCollisionBulletWithActor(&mActor))
+		if (true == (*mEnemys)[ti]->DoCollisionBulletWithActor(&mActor))
 		{
 			//todo...
 
@@ -120,19 +127,19 @@ void GameManager::Update()
 
 
 
-	mCurrentState = GameManager::STATE_DISPLAY;
+	mCurrentState = CGameManager::STATE_DISPLAY;
 }
 
-void GameManager::Display()
+void CGameManager::Display()
 {
 
 	ClearScreen(0, 0);
 
 	mActor.Display(*tPixel);
 	int ti = 0;
-	for (ti = 0; ti < mEnemys.size(); ti++)
+	for (ti = 0; ti < mEnemys->size(); ti++)
 	{
-		mEnemys[ti]->Display(&tPixel[0][0]);
+		(*mEnemys)[ti]->Display(&tPixel[0][0]);
 	}
 
 	for (mRow = 0; mRow < HEIGHT; mRow++)
@@ -141,28 +148,29 @@ void GameManager::Display()
 		{
 			cout << tPixel[mRow][mCol];
 		}
-		cout << endl;
+		//cout << endl;
 	}
 
-	Sleep(1000/30);
+	//Sleep(1000/30);
 
-	mCurrentState = GameManager::STATE_UPDATE;
+	mCurrentState = CGameManager::STATE_UPDATE;
 }
 
-void GameManager::Quit()
+void CGameManager::Quit()
 {
 	mIsPlaying = false;
+	mEnemys = NULL;
 	int ti = 0;
-	for (int ti = 0; ti < mEnemys.size(); ti++)
+	for (int ti = 0; ti < mEnemyFactorys.size(); ti++)
 	{
-		mEnemys[ti]->Destroy();
+		mEnemyFactorys[ti]->Destroy();
 	}
 
 	//delete ...
 }
 
 
-void GameManager::Play()
+void CGameManager::Play()
 {
 	mIsPlaying = true;
 	while (mIsPlaying)
@@ -171,7 +179,18 @@ void GameManager::Play()
 	}
 }
 
-void GameManager::ClearScreen(int tX, int tY)
+void CGameManager::SetEnemys(vector<CEnemy*>* tpEnemys)
+{
+	mEnemys = tpEnemys;
+}
+
+void CGameManager::SetFactory(int tIndex)
+{
+	mCurrentFactory = tIndex;
+	mEnemyFactorys[mCurrentFactory]->DoSetting(*this);
+}
+
+void CGameManager::ClearScreen(int tX, int tY)
 {
 	CONSOLE_CURSOR_INFO cci;
 	CONSOLE_CURSOR_INFO cci_old;

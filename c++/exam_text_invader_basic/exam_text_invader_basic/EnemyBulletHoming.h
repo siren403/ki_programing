@@ -12,7 +12,7 @@ public:
 	~CEnemyBulletHoming();
 
 	virtual void Update() override;
-	void SetTarget(CActor *tpPlayer);
+	CEnemyBulletHoming * SetTarget(CActor *tpPlayer);
 
 };
 

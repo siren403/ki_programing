@@ -8,7 +8,7 @@
 #define PLAYER_BULLET_COUNT 1
 
 #define ENEMY_BULLET_COUNT 5
-#define ENEMY_BULLET_INTERVAL 1000
+
 
 
 //------------------------------------ EnemyCount

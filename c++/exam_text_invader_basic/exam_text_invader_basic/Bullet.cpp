@@ -18,6 +18,7 @@ bool CBullet::IsScreenOut()
 
 CBullet::CBullet()
 {
+	mDisplayMark = '*';
 }
 
 
@@ -29,7 +30,7 @@ void CBullet::Display(char * tpPixel)
 {
 	if (mIsAlive)
 	{
-		*(tpPixel + mY*WIDTH + mX) = '*';
+		*(tpPixel + mY*WIDTH + mX) = mDisplayMark;
 	}
 }
 
@@ -37,6 +38,13 @@ void CBullet::SetPositionForFire(int tX, int tY)
 {
 	mX = tX;
 	mY = tY;
+}
+
+void CBullet::SetDirectionAndSpeedPower(float tDirX, float tDirY, float tSpeedPower)
+{
+	mDirX = tDirX;
+	mDirY = tDirY;
+	mSpeedPower = tSpeedPower;
 }
 
 void CBullet::Destroy()

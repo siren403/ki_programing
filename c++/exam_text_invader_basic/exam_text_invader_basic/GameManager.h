@@ -5,16 +5,16 @@
 #include "Actor.h"
 #include "Enemy.h"
 #include "EnemyBullet.h"
-
+#include "EnemyFactory.h"
 #include <vector>
 
 using namespace std;
 
-class GameManager
+class CGameManager
 {
 private:
 	
-	typedef void(GameManager::*StateAction)();
+	typedef void(CGameManager::*StateAction)();
 	
 	enum 
 	{
@@ -38,8 +38,9 @@ private:
 
 
 	CActor mActor;
-	vector<CEnemy*> mEnemys;
-
+	vector<CEnemy*> *mEnemys;
+	vector<CEnemyFactory*> mEnemyFactorys;
+	int mCurrentFactory = 0;
 
 	void Init();
 	void Title();
@@ -49,10 +50,12 @@ private:
 
 	void ClearScreen(int tX, int tY);
 public:
-	GameManager();
-	~GameManager();
+	CGameManager();
+	~CGameManager();
 
 	void Play();
 
+	void SetEnemys(vector<CEnemy*> *tpEnemys);
+	void SetFactory(int tIndex);
 };
 

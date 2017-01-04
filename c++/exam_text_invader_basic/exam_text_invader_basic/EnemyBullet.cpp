@@ -9,7 +9,7 @@ using namespace std;
 
 CEnemyBullet::CEnemyBullet()
 {
-
+	mDisplayMark = '|';
 	mDirX = 0;
 	mDirY = 1;
 	mSpeedPower = 2;
@@ -20,14 +20,6 @@ CEnemyBullet::~CEnemyBullet()
 {
 }
 
-
-void CEnemyBullet::Display(char * tpPixel)
-{
-	if (mIsAlive)
-	{
-		*(tpPixel + mY*WIDTH + mX) = '|';
-	}
-}
 
 void CEnemyBullet::Update()
 {
@@ -52,4 +44,5 @@ bool CEnemyBullet::DoCollisionWithActor(CActor * pPlayer)
 	}
 	return tResult;
 }
+
 

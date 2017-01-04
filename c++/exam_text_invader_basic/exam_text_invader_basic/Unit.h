@@ -4,6 +4,7 @@
 class CUnit
 {
 protected:
+	char mDisplayMark = 0;
 	int mX = 0;
 	int mY = 0;
 	float mDirX = 0;
@@ -23,9 +24,13 @@ public:
 
 
 	int GetX();
-	void SetX(int);
+	void SetX(int tX);
 	int GetY();
-	void SetY(int);
+	void SetY(int tY);
+	float GetSpeedPower();
+	void SetSpeedPower(float tSpeedPower);
+
+	void SetDisplayMark(char tMark);
 
 	virtual void Destroy() = 0;
 };

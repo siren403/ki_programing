@@ -37,6 +37,12 @@
     <Filter Include="Header Files\Bullet\ActorBullets">
       <UniqueIdentifier>{2ea7bafb-0294-46a5-afe0-70dc783def0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\EnemyFactory">
+      <UniqueIdentifier>{ba06f410-8b08-4e7a-8b29-7e46514f3fb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\EnemyFactory">
+      <UniqueIdentifier>{0a971bdd-d3e4-4a9c-bb13-0c94d8fb6163}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -78,7 +84,25 @@
     <ClInclude Include="Bullet.h">
       <Filter>Header Files\Bullet</Filter>
     </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyNormal.h">
+      <Filter>Header Files\Enemys</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyFactory.h">
+      <Filter>Header Files\EnemyFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyFactorySample1.h">
+      <Filter>Header Files\EnemyFactory</Filter>
+    </ClInclude>
     <ClInclude Include="EnemyBulletPattern.h">
+      <Filter>Header Files\Bullet\EnemyBullets</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyFactorySample2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStopFireWithMove.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -116,7 +140,25 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>Source Files\Bullet</Filter>
     </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyNormal.cpp">
+      <Filter>Source Files\Enemys</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyFactory.cpp">
+      <Filter>Source Files\EnemyFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyFactorySample1.cpp">
+      <Filter>Source Files\EnemyFactory</Filter>
+    </ClCompile>
     <ClCompile Include="EnemyBulletPattern.cpp">
+      <Filter>Source Files\Bullet\EnemyBullets</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyFactorySample2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStopFireWithMove.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

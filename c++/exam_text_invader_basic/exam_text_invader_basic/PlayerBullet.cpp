@@ -8,6 +8,7 @@ using namespace std;
 
 CPlayerBullet::CPlayerBullet()
 {
+	mDisplayMark = '*';
 	mX = WIDTH / 2;
 	mY = HEIGHT - 1 - 1;
 	mDirY = -1;
@@ -21,13 +22,13 @@ CPlayerBullet::~CPlayerBullet()
 }
 
 
-void CPlayerBullet::Display(char * tpPixel)
-{
-	if (mIsAlive)
-	{
-		*(tpPixel + mY*WIDTH + mX) = '*';
-	}
-}
+//void CPlayerBullet::Display(char * tpPixel)
+//{
+//	if (mIsAlive)
+//	{
+//		*(tpPixel + mY*WIDTH + mX) = mDisplayMark;
+//	}
+//}
 
 void CPlayerBullet::Update()
 {
@@ -58,3 +59,4 @@ bool CPlayerBullet::DoCollisionWithEnemy(CEnemy * pEnemy)
 
 	return tResult;
 }
+

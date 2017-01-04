@@ -6,7 +6,7 @@
 int main()
 {
 	
-	GameManager mGM;
+	CGameManager mGM;
 	
 	mGM.Play();
 

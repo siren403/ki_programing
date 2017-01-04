@@ -15,6 +15,8 @@ CActor::CActor()
 		mPlayerBullets[ti].SetAlive(false);
 	}
 	mCurBulletIndex = 0;
+
+	mDisplayMark = 'A';
 }
 
 
@@ -95,7 +97,7 @@ void CActor::Display(char * tpPixel)
 {
 	if (mIsAlive)
 	{
-		*(tpPixel + mY * WIDTH + mX) = 'A';
+		*(tpPixel + mY * WIDTH + mX) = mDisplayMark;
 	}
 	int ti = 0;
 	for (ti = 0; ti < PLAYER_BULLET_COUNT; ti++)

@@ -11,10 +11,9 @@ public:
 	CPlayerBullet();
 	virtual ~CPlayerBullet();
 
-	virtual void Display(char *tpPixel) override;
+	//virtual void Display(char *tpPixel) override;
 	virtual void Update() override;
 
 	bool DoCollisionWithEnemy(CEnemy *pEnemy);
-
 };
 
