@@ -21,22 +21,19 @@ CEnemyBulletNormal::CEnemyBulletNormal(int tDirX, int tDirY, int tSpeedPower)
 
 CEnemyBulletNormal::~CEnemyBulletNormal()
 {
+
 }
 
 void CEnemyBulletNormal::Update()
 {
-	if (mIsAlive)
+	mX = mX + mDirX * mSpeedPower;
+	mY = mY + mDirY * mSpeedPower;
+
+	if (IsScreenOut())
 	{
-		mX = mX + mDirX * mSpeedPower;
-		mY = mY + mDirY * mSpeedPower;
-
-		if (IsScreenOut())
-		{
-
-			mIsAlive = false;
-			mX = 0;
-			mY = 0;
-		}
+		mIsAlive = false;
+		mX = 0;
+		mY = 0;
 	}
 }
 

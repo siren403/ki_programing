@@ -21,8 +21,8 @@ public:
 	virtual void SetAlive(bool tIsAlive) override;
 	virtual bool GetAlive() override;
 	virtual void SetPositionForFire(int tX, int tY) override;
+	virtual bool DoCollisionWithActor(CActor *pPlayer) override;
 
 	CEnemyBulletPattern &AddBullet(CEnemyBullet *tpEnemyBullet);
-
 };
 

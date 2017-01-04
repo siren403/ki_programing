@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include <time.h>
+#include "EnemyFactorySample0.h"
 #include "EnemyFactorySample1.h"
 #include "EnemyFactorySample2.h"
 
@@ -14,7 +15,6 @@ CGameManager::CGameManager()
 {
 	srand((unsigned int)time(NULL));
 	//system("mode con: cols=80 lines=24");
-
 
 	mStateActions[CGameManager::STATE_INIT] = &CGameManager::Init;
 	mStateActions[CGameManager::STATE_TITLE] = &CGameManager::Title;
@@ -37,12 +37,11 @@ void CGameManager::Init()
 	mActor.SetUp(WIDTH / 2, HEIGHT - 1);
 
 	mEnemyFactorys.reserve(5);
-	
+	mEnemyFactorys.push_back(new CEnemyFactorySample0());
 	mEnemyFactorys.push_back(new CEnemyFactorySample1());
 	mEnemyFactorys.push_back(new CEnemyFactorySample2());
 
-	SetFactory(1);
-
+	SetFactory(2);
 
 	if (mEnemyFactorys.size() > 0)
 	{
@@ -87,17 +86,19 @@ void CGameManager::Update()
 	mActor.Update();
 	for (ti = 0; ti < mEnemys->size(); ti++)
 	{
-		(*mEnemys)[ti]->Update();
-		if ((*mEnemys)[ti]->GetX() < 0)
+		if ((*mEnemys)[ti]->GetAlive() == true)
 		{
-			(*mEnemys)[ti]->SetX(0);
-		}
-		else if ((*mEnemys)[ti]->GetX() > WIDTH - 1)
-		{
-			(*mEnemys)[ti]->SetX(WIDTH - 1);
+			(*mEnemys)[ti]->Update();
+			if ((*mEnemys)[ti]->GetX() < 0)
+			{
+				(*mEnemys)[ti]->SetX(0);
+			}
+			else if ((*mEnemys)[ti]->GetX() > WIDTH - 1)
+			{
+				(*mEnemys)[ti]->SetX(WIDTH - 1);
+			}
 		}
 	}
-
 
 	//Collision
 
@@ -109,7 +110,6 @@ void CGameManager::Update()
 			(*mEnemys)[ti]->SetAlive(false);
 			break;
 		}
-
 		//todo : boss...
 	}
 
@@ -118,14 +118,11 @@ void CGameManager::Update()
 		if (true == (*mEnemys)[ti]->DoCollisionBulletWithActor(&mActor))
 		{
 			//todo...
-
+			mActor.SetAlive(false);
 			break;
 		}
-
 		//todo : boss...
 	}
-
-
 
 	mCurrentState = CGameManager::STATE_DISPLAY;
 }

@@ -149,6 +149,7 @@
     <ClInclude Include="EnemyBulletHoming.h" />
     <ClInclude Include="EnemyBulletNormal.h" />
     <ClInclude Include="EnemyBulletPattern.h" />
+    <ClInclude Include="EnemyFactorySample0.h" />
     <ClInclude Include="EnemyFactorySample1.h" />
     <ClInclude Include="EnemyFactorySample2.h" />
     <ClInclude Include="EnemyNormal.h" />
@@ -170,6 +171,7 @@
     <ClCompile Include="EnemyBulletHoming.cpp" />
     <ClCompile Include="EnemyBulletNormal.cpp" />
     <ClCompile Include="EnemyBulletPattern.cpp" />
+    <ClCompile Include="EnemyFactorySample0.cpp" />
     <ClCompile Include="EnemyFactorySample1.cpp" />
     <ClCompile Include="EnemyFactorySample2.cpp" />
     <ClCompile Include="EnemyNormal.cpp" />

@@ -28,10 +28,7 @@ CBullet::~CBullet()
 
 void CBullet::Display(char * tpPixel)
 {
-	if (mIsAlive)
-	{
-		*(tpPixel + mY*WIDTH + mX) = mDisplayMark;
-	}
+	*(tpPixel + mY*WIDTH + mX) = mDisplayMark;
 }
 
 void CBullet::SetPositionForFire(int tX, int tY)

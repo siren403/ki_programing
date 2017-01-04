@@ -39,8 +39,6 @@ void CEnemy::Clean(char * tpPixel)
 	}
 }
 
-
-
 void CEnemy::Display(char * tpPixel)
 {
 	if (mIsAlive)
@@ -52,10 +50,12 @@ void CEnemy::Display(char * tpPixel)
 		int ti = 0;
 		for (ti = 0; ti < mEnemyBullets.size(); ti++)
 		{
-			mEnemyBullets[ti]->Display(tpPixel);
+			if (mEnemyBullets[ti]->GetAlive() == true)
+			{
+				mEnemyBullets[ti]->Display(tpPixel);
+			}
 		}
 	}
-
 }
 
 
@@ -65,7 +65,6 @@ bool CEnemy::DoCollisionBulletWithActor(CActor * pPlayer)
 	if (mEnemyBullets.size() > 0)
 	{
 		int ti = 0;
-		
 		for (ti = 0; ti < mEnemyBullets.size(); ti++)
 		{
 			tResult = mEnemyBullets[ti]->DoCollisionWithActor(pPlayer);
@@ -120,7 +119,10 @@ void CEnemy::Shot()
 	int ti = 0;
 	for (ti = 0; ti < mEnemyBullets.size(); ti++)
 	{
-		mEnemyBullets[ti]->Update();
+		if (mEnemyBullets[ti]->GetAlive() == true)
+		{
+			mEnemyBullets[ti]->Update();
+		}
 	}
 }
 

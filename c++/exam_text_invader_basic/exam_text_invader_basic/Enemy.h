@@ -17,7 +17,7 @@ protected:
 
 	CTimer mTimer;
 
-	void Shot();
+	virtual void Shot();
 public:
 	CEnemy();
 	virtual ~CEnemy();

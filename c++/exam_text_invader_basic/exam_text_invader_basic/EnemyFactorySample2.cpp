@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "EnemyFactorySample2.h"
+
 //Enemys
-#include "EnemyNormal.h"
+#include "EnemyStopFireWithMove.h"
 //EnemyBullets
 #include "EnemyBulletNormal.h"
 #include "EnemyBulletPattern.h"
@@ -15,9 +16,9 @@ CEnemyFactorySample2::CEnemyFactorySample2()
 
 	for (tiEnemy = 0; tiEnemy < 5; tiEnemy++)
 	{
-		tpEnemy = new CEnemyNormal();
+		tpEnemy = new CEnemyStopFireWithMove();
 		tpEnemy->SetUp((WIDTH * 0.2f) + (10 * tiEnemy), 3);
-		tpEnemy->SetSpeedPower(3);
+		tpEnemy->SetSpeedPower(8);
 		tpEnemy->SetBulletInterval(100);
 		//todo : issue
 		//(대각선 2개, 일직선 1개) * 5

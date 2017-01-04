@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "EnemyBulletPattern.h"
+#include "Actor.h"
 
+#include <iostream>
+
+using namespace std;
 
 CEnemyBulletPattern::CEnemyBulletPattern()
 {
@@ -25,7 +29,10 @@ void CEnemyBulletPattern::Update()
 	int ti = 0;
 	for (ti = 0; ti < mBullets.size(); ti++)
 	{
-		mBullets[ti]->Update();
+		if (mBullets[ti]->GetAlive() == true)
+		{
+			mBullets[ti]->Update();
+		}
 	}
 }
 
@@ -34,7 +41,10 @@ void CEnemyBulletPattern::Display(char * tpPixel)
 	int ti = 0;
 	for (ti = 0; ti < mBullets.size(); ti++)
 	{
-		mBullets[ti]->Display(tpPixel);
+		if (mBullets[ti]->GetAlive() == true)
+		{
+			mBullets[ti]->Display(tpPixel);
+		}
 	}
 }
 
@@ -79,6 +89,28 @@ void CEnemyBulletPattern::SetPositionForFire(int tX, int tY)
 	{
 		mBullets[ti]->SetPositionForFire(tX, tY);
 	}
+}
+
+bool CEnemyBulletPattern::DoCollisionWithActor(CActor * pPlayer)
+{
+	bool tResult = false;
+
+	int ti = 0;
+	for (ti = 0; ti < mBullets.size(); ti++)
+	{
+		if (mBullets[ti]->GetAlive())
+		{
+
+			if (mBullets[ti]->GetX() == pPlayer->GetX() 
+				&& mBullets[ti]->GetY() == pPlayer->GetY())
+			{
+				cout << "EnemyBullet VS actor Collision" << endl;
+				tResult = true;
+			}
+		}
+	}
+
+	return tResult;
 }
 
 CEnemyBulletPattern & CEnemyBulletPattern::AddBullet(CEnemyBullet * tpEnemyBullet)

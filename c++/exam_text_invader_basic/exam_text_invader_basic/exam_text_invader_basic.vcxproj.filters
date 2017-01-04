@@ -100,10 +100,13 @@
       <Filter>Header Files\Bullet\EnemyBullets</Filter>
     </ClInclude>
     <ClInclude Include="EnemyFactorySample2.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\EnemyFactory</Filter>
     </ClInclude>
     <ClInclude Include="EnemyStopFireWithMove.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Enemys</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyFactorySample0.h">
+      <Filter>Header Files\EnemyFactory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -156,10 +159,13 @@
       <Filter>Source Files\Bullet\EnemyBullets</Filter>
     </ClCompile>
     <ClCompile Include="EnemyFactorySample2.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\EnemyFactory</Filter>
     </ClCompile>
     <ClCompile Include="EnemyStopFireWithMove.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Enemys</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyFactorySample0.cpp">
+      <Filter>Source Files\EnemyFactory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
