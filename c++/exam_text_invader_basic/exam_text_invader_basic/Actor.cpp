@@ -7,23 +7,34 @@
 CActor::CActor()
 {
 
-	mPlayerBullets = new CPlayerBullet[PLAYER_BULLET_COUNT];
+	//mActorBullets = new CActorBullet[PLAYER_BULLET_COUNT];
 
-	int ti = 0;
+	/*int ti = 0;
 	for (ti = 0; ti < PLAYER_BULLET_COUNT; ti++)
 	{
-		mPlayerBullets[ti].SetAlive(false);
+		mActorBullets[ti].SetAlive(false);
 	}
 	mCurBulletIndex = 0;
-
+*/
 	mDisplayMark = 'A';
+	mActorBullets.reserve(ACTOR_BULLET_COUNT);
+	mCurBulletIndex = 0;
 }
-
 
 CActor::~CActor()
 {
 }
 
+void CActor::Clean(char * tpPixel)
+{
+	CUnit::Clean(tpPixel);
+
+	int ti = 0;
+	for (ti = 0; ti < mActorBullets.size(); ti++)
+	{
+		mActorBullets[ti]->Clean(tpPixel);
+	}
+}
 
 void CActor::Update()
 {
@@ -37,23 +48,25 @@ void CActor::Update()
 		case 'M':
 		case 'm':
 			
-			if (false == mPlayerBullets[mCurBulletIndex].GetAlive())
+			if (mActorBullets.size() > 0)
 			{
-				mPlayerBullets[mCurBulletIndex].SetPositionForFire(this->mX, this->mY - 1);
-
-				mPlayerBullets[mCurBulletIndex].SetAlive(true);
-
-				if (mCurBulletIndex < PLAYER_BULLET_COUNT - 1)
+				if (false == mActorBullets[mCurBulletIndex]->GetAlive())
 				{
-					mCurBulletIndex++;
-				}
-				else
-				{
-					mCurBulletIndex = 0;
-				}
+					mActorBullets[mCurBulletIndex]->SetPositionForFire(this->mX, this->mY - 1);
 
+					mActorBullets[mCurBulletIndex]->SetAlive(true);
+
+					if (mCurBulletIndex < ACTOR_BULLET_COUNT - 1)
+					{
+						mCurBulletIndex++;
+					}
+					else
+					{
+						mCurBulletIndex = 0;
+					}
+
+				}
 			}
-
 			break;
 		case 'Z':
 		case 'z':
@@ -74,24 +87,16 @@ void CActor::Update()
 	}
 
 	int ti = 0;
-	for (ti = 0; ti < PLAYER_BULLET_COUNT; ti++)
+	for (ti = 0; ti < mActorBullets.size(); ti++)
 	{
-		if (true == mPlayerBullets[ti].GetAlive())
+		if (true == mActorBullets[ti]->GetAlive())
 		{
-			mPlayerBullets[ti].Update();
+			mActorBullets[ti]->Update();
 		}
 	}
 }
 
-void CActor::Clean(char * tpPixel)
-{
-	CUnit::Clean(tpPixel);
-	int ti = 0;
-	for (ti = 0; ti < PLAYER_BULLET_COUNT; ti++)
-	{
-		mPlayerBullets[ti].Clean(tpPixel);
-	}
-}
+
 
 void CActor::Display(char * tpPixel)
 {
@@ -100,9 +105,12 @@ void CActor::Display(char * tpPixel)
 		*(tpPixel + mY * WIDTH + mX) = mDisplayMark;
 	}
 	int ti = 0;
-	for (ti = 0; ti < PLAYER_BULLET_COUNT; ti++)
+	for (ti = 0; ti < mActorBullets.size(); ti++)
 	{
-		mPlayerBullets[ti].Display(tpPixel);
+		if (mActorBullets[ti]->GetAlive() == true)
+		{
+			mActorBullets[ti]->Display(tpPixel);
+		}
 	}
 }
 
@@ -112,9 +120,9 @@ bool CActor::DoCollisionBulletWithEnemy(CEnemy * pEnemy)
 	bool tResult = false;
 
 	int ti = 0;
-	for (ti = 0; ti < PLAYER_BULLET_COUNT; ti++)
+	for (ti = 0; ti < mActorBullets.size(); ti++)
 	{
-		tResult = mPlayerBullets[ti].DoCollisionWithEnemy(pEnemy);
+		tResult = mActorBullets[ti]->DoCollisionWithEnemy(pEnemy);
 		
 		if (true == tResult)
 		{
@@ -125,9 +133,20 @@ bool CActor::DoCollisionBulletWithEnemy(CEnemy * pEnemy)
 	return tResult;
 }
 
+void CActor::AddBullet(CActorBullet * tpActorBullet)
+{
+	tpActorBullet->SetAlive(false);
+	mActorBullets.push_back(tpActorBullet);
+}
+
 void CActor::Destroy()
 {
-
+	int ti = 0;
+	for (ti = 0; ti < mActorBullets.size(); ti++)
+	{
+		mActorBullets[ti]->Destroy();
+	}
+	mActorBullets.clear();
 	delete this;
 }
 

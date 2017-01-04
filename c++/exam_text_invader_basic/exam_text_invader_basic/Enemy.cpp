@@ -20,12 +20,6 @@ CEnemy::~CEnemy()
 }
 
 
-void CEnemy::Update()
-{
-
-	Shot();
-}
-
 void CEnemy::Clean(char * tpPixel)
 {
 	CUnit::Clean(tpPixel);
@@ -37,6 +31,11 @@ void CEnemy::Clean(char * tpPixel)
 			mEnemyBullets[ti]->Clean(tpPixel);
 		}
 	}
+}
+
+void CEnemy::Update()
+{
+	Shot();
 }
 
 void CEnemy::Display(char * tpPixel)
@@ -130,12 +129,7 @@ void CEnemy::Shot()
 
 void CEnemy::Destroy()
 {
-	int ti = 0;
-	for (ti = 0; ti < mEnemyBullets.size(); ti++)
-	{
-		mEnemyBullets[ti]->Destroy();
-	}
-	mEnemyBullets.clear();
+	
 
 	delete this;
 }

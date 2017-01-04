@@ -162,7 +162,7 @@
     <ClInclude Include="EnemyBullet.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="Actor.h" />
-    <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="ActorBullet.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -184,7 +184,7 @@
     <ClCompile Include="EnemyBullet.cpp" />
     <ClCompile Include="exam_text_invader_basic.cpp" />
     <ClCompile Include="Actor.cpp" />
-    <ClCompile Include="PlayerBullet.cpp" />
+    <ClCompile Include="ActorBullet.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

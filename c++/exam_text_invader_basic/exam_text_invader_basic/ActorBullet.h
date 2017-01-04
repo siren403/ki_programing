@@ -4,12 +4,12 @@
 
 class CEnemy;
 
-class CPlayerBullet :
+class CActorBullet :
 	public CBullet
 {
 public:
-	CPlayerBullet();
-	virtual ~CPlayerBullet();
+	CActorBullet();
+	virtual ~CActorBullet();
 
 	//virtual void Display(char *tpPixel) override;
 	virtual void Update() override;

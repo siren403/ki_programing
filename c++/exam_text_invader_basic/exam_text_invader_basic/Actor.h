@@ -1,7 +1,10 @@
 #pragma once
 #include "Unit.h"
-#include "PlayerBullet.h"
+#include "ActorBullet.h"
 #include "config.h"
+#include <vector>
+
+using namespace std;
 
 class CEnemy;
 
@@ -10,7 +13,8 @@ class CActor :
 {
 private:
 	char mKey = 0;
-	CPlayerBullet *mPlayerBullets = NULL;
+	
+	vector<CActorBullet*> mActorBullets;
 	int mCurBulletIndex = 0;
 
 public:
@@ -21,10 +25,10 @@ public:
 	virtual void Display(char *tpPixel) override;
 	virtual void Update() override;
 	virtual void Clean(char *tpPixel) override;
+	virtual void Destroy() override;
 
 	bool DoCollisionBulletWithEnemy(CEnemy *pEnemy);
-
-	virtual void Destroy() override;
+	void AddBullet(CActorBullet *tpActorBullet);
 
 };
 

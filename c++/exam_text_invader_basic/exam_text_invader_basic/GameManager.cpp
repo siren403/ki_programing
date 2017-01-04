@@ -10,11 +10,14 @@
 #include "EnemyFactorySample1.h"
 #include "EnemyFactorySample2.h"
 
+#define SCREEN_SETTING false
 
 CGameManager::CGameManager()
 {
 	srand((unsigned int)time(NULL));
-	//system("mode con: cols=80 lines=24");
+	
+	if(SCREEN_SETTING)
+		system("mode con: cols=80 lines=24");
 
 	mStateActions[CGameManager::STATE_INIT] = &CGameManager::Init;
 	mStateActions[CGameManager::STATE_TITLE] = &CGameManager::Title;
@@ -35,13 +38,23 @@ CGameManager::~CGameManager()
 void CGameManager::Init()
 {
 	mActor.SetUp(WIDTH / 2, HEIGHT - 1);
+	
+	int ti = 0;
+	CActorBullet * tpActorBullet = NULL;
+
+	for (ti = 0; ti < ACTOR_BULLET_COUNT; ti++)
+	{
+		tpActorBullet = new CActorBullet();
+		tpActorBullet->SetDirectionAndSpeedPower(0, -1, 1);
+		mActor.AddBullet(tpActorBullet);
+	}
 
 	mEnemyFactorys.reserve(5);
 	mEnemyFactorys.push_back(new CEnemyFactorySample0());
 	mEnemyFactorys.push_back(new CEnemyFactorySample1());
 	mEnemyFactorys.push_back(new CEnemyFactorySample2());
 
-	SetFactory(2);
+	SetFactory(0);
 
 	if (mEnemyFactorys.size() > 0)
 	{
@@ -125,6 +138,18 @@ void CGameManager::Update()
 	}
 
 	mCurrentState = CGameManager::STATE_DISPLAY;
+
+	for (ti = 0; ti < mEnemys->size(); ti++)
+	{
+		if ((*mEnemys)[ti]->GetAlive())
+		{
+			return;
+		}
+	}
+
+	mCurrentFactory++;
+
+	mEnemyFactorys[mCurrentFactory]->DoSetting(*this);
 }
 
 void CGameManager::Display()
@@ -145,10 +170,12 @@ void CGameManager::Display()
 		{
 			cout << tPixel[mRow][mCol];
 		}
-		//cout << endl;
-	}
 
-	//Sleep(1000/30);
+		//if (SCREEN_SETTING)
+			//cout << endl;
+	}
+	if (SCREEN_SETTING)
+		Sleep(1000 / 30);
 
 	mCurrentState = CGameManager::STATE_UPDATE;
 }

@@ -5,7 +5,7 @@
 #define HEIGHT 24
 
 //------------------------------------ Bullet
-#define PLAYER_BULLET_COUNT 1
+#define ACTOR_BULLET_COUNT 10
 
 #define ENEMY_BULLET_COUNT 5
 

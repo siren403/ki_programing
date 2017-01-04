@@ -78,9 +78,6 @@
     <ClInclude Include="EnemyBulletNormal.h">
       <Filter>Header Files\Bullet\EnemyBullets</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerBullet.h">
-      <Filter>Header Files\Bullet\ActorBullets</Filter>
-    </ClInclude>
     <ClInclude Include="Bullet.h">
       <Filter>Header Files\Bullet</Filter>
     </ClInclude>
@@ -107,6 +104,9 @@
     </ClInclude>
     <ClInclude Include="EnemyFactorySample0.h">
       <Filter>Header Files\EnemyFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorBullet.h">
+      <Filter>Header Files\Bullet\ActorBullets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -137,9 +137,6 @@
     <ClCompile Include="EnemyBulletNormal.cpp">
       <Filter>Source Files\Bullet\EnemyBullets</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerBullet.cpp">
-      <Filter>Source Files\Bullet\ActorBullets</Filter>
-    </ClCompile>
     <ClCompile Include="Bullet.cpp">
       <Filter>Source Files\Bullet</Filter>
     </ClCompile>
@@ -166,6 +163,9 @@
     </ClCompile>
     <ClCompile Include="EnemyFactorySample0.cpp">
       <Filter>Source Files\EnemyFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorBullet.cpp">
+      <Filter>Source Files\Bullet\ActorBullets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
