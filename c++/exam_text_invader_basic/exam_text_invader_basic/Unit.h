@@ -29,6 +29,7 @@ public:
 	void SetY(int tY);
 	float GetSpeedPower();
 	void SetSpeedPower(float tSpeedPower);
+	void SetDirectionAndSpeedPower(float tDirX, float tDirY, float tSpeedPower);
 
 	void SetDisplayMark(char tMark);
 

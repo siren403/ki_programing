@@ -34,7 +34,7 @@ private:
 	int mRow = 0;
 	int mCol = 0;
 	char mKey = 0;
-	char tPixel[HEIGHT][WIDTH] = { 0 };
+	char mPixel[HEIGHT][WIDTH] = { 0 };
 
 
 	CActor mActor;

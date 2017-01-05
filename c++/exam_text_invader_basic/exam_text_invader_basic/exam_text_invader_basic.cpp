@@ -3,9 +3,9 @@
 #include "stdafx.h"
 #include "GameManager.h"
 
+
 int main()
 {
-	
 	CGameManager mGM;
 	
 	mGM.Play();

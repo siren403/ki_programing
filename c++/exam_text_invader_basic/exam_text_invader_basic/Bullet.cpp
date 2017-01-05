@@ -37,12 +37,7 @@ void CBullet::SetPositionForFire(int tX, int tY)
 	mY = tY;
 }
 
-void CBullet::SetDirectionAndSpeedPower(float tDirX, float tDirY, float tSpeedPower)
-{
-	mDirX = tDirX;
-	mDirY = tDirY;
-	mSpeedPower = tSpeedPower;
-}
+
 
 void CBullet::Destroy()
 {

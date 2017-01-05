@@ -73,3 +73,9 @@ bool CUnit::GetAlive()
 	return mIsAlive;
 }
 
+void CUnit::SetDirectionAndSpeedPower(float tDirX, float tDirY, float tSpeedPower)
+{
+	mDirX = tDirX;
+	mDirY = tDirY;
+	mSpeedPower = tSpeedPower;
+}

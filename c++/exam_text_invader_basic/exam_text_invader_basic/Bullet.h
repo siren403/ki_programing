@@ -17,6 +17,5 @@ public:
 
 	virtual void SetPositionForFire(int tX, int tY);
 
-	void SetDirectionAndSpeedPower(float tDirX, float tDirY, float tSpeedPower);
 };
 

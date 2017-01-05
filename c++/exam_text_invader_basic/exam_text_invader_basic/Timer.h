@@ -11,7 +11,7 @@ public:
 	CTimer();
 	~CTimer();
 
-	void SetInterval(float tInterval);
+	void SetInterval(int tInterval);
 	void Init();
 	void Update();
 	bool Check();

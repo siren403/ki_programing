@@ -7,12 +7,16 @@
 
 #include <time.h>
 #include "ActorBulletPattern.h"
+#include "ActorBulletCurve.h"
 
 #include "EnemyFactorySample0.h"
 #include "EnemyFactorySample1.h"
 #include "EnemyFactorySample2.h"
 
+#include "Score.h"
+
 #define SCREEN_SETTING false
+#define ACTOR_IMMORTAL true
 
 CGameManager::CGameManager()
 {
@@ -29,6 +33,7 @@ CGameManager::CGameManager()
 
 	mCurrentState = CGameManager::STATE_INIT;
 
+	CScore::GetInstance().SetPosition(5, 0);
 }
 
 CGameManager::~CGameManager()
@@ -42,32 +47,46 @@ void CGameManager::Init()
 	mActor.SetUp(WIDTH / 2, HEIGHT - 1);
 	
 	int ti = 0;
-	//CActorBullet * tp = new CActorBullet();
-	//tp->SetDirectionAndSpeedPower(0, -1, 1);
-	//mActor.AddBullet(tp);
+	
+
 	CActorBulletPattern * tpActorBulletPattern = NULL;
 	CActorBullet * tpActorBullet = NULL;
+	CActorBulletCurve * tpActorBulletCircle = NULL;
+
 	for (ti = 0; ti < ACTOR_BULLET_COUNT; ti++)
 	{
 		tpActorBulletPattern = new CActorBulletPattern();
 		
-		//3¹æÇâ Åº
-		tpActorBullet = new CActorBullet();
-		tpActorBullet->SetDirectionAndSpeedPower(-1, -1, 2);
-		tpActorBulletPattern->AddBullet(tpActorBullet);
+
+		tpActorBulletCircle = new CActorBulletCurve();
+		tpActorBulletCircle->SetDirectionAndSpeedPower(-1, -1, 1);
+		tpActorBulletCircle->SetRadius(3);
+		tpActorBulletPattern->AddBullet(tpActorBulletCircle);
+
+		tpActorBulletCircle = new CActorBulletCurve();
+		tpActorBulletCircle->SetDirectionAndSpeedPower(-1, -1, 2);
+		tpActorBulletCircle->SetRadius(1);
+		tpActorBulletPattern->AddBullet(tpActorBulletCircle);
+
 
 		tpActorBullet = new CActorBullet();
 		tpActorBullet->SetDirectionAndSpeedPower(0, -1, 2);
 		tpActorBulletPattern->AddBullet(tpActorBullet);
 
-		tpActorBullet = new CActorBullet();
-		tpActorBullet->SetDirectionAndSpeedPower(1, -1, 2);
-		tpActorBulletPattern->AddBullet(tpActorBullet);
 
+		tpActorBulletCircle = new CActorBulletCurve();
+		tpActorBulletCircle->SetDirectionAndSpeedPower(1, -1, 2);
+		tpActorBulletCircle->SetRadius(1);
+		tpActorBulletPattern->AddBullet(tpActorBulletCircle);
+		
+		tpActorBulletCircle = new CActorBulletCurve();
+		tpActorBulletCircle->SetDirectionAndSpeedPower(1, -1, 1);
+		tpActorBulletCircle->SetRadius(3);
+		tpActorBulletPattern->AddBullet(tpActorBulletCircle);
 		
 		mActor.AddBullet(tpActorBulletPattern);
 	}
-
+	
 
 
 	mEnemyFactorys.reserve(5);
@@ -95,11 +114,11 @@ void CGameManager::Title()
 }
 void CGameManager::Update()
 {
-	mActor.Clean(*tPixel);
+	mActor.Clean(*mPixel);
 	int ti = 0;
 	for (ti = 0; ti < mEnemys->size(); ti++)
 	{
-		(*mEnemys)[ti]->Clean(&tPixel[0][0]);
+		(*mEnemys)[ti]->Clean(&mPixel[0][0]);
 	}
 
 	mKey = 0;
@@ -154,7 +173,9 @@ void CGameManager::Update()
 	{
 		if (mActor.GetAlive() && true == (*mEnemys)[ti]->DoCollisionBulletWithActor(&mActor))
 		{
-			mActor.SetAlive(false);
+			if(ACTOR_IMMORTAL == false)
+				mActor.SetAlive(false);
+			
 			break;
 		}
 		//todo : boss...
@@ -163,14 +184,13 @@ void CGameManager::Update()
 	mCurrentState = CGameManager::STATE_DISPLAY;
 
 
-
-
 	if (mActor.GetAlive() == false)
 	{
-		Sleep(500);
+		Sleep(1500);
 		system("cls");
-		mActor.SetAlive(true);
-		mCurrentState = CGameManager::STATE_TITLE;
+		cout << "Game Over" << endl;
+		Sleep(1000);
+		mCurrentState = CGameManager::STATE_QUIT;
 	}
 	for (ti = 0; ti < mEnemys->size(); ti++)
 	{
@@ -189,27 +209,30 @@ void CGameManager::Display()
 
 	if (mActor.GetAlive())
 	{
-		mActor.Display(*tPixel);
+		mActor.Display(*mPixel);
 	}
 	int ti = 0;
 	for (ti = 0; ti < mEnemys->size(); ti++)
 	{
-		(*mEnemys)[ti]->Display(&tPixel[0][0]);
+		(*mEnemys)[ti]->Display(&mPixel[0][0]);
 	}
 
 	for (mRow = 0; mRow < HEIGHT; mRow++)
 	{
 		for (mCol = 0; mCol < WIDTH; mCol++)
 		{
-			cout << tPixel[mRow][mCol];
+			cout << mPixel[mRow][mCol];
 		}
 
 		//if (SCREEN_SETTING)
 			//cout << endl;
 	}
+	
+	
+	CScore::GetInstance().Display(*mPixel);
+	
 	if (SCREEN_SETTING)
 		Sleep(1000 / 30);
-
 	mCurrentState = CGameManager::STATE_UPDATE;
 }
 

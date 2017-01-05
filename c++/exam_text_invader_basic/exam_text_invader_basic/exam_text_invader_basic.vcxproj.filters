@@ -111,6 +111,12 @@
     <ClInclude Include="ActorBulletPattern.h">
       <Filter>Header Files\Bullet\ActorBullets</Filter>
     </ClInclude>
+    <ClInclude Include="ActorBulletCurve.h">
+      <Filter>Header Files\Bullet\ActorBullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Score.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -172,6 +178,12 @@
     </ClCompile>
     <ClCompile Include="ActorBulletPattern.cpp">
       <Filter>Source Files\Bullet\ActorBullets</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorBulletCurve.cpp">
+      <Filter>Source Files\Bullet\ActorBullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Score.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

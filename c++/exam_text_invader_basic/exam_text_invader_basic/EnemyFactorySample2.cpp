@@ -26,10 +26,16 @@ CEnemyFactorySample2::CEnemyFactorySample2()
 		for (tiBullet = 0; tiBullet < 5; tiBullet++)
 		{
 			tpBulletPattern = new CEnemyBulletPattern();
-			tpBulletPattern
+			/*tpBulletPattern
 				->AddBullet(new CEnemyBulletNormal(-1, 1, tiBullet % 2 == 0 ? 1 : 2))
 				.AddBullet(new CEnemyBulletNormal(0, 1, tiBullet % 2 == 0 ? 2 : 1))
-				.AddBullet(new CEnemyBulletNormal(1, 1, tiBullet % 2 == 0 ? 1 : 2));
+				.AddBullet(new CEnemyBulletNormal(1, 1, tiBullet % 2 == 0 ? 1 : 2));*/
+
+			tpBulletPattern
+				->AddBullet(new CEnemyBulletNormal(-1, 1, 1))
+				.AddBullet(new CEnemyBulletNormal(0, 1, 1))
+				.AddBullet(new CEnemyBulletNormal(1, 1, 1));
+
 			tpEnemy->AddBullet(tpBulletPattern);
 		}
 		mEnemys.push_back(tpEnemy);

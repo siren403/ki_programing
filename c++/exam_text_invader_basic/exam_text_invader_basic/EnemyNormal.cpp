@@ -15,43 +15,32 @@ CEnemyNormal::~CEnemyNormal()
 
 void CEnemyNormal::Update()
 {
-	/*if (DIR_RIGHT == mDirX)
-	{
-	if (mX < WIDTH - 1)
-	{
-	mDirX = DIR_RIGHT;
-	}
-	else
-	{
-	mDirX = DIR_LEFT;
-	}
-	}
-	if (DIR_LEFT == mDirX)
-	{
-	if (mX > 0)
-	{
-	mDirX = DIR_LEFT;
-	}
-	else
-	{
-	mDirX = DIR_RIGHT;
-	}
-	}*/
 
 	//Move
-	if (mX >= WIDTH - 1 || mX <= 1)
+	if (mX >= mStartPositionX + mMoveWidth || mX <= mStartPositionX - mMoveWidth)
 	{
 		mDirX = -mDirX;
-		mY = mY + mSpeedPower;
-		if (mY >= HEIGHT - 1)
+		mY = mY + mDirY * mSpeedPower;
+		if (mY >= HEIGHT * 0.3f || mY <= 1)
 		{
-			mIsAlive = false;
+			mDirY = -mDirY;
+			/*mIsAlive = false;*/
 		}
 	}
 
 	mX = mX + mDirX * mSpeedPower;
 
-
 	Shot();
+}
+
+void CEnemyNormal::SetUp(int tX, int tY)
+{
+	CUnit::SetUp(tX, tY);
+	mStartPositionX = mX;
+}
+
+void CEnemyNormal::SetMoveWidth(int tMoveWidth)
+{
+	mMoveWidth = tMoveWidth;
 }
 

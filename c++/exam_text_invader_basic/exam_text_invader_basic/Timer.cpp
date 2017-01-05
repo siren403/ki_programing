@@ -11,7 +11,7 @@ CTimer::~CTimer()
 {
 }
 
-void CTimer::SetInterval(float tInterval)
+void CTimer::SetInterval(int tInterval)
 {
 	mInterval = tInterval;
 }
