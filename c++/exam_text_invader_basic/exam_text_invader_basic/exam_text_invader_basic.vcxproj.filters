@@ -108,6 +108,9 @@
     <ClInclude Include="ActorBullet.h">
       <Filter>Header Files\Bullet\ActorBullets</Filter>
     </ClInclude>
+    <ClInclude Include="ActorBulletPattern.h">
+      <Filter>Header Files\Bullet\ActorBullets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -165,6 +168,9 @@
       <Filter>Source Files\EnemyFactory</Filter>
     </ClCompile>
     <ClCompile Include="ActorBullet.cpp">
+      <Filter>Source Files\Bullet\ActorBullets</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorBulletPattern.cpp">
       <Filter>Source Files\Bullet\ActorBullets</Filter>
     </ClCompile>
   </ItemGroup>

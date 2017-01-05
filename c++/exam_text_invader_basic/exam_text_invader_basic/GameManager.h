@@ -49,6 +49,8 @@ private:
 	void Quit();
 
 	void ClearScreen(int tX, int tY);
+
+
 public:
 	CGameManager();
 	~CGameManager();

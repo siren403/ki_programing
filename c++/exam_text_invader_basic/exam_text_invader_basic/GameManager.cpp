@@ -6,6 +6,8 @@
 #include <iostream>
 
 #include <time.h>
+#include "ActorBulletPattern.h"
+
 #include "EnemyFactorySample0.h"
 #include "EnemyFactorySample1.h"
 #include "EnemyFactorySample2.h"
@@ -40,14 +42,33 @@ void CGameManager::Init()
 	mActor.SetUp(WIDTH / 2, HEIGHT - 1);
 	
 	int ti = 0;
+	//CActorBullet * tp = new CActorBullet();
+	//tp->SetDirectionAndSpeedPower(0, -1, 1);
+	//mActor.AddBullet(tp);
+	CActorBulletPattern * tpActorBulletPattern = NULL;
 	CActorBullet * tpActorBullet = NULL;
-
 	for (ti = 0; ti < ACTOR_BULLET_COUNT; ti++)
 	{
+		tpActorBulletPattern = new CActorBulletPattern();
+		
+		//3¹æÇâ Åº
 		tpActorBullet = new CActorBullet();
-		tpActorBullet->SetDirectionAndSpeedPower(0, -1, 1);
-		mActor.AddBullet(tpActorBullet);
+		tpActorBullet->SetDirectionAndSpeedPower(-1, -1, 2);
+		tpActorBulletPattern->AddBullet(tpActorBullet);
+
+		tpActorBullet = new CActorBullet();
+		tpActorBullet->SetDirectionAndSpeedPower(0, -1, 2);
+		tpActorBulletPattern->AddBullet(tpActorBullet);
+
+		tpActorBullet = new CActorBullet();
+		tpActorBullet->SetDirectionAndSpeedPower(1, -1, 2);
+		tpActorBulletPattern->AddBullet(tpActorBullet);
+
+		
+		mActor.AddBullet(tpActorBulletPattern);
 	}
+
+
 
 	mEnemyFactorys.reserve(5);
 	mEnemyFactorys.push_back(new CEnemyFactorySample0());
@@ -93,6 +114,10 @@ void CGameManager::Update()
 		case 'q':
 			mCurrentState = CGameManager::STATE_QUIT;
 			return;
+		case 'P':
+		case 'p':
+			SetFactory(mCurrentFactory + 1);
+			break;
 		}
 	}
 
@@ -119,7 +144,6 @@ void CGameManager::Update()
 	{
 		if (true == mActor.DoCollisionBulletWithEnemy((*mEnemys)[ti]))
 		{
-			//todo...
 			(*mEnemys)[ti]->SetAlive(false);
 			break;
 		}
@@ -128,9 +152,8 @@ void CGameManager::Update()
 
 	for (ti = 0; ti < mEnemys->size(); ti++)
 	{
-		if (true == (*mEnemys)[ti]->DoCollisionBulletWithActor(&mActor))
+		if (mActor.GetAlive() && true == (*mEnemys)[ti]->DoCollisionBulletWithActor(&mActor))
 		{
-			//todo...
 			mActor.SetAlive(false);
 			break;
 		}
@@ -139,6 +162,16 @@ void CGameManager::Update()
 
 	mCurrentState = CGameManager::STATE_DISPLAY;
 
+
+
+
+	if (mActor.GetAlive() == false)
+	{
+		Sleep(500);
+		system("cls");
+		mActor.SetAlive(true);
+		mCurrentState = CGameManager::STATE_TITLE;
+	}
 	for (ti = 0; ti < mEnemys->size(); ti++)
 	{
 		if ((*mEnemys)[ti]->GetAlive())
@@ -146,10 +179,7 @@ void CGameManager::Update()
 			return;
 		}
 	}
-
-	mCurrentFactory++;
-
-	mEnemyFactorys[mCurrentFactory]->DoSetting(*this);
+	SetFactory(mCurrentFactory + 1);
 }
 
 void CGameManager::Display()
@@ -157,7 +187,10 @@ void CGameManager::Display()
 
 	ClearScreen(0, 0);
 
-	mActor.Display(*tPixel);
+	if (mActor.GetAlive())
+	{
+		mActor.Display(*tPixel);
+	}
 	int ti = 0;
 	for (ti = 0; ti < mEnemys->size(); ti++)
 	{
@@ -190,6 +223,7 @@ void CGameManager::Quit()
 		mEnemyFactorys[ti]->Destroy();
 	}
 
+	mActor.Destroy();
 	//delete ...
 }
 
@@ -211,6 +245,10 @@ void CGameManager::SetEnemys(vector<CEnemy*>* tpEnemys)
 void CGameManager::SetFactory(int tIndex)
 {
 	mCurrentFactory = tIndex;
+	if (mCurrentFactory >= mEnemyFactorys.size())
+	{
+		mCurrentFactory = 0;
+	}
 	mEnemyFactorys[mCurrentFactory]->DoSetting(*this);
 }
 
@@ -232,6 +270,5 @@ void CGameManager::ClearScreen(int tX, int tY)
 	cd.Y = tY;
 
 	SetConsoleCursorPosition(hOutput, cd);
-
 }
 

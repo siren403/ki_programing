@@ -19,7 +19,7 @@ CActorBullet::~CActorBullet()
 
 void CActorBullet::Update()
 {
-	if (mY < HEIGHT - 1 || mY > 0)
+	if (IsScreenOut() == false)
 	{
 		mX = mX + mDirX * mSpeedPower;
 		mY = mY + mDirY * mSpeedPower;

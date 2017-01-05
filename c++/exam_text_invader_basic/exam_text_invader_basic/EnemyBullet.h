@@ -12,7 +12,7 @@ public:
 
 	virtual void Update() override;
 
-	virtual void SetPositionForFire(int tX, int tY);
+	virtual void SetPositionForFire(int tX, int tY) override;
 	virtual bool DoCollisionWithActor(CActor *pPlayer);
 
 };

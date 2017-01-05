@@ -15,7 +15,7 @@ public:
 	virtual void Display(char *tpPixel) override;
 	virtual void Destroy() override;
 
-	void SetPositionForFire(int tX, int tY);
+	virtual void SetPositionForFire(int tX, int tY);
 
 	void SetDirectionAndSpeedPower(float tDirX, float tDirY, float tSpeedPower);
 };

@@ -7,15 +7,6 @@
 CActor::CActor()
 {
 
-	//mActorBullets = new CActorBullet[PLAYER_BULLET_COUNT];
-
-	/*int ti = 0;
-	for (ti = 0; ti < PLAYER_BULLET_COUNT; ti++)
-	{
-		mActorBullets[ti].SetAlive(false);
-	}
-	mCurBulletIndex = 0;
-*/
 	mDisplayMark = 'A';
 	mActorBullets.reserve(ACTOR_BULLET_COUNT);
 	mCurBulletIndex = 0;
@@ -56,7 +47,7 @@ void CActor::Update()
 
 					mActorBullets[mCurBulletIndex]->SetAlive(true);
 
-					if (mCurBulletIndex < ACTOR_BULLET_COUNT - 1)
+					if (mCurBulletIndex < mActorBullets.size() - 1)
 					{
 						mCurBulletIndex++;
 					}
@@ -147,7 +138,7 @@ void CActor::Destroy()
 		mActorBullets[ti]->Destroy();
 	}
 	mActorBullets.clear();
-	delete this;
+	//delete this;
 }
 
 
