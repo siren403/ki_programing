@@ -25,7 +25,7 @@ void CActorBulletCurve::Update()
 
 	mY = mY + mDirY * mSpeedPower;
 	mX = mX + (cos((PI * 2) * (tCurrentTime - ShotTime) * 0.001f) * mRadius) * mDirX;
-	mY = mY + -sin((PI * 2) * (tCurrentTime - ShotTime) * 0.001f) * mRadius;
+	mY = mY + -abs(sin((PI * 2) * (tCurrentTime - ShotTime) * 0.001f) * mRadius);
 
 	if (mDirX == 1)
 	{
