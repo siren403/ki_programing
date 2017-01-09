@@ -1,11 +1,24 @@
 #include "stdafx.h"
 #include "Bullet.h"
-#include "gamesettings.h"
+#include "config.h"
 #include "Enemy.h"
+
+bool CBullet::IsScreenOut()
+{
+	bool tResult = false;
+
+	if (mX < 0 || mX > WIDTH - 1
+		|| mY < 0 || mY > HEIGHT - 1)
+	{
+		tResult = true;
+	}
+
+	return tResult;
+}
 
 CBullet::CBullet()
 {
-	mMark = '*';
+	mDisplayMark = '*';
 }
 
 
@@ -15,10 +28,7 @@ CBullet::~CBullet()
 
 void CBullet::Display(char * tpPixel)
 {
-	if (mIsAlive)
-	{
-		*(tpPixel + mY*WIDTH + mX) = mMark;
-	}
+	*(tpPixel + mY*WIDTH + mX) = mDisplayMark;
 }
 
 void CBullet::SetPositionForFire(int tX, int tY)
@@ -29,14 +39,9 @@ void CBullet::SetPositionForFire(int tX, int tY)
 
 
 
-void CBullet::SetAlive(bool tAlive)
+void CBullet::Destroy()
 {
-	mIsAlive = tAlive;
+	delete this;
 }
 
-
-bool CBullet::GetAlive()
-{
-	return mIsAlive;
-}
 

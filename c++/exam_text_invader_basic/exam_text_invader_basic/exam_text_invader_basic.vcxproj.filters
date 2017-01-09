@@ -13,6 +13,36 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Enemys">
+      <UniqueIdentifier>{7b036e5c-9e47-4bf8-9623-b7ca331160b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Enemys">
+      <UniqueIdentifier>{73b671b7-734c-4dda-b3e4-09f64b11395d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Bullet">
+      <UniqueIdentifier>{278c4956-7271-4d14-bf6c-1d1a75395aee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Bullet\EnemyBullets">
+      <UniqueIdentifier>{5b656023-527f-4f11-a4ac-a1d1471c6e56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Bullet\ActorBullets">
+      <UniqueIdentifier>{dea59484-925e-46cf-bc80-6effa0996ebb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Bullet">
+      <UniqueIdentifier>{ffae0367-8fec-4e3b-9ec5-e5c3c08acef8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Bullet\EnemyBullets">
+      <UniqueIdentifier>{ff005068-6f1d-49b8-ba1e-43bb79a62973}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Bullet\ActorBullets">
+      <UniqueIdentifier>{2ea7bafb-0294-46a5-afe0-70dc783def0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\EnemyFactory">
+      <UniqueIdentifier>{ba06f410-8b08-4e7a-8b29-7e46514f3fb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\EnemyFactory">
+      <UniqueIdentifier>{0a971bdd-d3e4-4a9c-bb13-0c94d8fb6163}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -24,28 +54,67 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Character.h">
+    <ClInclude Include="Actor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
+    <ClInclude Include="Unit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="gamesettings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyBulletLt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerBullet.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Enemys</Filter>
     </ClInclude>
     <ClInclude Include="EnemyBullet.h">
+      <Filter>Header Files\Bullet\EnemyBullets</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBulletHoming.h">
+      <Filter>Header Files\Bullet\EnemyBullets</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBulletNormal.h">
+      <Filter>Header Files\Bullet\EnemyBullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Header Files\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyNormal.h">
+      <Filter>Header Files\Enemys</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyFactory.h">
+      <Filter>Header Files\EnemyFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyFactorySample1.h">
+      <Filter>Header Files\EnemyFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBulletPattern.h">
+      <Filter>Header Files\Bullet\EnemyBullets</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyFactorySample2.h">
+      <Filter>Header Files\EnemyFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStopFireWithMove.h">
+      <Filter>Header Files\Enemys</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyFactorySample0.h">
+      <Filter>Header Files\EnemyFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorBullet.h">
+      <Filter>Header Files\Bullet\ActorBullets</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorBulletPattern.h">
+      <Filter>Header Files\Bullet\ActorBullets</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorBulletCurve.h">
+      <Filter>Header Files\Bullet\ActorBullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Score.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -56,25 +125,64 @@
     <ClCompile Include="exam_text_invader_basic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Character.cpp">
+    <ClCompile Include="Actor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="Unit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyBulletLt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerBullet.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Enemys</Filter>
     </ClCompile>
     <ClCompile Include="EnemyBullet.cpp">
+      <Filter>Source Files\Bullet\EnemyBullets</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBulletHoming.cpp">
+      <Filter>Source Files\Bullet\EnemyBullets</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBulletNormal.cpp">
+      <Filter>Source Files\Bullet\EnemyBullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source Files\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyNormal.cpp">
+      <Filter>Source Files\Enemys</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyFactory.cpp">
+      <Filter>Source Files\EnemyFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyFactorySample1.cpp">
+      <Filter>Source Files\EnemyFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBulletPattern.cpp">
+      <Filter>Source Files\Bullet\EnemyBullets</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyFactorySample2.cpp">
+      <Filter>Source Files\EnemyFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStopFireWithMove.cpp">
+      <Filter>Source Files\Enemys</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyFactorySample0.cpp">
+      <Filter>Source Files\EnemyFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorBullet.cpp">
+      <Filter>Source Files\Bullet\ActorBullets</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorBulletPattern.cpp">
+      <Filter>Source Files\Bullet\ActorBullets</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorBulletCurve.cpp">
+      <Filter>Source Files\Bullet\ActorBullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Score.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

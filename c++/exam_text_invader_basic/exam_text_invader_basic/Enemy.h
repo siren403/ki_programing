@@ -1,20 +1,23 @@
 #pragma once
-#include "Character.h"
+#include "Actor.h"
 #include "EnemyBullet.h"
-#define DIR_LEFT 0
-#define DIR_RIGHT 1
+#include "Timer.h"
+#include <vector>
 
+
+using namespace std;
 
 class CEnemy :
-	public CCharacter
+	public CUnit
 {
 protected:
-	CEnemyBullet *mEnemyBullets = NULL;
+
+	vector<CEnemyBullet*> mEnemyBullets;
 	int mCurBulletIndex = 0;
 
-	unsigned int mDelay = 0;
-	unsigned int mTemp = 0;
+	CTimer mTimer;
 
+	virtual void Shot();
 public:
 	CEnemy();
 	virtual ~CEnemy();
@@ -22,8 +25,12 @@ public:
 	virtual void Display(char *tpPixel) override;
 	virtual void Update() override;
 	virtual void Clean(char *tpPixel) override;
+	virtual void Destroy() override;
 	
-	void SetPlayer(CPlayer *tPlayer);
-	bool DoCollisionBulletWithActor(CPlayer *pPlayer);
+	bool DoCollisionBulletWithActor(CActor *pPlayer);
+
+	void AddBullet(CEnemyBullet *tpEnemyBullet);
+	void SetBulletInterval(unsigned int tInterval);
+
 };
 

@@ -1,24 +1,21 @@
 #pragma once
-#include "Character.h"
+#include "Unit.h"
 
 
 class CBullet :
-	public CCharacter
+	public CUnit
 {
 protected:
-	bool mIsAlive = false;
-	char mMark = 0;
-
+	bool IsScreenOut();
 public:
 	CBullet();
 	virtual ~CBullet();
 
 
 	virtual void Display(char *tpPixel) override;
+	virtual void Destroy() override;
 
-	void SetPositionForFire(int tX, int tY);
+	virtual void SetPositionForFire(int tX, int tY);
 
-	void SetAlive(bool tAlive);
-	bool GetAlive();
 };
 

@@ -1,22 +1,16 @@
 #include "stdafx.h"
 #include "Enemy.h"
-#include "gamesettings.h"
+#include "config.h"
 #include <iostream>
-#include <Windows.h>
-#include <WinBase.h>
+
+#include "EnemyBulletNormal.h"
+
 
 CEnemy::CEnemy()
 {
-	mEnemyBullets = new CEnemyBullet[ENEMY_BULLET_COUNT];
-
-	int ti = 0;
-	for (ti = 0; ti < ENEMY_BULLET_COUNT; ti++)
-	{
-		mEnemyBullets[ti].SetAlive(false);
-	}
+	mDisplayMark = '#';
+	mEnemyBullets.reserve(ENEMY_BULLET_COUNT);
 	mCurBulletIndex = 0;
-
-	mDirX = DIR_RIGHT;
 
 }
 
@@ -26,111 +20,119 @@ CEnemy::~CEnemy()
 }
 
 
-void CEnemy::Update()
-{
-	if (DIR_RIGHT == mDirX)
-	{
-		if (mX < WIDTH - 1)
-		{
-			mX = mX + 1;
-		}
-		else
-		{
-			mDirX = DIR_LEFT;
-		}
-	}
-	if (DIR_LEFT == mDirX)
-	{
-		if (mX > 0)
-		{
-			mX = mX - 1;
-		}
-		else
-		{
-			mDirX = DIR_RIGHT;
-		}
-	}
-
-	int ti = 0;
-	if (0 == mDelay)
-	{
-		mDelay = GetTickCount();
-	}
-
-	mTemp = GetTickCount();
-	if (mTemp - mDelay > ENEMY_BULLET_INTERVAL)
-	{
-		if (false == mEnemyBullets[mCurBulletIndex].GetAlive())
-		{
-			mEnemyBullets[mCurBulletIndex].SetPositionForFire(this->mX, this->mY + 1);
-			mEnemyBullets[mCurBulletIndex].SetAlive(true);
-
-			if (mCurBulletIndex < ENEMY_BULLET_COUNT - 1)
-			{
-				mCurBulletIndex++;
-			}
-			else
-			{
-				mCurBulletIndex = 0;
-			}
-		}
-
-		mDelay = mTemp;
-	}
-
-	for (ti = 0; ti < ENEMY_BULLET_COUNT; ti++)
-	{
-		if (false != mEnemyBullets[ti].GetAlive())
-		{
-			mEnemyBullets[ti].Update();
-		}
-	}
-}
-
 void CEnemy::Clean(char * tpPixel)
 {
-	CCharacter::Clean(tpPixel);
-	int ti = 0;
-	for (ti = 0; ti < ENEMY_BULLET_COUNT; ti++)
+	CUnit::Clean(tpPixel);
+	if (mEnemyBullets.size() > 0)
 	{
-		mEnemyBullets[ti].Clean(tpPixel);
+		int ti = 0;
+		for (ti = 0; ti < mEnemyBullets.size(); ti++)
+		{
+			mEnemyBullets[ti]->Clean(tpPixel);
+		}
 	}
 }
 
+void CEnemy::Update()
+{
+	Shot();
+}
 
 void CEnemy::Display(char * tpPixel)
 {
-	*(tpPixel + mY * WIDTH + mX) = '#';
-	int ti = 0;
-	for (ti = 0; ti < ENEMY_BULLET_COUNT; ti++)
+	if (mIsAlive)
 	{
-		mEnemyBullets[ti].Display(tpPixel);
+		*(tpPixel + mY * WIDTH + mX) = mDisplayMark;
+	}
+	if (mEnemyBullets.size() > 0)
+	{
+		int ti = 0;
+		for (ti = 0; ti < mEnemyBullets.size(); ti++)
+		{
+			if (mEnemyBullets[ti]->GetAlive() == true)
+			{
+				mEnemyBullets[ti]->Display(tpPixel);
+			}
+		}
 	}
 }
 
-void CEnemy::SetPlayer(CPlayer * tPlayer)
-{
-	int ti = 0;
-	for (ti = 0; ti < ENEMY_BULLET_COUNT; ti++)
-	{
-		mEnemyBullets[ti].SetTarget(tPlayer);
-	}
-}
 
-bool CEnemy::DoCollisionBulletWithActor(CPlayer * pPlayer)
+bool CEnemy::DoCollisionBulletWithActor(CActor * pPlayer)
 {
 	bool tResult = false;
-
-	int ti = 0;
-	for (ti = 0; ti < ENEMY_BULLET_COUNT; ti++)
+	if (mEnemyBullets.size() > 0)
 	{
-		tResult = mEnemyBullets[ti].DoCollisionWithActor(pPlayer);
-		if (true == tResult)
+		int ti = 0;
+		for (ti = 0; ti < mEnemyBullets.size(); ti++)
 		{
-			break;
+			tResult = mEnemyBullets[ti]->DoCollisionWithActor(pPlayer);
+			if (true == tResult)
+			{
+				break;
+			}
+		}
+	}
+	return tResult;
+}
+
+void CEnemy::AddBullet(CEnemyBullet * tpEnemyBullet)
+{
+	tpEnemyBullet->SetAlive(false);
+	mEnemyBullets.push_back(tpEnemyBullet);
+}
+
+void CEnemy::SetBulletInterval(unsigned int tInterval)
+{
+	mTimer.SetInterval(tInterval);
+}
+
+void CEnemy::Shot()
+{
+	//Shotting
+	if (mEnemyBullets.size() > 0)
+	{
+		//mTimer.Init();
+
+		mTimer.Update();
+		bool first = false;
+		if (mTimer.Check())
+		{
+			if (false == mEnemyBullets[mCurBulletIndex]->GetAlive())
+			{
+				mEnemyBullets[mCurBulletIndex]->SetPositionForFire(this->mX, this->mY + 1);
+				mEnemyBullets[mCurBulletIndex]->SetAlive(true);
+
+				if (mCurBulletIndex < mEnemyBullets.size() - 1)
+				{
+					mCurBulletIndex++;
+				}
+				else
+				{
+					mCurBulletIndex = 0;
+				}
+			}
 		}
 	}
 
-	return tResult;
+	int ti = 0;
+	for (ti = 0; ti < mEnemyBullets.size(); ti++)
+	{
+		if (mEnemyBullets[ti]->GetAlive() == true)
+		{
+			mEnemyBullets[ti]->Update();
+		}
+	}
 }
+
+
+
+void CEnemy::Destroy()
+{
+	
+
+	delete this;
+}
+
+
 
