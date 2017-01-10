@@ -11,6 +11,7 @@ proj.linux/
 proj.tizen/
 proj.win8.1-universal/
 proj.tizen/
+proj.ios_mac/
 
 # Ignore files build by Visual Studio
 *.obj

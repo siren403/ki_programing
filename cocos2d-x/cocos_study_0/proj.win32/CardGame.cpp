@@ -33,11 +33,29 @@ bool CCardGame::init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	/////////////////////////////
-	// 2. add a menu item with "X" image, which is clicked to quit the program
-	//    you may modify it.
+	Vec2 tCenter = Vec2(visibleSize.width / 2, visibleSize.height/2);
 
-	// add a "close" icon to exit the progress. it's an autorelease object
+#pragma region InitTitleLayer
+	mTitleLayer = Layer::create();
+	mTitleLayer->retain();	
+	this->addChild(mTitleLayer,1);
+
+	mTitleLabel = Label::createWithBMFont("fonts/boundsTestFont.fnt", "Slime");
+	mTitleLabel->retain();
+	mTitleLabel->setPosition(tCenter);
+	mTitleLabel->setAnchorPoint(Vec2(0.6,0.5));
+	mTitleLabel->setScale(2);
+	mTitleLayer->addChild(mTitleLabel);
+
+#pragma endregion
+
+#pragma region InitiBattleLayer
+
+	mBattleLayer = Layer::create();
+	mBattleLayer->retain();
+	mBattleLayer->setVisible(false);
+	this->addChild(mBattleLayer);
+
 	auto closeItem = MenuItemImage::create(
 		"CloseNormal.png",
 		"CloseSelected.png",
@@ -46,74 +64,255 @@ bool CCardGame::init()
 	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width / 2,
 		origin.y + closeItem->getContentSize().height / 2));
 
+	auto tBattleMenu = Menu::create(closeItem, NULL);
+	tBattleMenu->setPosition(Vec2::ZERO);
+	mBattleLayer->addChild(tBattleMenu);
+	
+	mPlayerSprite = Sprite::create("images/grossini.png");
+	mPlayerSprite->retain();
+	mPlayerSprite->setAnchorPoint(Vec2(0.5, 0));
+	mPlayerSprite->setPosition(Vec2(100, 160));
+	mBattleLayer->addChild(mPlayerSprite, 1);
 
-	auto tMenuItem_1 = MenuItemFont::create("1", CC_CALLBACK_1(CCardGame::DoAction, this));
+
+	//==========================================
+	mSlimeLayer = Layer::create();
+	mSlimeLayer->retain();
+	mBattleLayer->addChild(mSlimeLayer);
+
+	auto tAttackSlimeMenuItem = MenuItemImage::create(
+		"CloseNormal.png",
+		"CloseSelected.png",
+		CC_CALLBACK_1(CCardGame::attackSlime, this));
+	tAttackSlimeMenuItem->setPosition(tCenter);
+
+	auto tSlimeMenu = Menu::create(
+		tAttackSlimeMenuItem,
+		NULL
+	);
+	tSlimeMenu->setPosition(Vec2::ZERO);
+	tSlimeMenu->setScale(2);
+	mSlimeLayer->addChild(tSlimeMenu, 10);
+
+
+	mSlimeSprite = Sprite::create("images/slime.png");
+	mSlimeSprite->retain();
+	mSlimeSprite->setAnchorPoint(Vec2(0.5, 0));
+	mSlimeSprite->setPosition(Vec2(400, 160));
+	mSlimeSprite->setFlipX(true);
+	mSlimeLayer->addChild(mSlimeSprite, 1);
+	mSlimeHp = mSlimeMaxHp;
+
+	auto tSlimeMotion = RepeatForever::create(
+		Sequence::create(
+			Spawn::create
+			(
+				ScaleTo::create(0.4, 1.2, 1),
+				Sequence::create(
+					DelayTime::create(0.1),
+					ScaleTo::create(0.4, 1, 1.1),
+					NULL
+				),
+				NULL
+			),
+			ScaleTo::create(0.4, 1, 1),
+			NULL
+		)
+	);
+	mSlimeSprite->runAction(tSlimeMotion->clone());
+
+
+	mSlimeHpSprite = Sprite::create("images/white-512x512.png");
+	mSlimeHpSprite->retain();
+	mSlimeHpSprite->setColor(Color3B::RED);
+	mSlimeHpSprite->setTextureRect(Rect(0, 0, 80, 5));
+	mSlimeHpSprite->setAnchorPoint(Vec2(0.5, 0));
+	mSlimeHpSprite->setPosition(Vec2(mSlimeSprite->getPosition().x, mSlimeSprite->getPosition().y + 100));
+	mSlimeLayer->addChild(mSlimeHpSprite);
+
+	//=========================================
+
+
+	mBossLayer = Layer::create();
+	mBossLayer->retain();
+	mBossLayer->setVisible(false);
+	mBattleLayer->addChild(mBossLayer);
+
+	auto tMenuItem_1 = MenuItemImage::create(
+		"images/sprite-1.png", 
+		"images/sprite-1.png",
+		CC_CALLBACK_1(CCardGame::DoAction, this));
 	tMenuItem_1->setTag(1);
 	tMenuItem_1->setPosition(Vec2((this->getContentSize().width / 2) - 50, 50));
 
-	auto tMenuItem_2 = MenuItemFont::create("2", CC_CALLBACK_1(CCardGame::DoAction, this));
+	auto tMenuItem_2 = MenuItemImage::create(
+		"images/sprite-2.png",
+		"images/sprite-2.png",
+		CC_CALLBACK_1(CCardGame::DoAction, this));
 	tMenuItem_2->setTag(2);
 	tMenuItem_2->setPosition(Vec2((this->getContentSize().width / 2), 50));
 
-	auto tMenuItem_3 = MenuItemFont::create("3", CC_CALLBACK_1(CCardGame::DoAction, this));
+	auto tMenuItem_3 = MenuItemImage::create(
+		"images/sprite-3.png",
+		"images/sprite-3.png",
+		CC_CALLBACK_1(CCardGame::DoAction, this));
 	tMenuItem_3->setTag(3);
 	tMenuItem_3->setPosition(Vec2((this->getContentSize().width / 2) + 50, 50));
 
 	// create menu, it's an autorelease object
-	auto menu = Menu::create(closeItem, tMenuItem_1, tMenuItem_2, tMenuItem_3, NULL);
+	auto menu = Menu::create(tMenuItem_1, tMenuItem_2, tMenuItem_3, NULL);
 	menu->setPosition(Vec2::ZERO);
-	this->addChild(menu, 10);
+	mBossLayer->addChild(menu, 10);
 
 
-	mLeftLabel = Label::createWithTTF("0", "fonts/Marker Felt.ttf", 24);
-	mLeftLabel->retain();
-	mLeftLabel->setPosition(Vec2(100, 160));
-	this->addChild(mLeftLabel);
-
-	mRightLabel = Label::createWithTTF("0", "fonts/Marker Felt.ttf", 24);
-	mRightLabel->retain();
-	mRightLabel->setPosition(Vec2(400, 160));
-	this->addChild(mRightLabel);
+	mBossSprite = Sprite::create("images/slime_boss.png");
+	mBossSprite->retain();
+	mBossSprite->setAnchorPoint(Vec2(0.5, 0));
+	mBossSprite->setPosition(Vec2(400, 140));
+	mBossSprite->setFlipX(true);
+	mBossLayer->addChild(mBossSprite, 1);
+	mBossSprite->runAction(tSlimeMotion->clone());
 
 
+	mLeftWinCountLabel = Label::createWithBMFont("fonts/boundsTestFont.fnt", "0");
+	mLeftWinCountLabel->retain();
+	mLeftWinCountLabel->setPosition(Vec2(tCenter.x - 50, tCenter.y));
+	mLeftWinCountLabel->setScale(2);
+	mLeftWinCountLabel->setColor(Color3B(0, 100, 150));
+	mBossLayer->addChild(mLeftWinCountLabel);
+
+	mRightWinCountLabel = Label::createWithBMFont("fonts/boundsTestFont.fnt", "0");
+	mRightWinCountLabel->retain();
+	mRightWinCountLabel->setPosition(Vec2(tCenter.x + 50, tCenter.y));
+	mRightWinCountLabel->setScale(2);
+	mRightWinCountLabel->setColor(Color3B(150, 100, 0));
+	mBossLayer->addChild(mRightWinCountLabel);
+
+
+	mLeftCard = Sprite::create("images/sprite-1.png");
+	mLeftCard->retain();
+	mLeftCard->setPosition(Vec2(100, 100));
+	mLeftCard->setScale(2, 2);
+	mBossLayer->addChild(mLeftCard);
+
+	mRightCard = Sprite::create("images/sprite-1.png");
+	mRightCard->retain();
+	mRightCard->setPosition(Vec2(400, 100));
+	mRightCard->setScale(2, 2);
+	mBossLayer->addChild(mRightCard);
 
 	mResultLabel = Label::createWithTTF("Result", "fonts/Marker Felt.ttf", 24);
 	mResultLabel->retain();
 	mResultLabel->setPosition(Vec2((this->getContentSize().width / 2), 100));
-	this->addChild(mResultLabel);
-	
+	mBossLayer->addChild(mResultLabel,2);
+
+#pragma endregion
 
 
+	mTitleLabel->setPosition(Vec2(-100, tCenter.y));
+	auto tTitleSeq = Sequence::create
+	(
+		EaseExponentialOut::create(MoveTo::create(1.5, tCenter)),
+		DelayTime::create(1),
+		FadeOut::create(1),
+		CallFunc::create(CC_CALLBACK_0(CCardGame::startGame, this)),
+		NULL
+	);
 
-
-
+	mTitleLabel->runAction(tTitleSeq);
 
 	return true;
 }
 
 void CCardGame::menuCloseCallback(cocos2d::Ref * pSender)
 {
-	this->removeChild(mLeftLabel);
-	if (NULL != mLeftLabel)
+
+	mTitleLayer->removeAllChildren();
+	if (NULL != mTitleLabel)
 	{
-		mLeftLabel->release();
-		mLeftLabel = NULL;
+		mTitleLabel->release();
+		mTitleLabel = NULL;
 	}
 
-	this->removeChild(mRightLabel);
-	if (NULL != mRightLabel)
+	this->removeChild(mTitleLayer);
+	if (NULL != mTitleLayer)
 	{
-		mRightLabel->release();
-		mRightLabel = NULL;
+		mTitleLayer->release();
+		mTitleLayer = NULL;
 	}
 
 
 
-	this->removeChild(mResultLabel);
+	//=============================
+	mBattleLayer->removeAllChildren();
+
+
+	mSlimeLayer->removeAllChildren();
+	if (NULL != mSlimeHpSprite)
+	{
+		mSlimeHpSprite->release();
+		mSlimeHpSprite = NULL;
+	}
+	if (NULL != mSlimeSprite)
+	{
+		mSlimeSprite->release();
+		mSlimeSprite = NULL;
+	}
+
+	if (NULL != mSlimeLayer)
+	{
+		mSlimeLayer->release();
+		mSlimeLayer = NULL;
+	}
+	//=============================
+	
+	mBossLayer->removeAllChildren();
+	if (NULL != mBossSprite)
+	{
+		mBossSprite->release();
+		mBossSprite = NULL;
+	}
+	if (NULL != mLeftWinCountLabel)
+	{
+		mLeftWinCountLabel->release();
+		mLeftWinCountLabel = NULL;
+	}
+	if (NULL != mRightWinCountLabel)
+	{
+		mRightWinCountLabel->release();
+		mRightWinCountLabel = NULL;
+	}
+	if (NULL != mLeftCard)
+	{
+		mLeftCard->release();
+		mLeftCard = NULL;
+	}
+	if (NULL != mRightCard)
+	{
+		mRightCard->release();
+		mRightCard = NULL;
+	}
 	if (NULL != mResultLabel)
 	{
 		mResultLabel->release();
 		mResultLabel = NULL;
+	}
+	if (NULL != mBossLayer)
+	{
+		mBossLayer->release();
+		mBossLayer = NULL;
+	}
+	//=============================
+	if (NULL != mPlayerSprite)
+	{
+		mPlayerSprite->release();
+		mPlayerSprite = NULL;
+	}
+	this->removeChild(mBattleLayer);
+	if (NULL != mBattleLayer)
+	{
+		mBattleLayer->release();
+		mBattleLayer = NULL;
 	}
 
 
@@ -131,10 +330,12 @@ void CCardGame::DoAction(Ref * pSender)
 	int tPlayer = tPressMenu->getTag();
 
 	int tEnemy = rand() % 3 + 1;
-	std::string tResult;
+	std::string tResultString;
 
-	mLeftLabel->setString(std::to_string(tPlayer));
-	mRightLabel->setString(std::to_string(tEnemy));
+	mLeftCard->setTexture("images/sprite-" + std::to_string(tPlayer) + ".png");
+	mRightCard->setTexture("images/sprite-" + std::to_string(tEnemy) + ".png");
+
+	int tResult = 0;
 
 	switch (tPlayer)
 	{
@@ -142,14 +343,16 @@ void CCardGame::DoAction(Ref * pSender)
 		switch (tEnemy)
 		{
 		case 1:
-			
-			tResult = "Draw";
+			tResult = 0;
+			//tResultString = "Draw";
 			break;
 		case 2:
-			tResult = "Lose";
+			tResult = -1;
+			//tResultString = "Lose";
 			break;
 		case 3:
-			tResult = "Win";
+			tResult = 1;
+			//tResultString = "Win";
 			break;
 		}
 		break;
@@ -157,13 +360,16 @@ void CCardGame::DoAction(Ref * pSender)
 		switch (tEnemy)
 		{
 		case 1:
-			tResult = "Win";
+			tResult = 1;
+			//tResultString = "Win";
 			break;
 		case 2:
-			tResult = "Draw";
+			tResult = 0;
+			//tResultString = "Draw";
 			break;
 		case 3:
-			tResult = "Lose";
+			tResult = -1;
+			//tResultString = "Lose";
 			break;
 		}
 		break;
@@ -171,18 +377,79 @@ void CCardGame::DoAction(Ref * pSender)
 		switch (tEnemy)
 		{
 		case 1:
-			tResult = "Lose";
+			tResult = -1;
 			break;
 		case 2:
-			tResult = "Win";
+			tResult = 1;
 			break;
 		case 3:
-			tResult = "Draw";
+			tResult = 0;
 			break;
 		}
 		break;
 	}
 
-	mResultLabel->setString(tResult);
+	switch (tResult)
+	{
+	case -1:
+		mRightWinCount += 1;
+		tResultString = "Lose";
+		break;
+	case 0:
+		tResultString = "Draw";
+		break;
+	case 1:
+		mLeftWinCount += 1;
+		tResultString = "Win";
+		break;
+	}
 
+	mLeftWinCountLabel->setString(std::to_string(mLeftWinCount));
+	mRightWinCountLabel->setString(std::to_string(mRightWinCount));
+	mResultLabel->setString(tResultString);
+
+
+	if (mLeftWinCount >= mWinCount)
+	{
+		mBossSprite->runAction(
+			Sequence::create(
+				FadeOut::create(0.7),
+				CallFunc::create(CC_CALLBACK_0(CCardGame::endGame, this)),
+				NULL
+			)
+		);
+	}
+	else if (mRightWinCount >= mWinCount)
+	{
+		mPlayerSprite->runAction(
+			Sequence::create(
+				FadeOut::create(0.6),
+				CallFunc::create(CC_CALLBACK_0(CCardGame::endGame, this)),
+				NULL
+			)
+		);
+	}
+}
+
+void CCardGame::startGame()
+{
+	mTitleLayer->setVisible(false);
+	mBattleLayer->setVisible(true);
+}
+
+void CCardGame::attackSlime(Ref * pSender)
+{
+	mSlimeHp -= 1;
+	mSlimeHpSprite->setScale((float)mSlimeHp / mSlimeMaxHp, 1);
+	if (mSlimeHp <= 0)
+	{
+		mSlimeLayer->setVisible(false);
+		mBossLayer->setVisible(true);
+	}
+
+}
+
+void CCardGame::endGame()
+{
+	//mBossLayer->setVisible(false);
 }
