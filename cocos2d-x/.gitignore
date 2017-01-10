@@ -13,6 +13,8 @@ proj.win8.1-universal/
 proj.tizen/
 proj.ios_mac/
 
+*.VC.db
+
 # Ignore files build by Visual Studio
 *.obj
 *.exe
