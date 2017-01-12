@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="win32">
+      <UniqueIdentifier>{84a8ebd7-7cf0-47f6-b75e-d441df67da40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource">
+      <UniqueIdentifier>{715254bc-d70b-4ec5-bf29-467dd3ace079}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Title">
+      <UniqueIdentifier>{c050069a-3cb1-4589-8e1a-f61c32cb4f9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Play">
+      <UniqueIdentifier>{758c5423-31ce-4b15-99da-3fcc2030d029}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\End">
+      <UniqueIdentifier>{eeeeb67a-de76-4ed7-84aa-ac3d3182864b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actors">
+      <UniqueIdentifier>{6c92995a-870f-478b-b727-a52740e96141}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AppDelegate.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\HelloWorldScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SceneTitle.cpp">
+      <Filter>src\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SceneField.cpp">
+      <Filter>src\Play</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SceneGameOver.cpp">
+      <Filter>src\End</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Actor.cpp">
+      <Filter>src\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Player.cpp">
+      <Filter>src\Actors</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="main.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AppDelegate.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\HelloWorldScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SceneTitle.h">
+      <Filter>src\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SceneField.h">
+      <Filter>src\Play</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SceneGameOver.h">
+      <Filter>src\End</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Actor.h">
+      <Filter>src\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Player.h">
+      <Filter>src\Actors</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="game.rc">
+      <Filter>resource</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
