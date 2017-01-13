@@ -1,0 +1,74 @@
+게임제작리뷰
+
+
+작성자 이름 : 박성호
+
+
+제목 : 용사는 일차원  ver. cocos2d-x
+
+
+# 게임 간단 소개
+
+일반슬라임을 주시위를 던져 이기고 보스슬라임을
+
+가위바위보로 이기면 클리어
+
+# 개발환경과 도구
+
+VisualStudio Communitiy 2015
+
+# 게임에 쓰인 프로그래밍 기술 주요 이슈
+
+1. 주사위 표현
+
+주사위를 화면에 그리기 위해 각 면이 그려진
+하나의 텍스쳐를 사용했다.
+
+Sprite를 생성한 후 setTextureRect를 사용하여
+화면에 랜덤으로 나온 값에 맞는 주사위면만
+그려지도록 하였다.
+
+void Dice::SetNumberByTextureRect(int n)
+{
+	float tWidth = (mpDiceSprite->getTexture()->getPixelsWide() + 1.3f) / 6;
+	int tHeight = mpDiceSprite->getTexture()->getPixelsHigh();
+	mpDiceSprite->setTextureRect(Rect(n*tWidth, 0, tWidth, tHeight));
+}
+
+
+2. 싱글터치 이벤트
+
+주사위를 던질 입력을 받기위해 터치이벤트롤 만들어
+등록한 후 해제하기 편하기 위해서 onExit에서
+removeAllEventListeners()를 사용했었는데
+_eventDispatcher가 같은 인스턴스를 가리키는건지
+이유는 잘 모르겠지만 다음 씬 초기화후
+removeAllEventListeners()가 호출되고 나니
+다음씬의 MenuItem의 입력까지 들어오기 않게 되는 현상이 생겼다.
+
+해결하기 위헤 이벤트를 멤버변수로 담고 해제 시 전달하여
+해제하는 방법하고 	_eventDispatcher->removeEventListenersForTarget(this);
+이 메소드로 타겟을 지정하여 해제 해봤는데
+둘 다 정상적으로 동작되는 것을 확인하였다.
+
+3. BoundingBox
+
+그래프에 추가되어있는 자식의 BoundingBox까지 포함하여
+체크하기위해 자식노드까지 재귀적으로 호출하여
+merge한 BoundingBox를 리턴해주는 getCascadeBoundingBox()를
+사용 하여 터치판정을 하였다.
+
+
+# 잘한 점
+
+1. 주사위 관련 코드를 클래스화 시켜 게임의 흐름과
+
+관련없는 TextureRect조정 등의 코드를 추상화 시켜
+
+사용하였다.
+
+# 잘못한 점
+
+1. 게임 코드를 적절히 추상화 하지 못하여 씬을 초기화하는
+
+부분이 들어나 관리하기 힘들게 작성된 것 같다.

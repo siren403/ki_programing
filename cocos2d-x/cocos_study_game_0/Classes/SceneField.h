@@ -6,7 +6,9 @@
 
 USING_NS_CC;
 
-class Player;
+class SpriteAnimator;
+class Dice;
+
 
 class SceneField : public LayerColor
 {
@@ -16,15 +18,13 @@ private:
 	Layer * mpBattleLayer = nullptr;
 
 
+	int mSlimeHp = 0;
 	Layer * mpSlimeLayer = nullptr;
 	Sprite * mpSlimeSprite = nullptr;
 	Sprite * mpSlimeHpSprite = nullptr;
-	Sprite * mpAttackSlimeSprite = nullptr;
+	Dice * mpDice = nullptr;
 
-	int mSlimeHp = 0;
 	int mSlimeMaxHp = 10;
-
-
 	Layer * mpBossLayer = nullptr;
 	Sprite * mpBossSprite = nullptr;
 	Sprite * mpLeftCard = nullptr;
@@ -43,7 +43,8 @@ public:
 
 	//==========================================
 private:
-	Player * mpPlayer = nullptr;
+	SpriteAnimator * mpPlayerAnimator = nullptr;
+	EventListenerTouchOneByOne * mpTouchEventOne = nullptr;
 	void NextScene();
 public:
 	static Scene * createScene();
@@ -53,8 +54,8 @@ public:
 	virtual void onExit() override;
 	virtual bool onTouchBegan(Touch * tTouch, Event * unused_event) override;
 
-
 	CREATE_FUNC(SceneField);
+
 };
 
 #endif // !__SCENEFIELD_H__

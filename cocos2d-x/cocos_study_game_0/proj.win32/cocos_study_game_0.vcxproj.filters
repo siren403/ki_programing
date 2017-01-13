@@ -19,9 +19,6 @@
     <Filter Include="src\End">
       <UniqueIdentifier>{eeeeb67a-de76-4ed7-84aa-ac3d3182864b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Actors">
-      <UniqueIdentifier>{6c92995a-870f-478b-b727-a52740e96141}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -42,11 +39,11 @@
     <ClCompile Include="..\Classes\SceneGameOver.cpp">
       <Filter>src\End</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Actor.cpp">
-      <Filter>src\Actors</Filter>
+    <ClCompile Include="..\Classes\SpriteAnimator.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Player.cpp">
-      <Filter>src\Actors</Filter>
+    <ClCompile Include="..\Classes\Dice.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,11 +65,11 @@
     <ClInclude Include="..\Classes\SceneGameOver.h">
       <Filter>src\End</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Actor.h">
-      <Filter>src\Actors</Filter>
+    <ClInclude Include="..\Classes\SpriteAnimator.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Player.h">
-      <Filter>src\Actors</Filter>
+    <ClInclude Include="..\Classes\Dice.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

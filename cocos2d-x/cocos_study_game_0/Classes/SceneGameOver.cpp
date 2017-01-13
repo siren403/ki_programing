@@ -36,6 +36,7 @@ bool SceneGameOver::init()
 
 	auto tMenu = Menu::create(tMenuNextScene, nullptr);
 	tMenu->setPosition(Vec2::ZERO);
+
 	this->addChild(tMenu, 10);
 	return true;
 }

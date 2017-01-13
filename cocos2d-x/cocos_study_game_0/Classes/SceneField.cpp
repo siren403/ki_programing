@@ -1,6 +1,7 @@
 #include "SceneField.h"
-#include "Player.h"
 #include "SceneGameOver.h"
+#include "SpriteAnimator.h"
+#include "Dice.h"
 
 Scene * SceneField::createScene()
 {
@@ -22,22 +23,17 @@ bool SceneField::init()
 
 #pragma region create Player
 
-	auto tPlayerSprite = Sprite::create("images/grossini.png");
-	tPlayerSprite->setPosition(Vec2::ZERO);
-	tPlayerSprite->setFlipX(true);
-	mpPlayer = Player::create();
-	mpPlayer->SetSprite(tPlayerSprite);
-	mpPlayer->initHp(10);
-	mpPlayer->setPosition(Vec2(100, 200));
-	mpPlayer->setAnchorPoint(Vec2(0.5, 0));
 
-	this->addChild(mpPlayer, 1);
+	mpPlayerAnimator = SpriteAnimator::create("grossini_dance", 1, 14, 0.3f);
+	mpPlayerAnimator->setPosition(Vec2(100, 200));
+	mpPlayerAnimator->setAnchorPoint(Vec2(0.5, 0));
+	mpPlayerAnimator->runAni();
+	this->addChild(mpPlayerAnimator);
+
 
 #pragma endregion
 
-
-
-#pragma region InitiBattleLayer
+#pragma region InitBattleLayer
 
 	mpBattleLayer = Layer::create();
 	mpBattleLayer->setVisible(false);
@@ -47,9 +43,6 @@ bool SceneField::init()
 	//==========================================
 	mpSlimeLayer = Layer::create();
 	mpBattleLayer->addChild(mpSlimeLayer, 1);
-
-
-	
 
 
 	mpSlimeSprite = Sprite::create("images/slime.png");
@@ -81,17 +74,22 @@ bool SceneField::init()
 	mpSlimeHpSprite = Sprite::create("images/white-512x512.png");
 	mpSlimeHpSprite->setColor(Color3B::RED);
 	mpSlimeHpSprite->setTextureRect(Rect(0, 0, 80, 5));
-	mpSlimeHpSprite->setAnchorPoint(Vec2(0.5, 0));
-	mpSlimeHpSprite->setPosition(Vec2(mpSlimeSprite->getPosition().x, mpSlimeSprite->getPosition().y + 100));
+	mpSlimeHpSprite->setAnchorPoint(Vec2(0, 0.5f));
+	mpSlimeHpSprite->setPosition(Vec2(mpSlimeSprite->getPosition().x-30, mpSlimeSprite->getPosition().y + 100));
 	mpSlimeLayer->addChild(mpSlimeHpSprite);
 
 
-	mpAttackSlimeSprite = Sprite::create("CloseNormal.png");
-	mpAttackSlimeSprite->setPosition(tCenter);
-	mpAttackSlimeSprite->setScale(2);
-	mpSlimeLayer->addChild(mpAttackSlimeSprite, 2);
-	//=========================================
 
+	mpDice = Dice::create();
+	mpDice->setPosition(Vec2(tCenter.x, tVisibleSize.height*0.5f));
+	mpSlimeLayer->addChild(mpDice);
+
+
+	//=========================================
+#pragma endregion
+
+
+#pragma region InitBattleLayer
 
 	mpBossLayer = Layer::create();
 	mpBossLayer->setVisible(false);
@@ -148,6 +146,7 @@ bool SceneField::init()
 	mpLeftCard = Sprite::create();
 	mpLeftCard->setPosition(Vec2(100, 100));
 	mpLeftCard->setScale(2, 2);
+	mpLeftCard->setFlipX(true);
 	mpBossLayer->addChild(mpLeftCard);
 
 	mpRightCard = Sprite::create();
@@ -159,24 +158,9 @@ bool SceneField::init()
 	mpResultLabel->setPosition(Vec2((this->getContentSize().width / 2), 100));
 	mpBossLayer->addChild(mpResultLabel, 2);
 
-#pragma endregion
-
 	mpBattleLayer->setVisible(true);
 
-	//auto tBlackSprite = Sprite::create("images/white-512x512.png");
-	//tBlackSprite->setColor(Color3B::BLACK);
-	//tBlackSprite->setTextureRect(Rect(Vec2::ZERO, tVisibleSize));
-	////tBlackSprite->setPosition(tCenter);
-	//tBlackSprite->runAction(
-	//	Sequence::create(
-	//		DelayTime::create(1.2f),
-	//		FadeOut::create(0.3f),
-	//		nullptr
-	//	)
-	//);
-
-	//this->addChild(tBlackSprite, 10);
-	//==================================
+#pragma endregion
 
 	return true;
 }
@@ -189,13 +173,17 @@ bool SceneField::init()
 void SceneField::onEnter()
 {
 	Layer::onEnter();
-	auto tTouchEvent = EventListenerTouchOneByOne::create();
-	tTouchEvent->onTouchBegan = CC_CALLBACK_2(SceneField::onTouchBegan, this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(tTouchEvent, this);
+	mpTouchEventOne = EventListenerTouchOneByOne::create();
+	mpTouchEventOne->setSwallowTouches(true);
+	mpTouchEventOne->onTouchBegan = CC_CALLBACK_2(SceneField::onTouchBegan, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(mpTouchEventOne, this);
+
+
 }
 void SceneField::onExit()
 {
-	_eventDispatcher->removeAllEventListeners();
+	//_eventDispatcher->removeEventListener(mpTouchEventOne);
+	_eventDispatcher->removeEventListenersForTarget(this);
 	Layer::onExit();
 }
 
@@ -204,7 +192,8 @@ void SceneField::onExit()
 bool SceneField::onTouchBegan(Touch * tTouch, Event * unused_event)
 {
 	auto tTouchPos = tTouch->getLocation();
-	bool tIsTouch = mpAttackSlimeSprite->getBoundingBox().containsPoint(tTouchPos);
+	Rect tBox = utils::getCascadeBoundingBox(mpDice);
+	bool tIsTouch = tBox.containsPoint(tTouchPos);
 	if (tIsTouch)
 	{
 		attackSlime();
@@ -214,12 +203,21 @@ bool SceneField::onTouchBegan(Touch * tTouch, Event * unused_event)
 
 void SceneField::attackSlime()
 {
-	mSlimeHp -= 1;
-	mpSlimeHpSprite->setScale((float)mSlimeHp / mSlimeMaxHp, 1);
-	if (mSlimeHp <= 0)
+	int tNumber = mpDice->throwDice();
+
+	if (tNumber >= 4)
 	{
-		mpSlimeLayer->setVisible(false);
-		mpBossLayer->setVisible(true);
+		mSlimeHp -= 5;
+		mpSlimeHpSprite->setScale((float)mSlimeHp / mSlimeMaxHp, 1);
+		if (mSlimeHp <= 0)
+		{
+			mpSlimeLayer->setVisible(false);
+			mpBossLayer->setVisible(true);
+		}
+	}
+	else
+	{
+		NextScene();
 	}
 }
 
@@ -308,29 +306,21 @@ void SceneField::doAction(Ref * pSender)
 	mpRightWinCountLabel->setString(std::to_string(mRightWinCount));
 	mpResultLabel->setString(tResultString);
 
-
+	auto tEndAction = Sequence::create(
+		FadeOut::create(0.7),
+		CallFunc::create(CC_CALLBACK_0(SceneField::NextScene, this)),
+		NULL
+	);
 	if (mLeftWinCount >= mWinCount)
 	{
-		mpBossSprite->runAction(
-			Sequence::create(
-				FadeOut::create(0.7),
-				CallFunc::create(CC_CALLBACK_0(SceneField::NextScene, this)),
-				NULL
-			)
-		);
+		mpBossSprite->runAction(tEndAction);
 	}
 	else if (mRightWinCount >= mWinCount)
 	{
-		mpPlayer->GetSprite()->runAction(
-			Sequence::create(
-				FadeOut::create(0.6),
-				CallFunc::create(CC_CALLBACK_0(SceneField::NextScene, this)),
-				NULL
-			)
-		);
+		mpPlayerAnimator->stopAni();
+		mpPlayerAnimator->runAction(tEndAction);
 	}
 }
-
 
 void SceneField::NextScene()
 {
