@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="15" height="10" tilewidth="32" tileheight="32" nextobjectid="6">
+ <tileset firstgid="1" name="tileset32x32" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="48" columns="8">
+  <image source="tmw_desert_spacing.png" width="265" height="199"/>
+  <tile id="0">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="19">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="24">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="25">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="26">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="27">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="28">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="29">
+   <properties>
+    <property name="mAttrib" value="1"/>
+   </properties>
+  </tile>
+  <tile id="30">
+   <properties>
+    <property name="mAttrib" value="2"/>
+   </properties>
+  </tile>
+  <tile id="31">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="32">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="33">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="34">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="35">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="36">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="37">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="38">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="39">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="40">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="41">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="42">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="43">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="44">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="45">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="46">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+  <tile id="47">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="15" height="10" offsetx="66" offsety="9">
+  <data encoding="csv">
+15,15,15,16,30,30,30,30,1,2,29,10,11,30,14,
+15,4,23,24,40,30,30,39,9,10,10,10,11,30,14,
+15,16,25,26,26,26,27,30,9,10,20,18,19,30,14,
+23,24,33,36,42,37,35,30,9,10,11,30,30,30,14,
+40,30,33,35,46,33,35,30,9,10,11,30,31,31,14,
+30,30,33,44,26,45,35,30,9,10,11,30,30,31,14,
+30,30,41,42,42,42,43,30,9,10,11,30,30,30,14,
+2,2,2,2,2,2,2,2,29,10,11,31,30,30,14,
+10,10,10,10,10,10,10,10,10,10,11,30,30,39,14,
+18,18,18,18,18,18,18,18,18,18,19,30,30,30,14
+</data>
+ </layer>
+ <objectgroup name="Object Layer 1">
+  <object id="4" name="actor" x="224" y="96" width="31" height="31">
+   <properties>
+    <property name="mAttrib" value="0"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

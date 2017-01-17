@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="6" height="4" tilewidth="80" tileheight="80" nextobjectid="1">
+ <tileset firstgid="1" name="test" tilewidth="80" tileheight="80" tilecount="6" columns="3">
+  <image source="tmw_desert_spacing.png" width="265" height="199"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="6" height="4">
+  <data encoding="csv">
+1,1,1,1,1,1,
+5,5,5,5,1,1,
+5,5,5,5,1,1,
+6,6,6,6,1,1
+</data>
+ </layer>
+</map>
