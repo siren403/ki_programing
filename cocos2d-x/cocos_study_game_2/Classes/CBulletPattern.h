@@ -14,6 +14,11 @@ public:
 	CREATE_FUNC(CBulletPattern);
 
 	void pushBullet(CBullet * tBullet);
+	void bulletReserve(int size);
+
+	virtual bool getIsAlive() override;
+	virtual void setIsAlive(bool tIsAlive) override;
+	virtual void Shot(Vec2 tPos) override;
 
 };
 

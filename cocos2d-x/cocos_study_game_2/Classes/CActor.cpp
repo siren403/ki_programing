@@ -1,4 +1,6 @@
 #include "CActor.h"
+#include "CBulletDirection.h"
+#include "CBulletPattern.h"
 
 #define USE_MOUSE_POSITION true
 #define BULLET_MAX_COUNT 30
@@ -30,6 +32,7 @@ bool CActor::lateInit()
 	mBullets.reserve(BULLET_MAX_COUNT);
 
 	CBulletDirection * tTempBullet = nullptr;
+	/*
 	for (int i = 0; i < BULLET_MAX_COUNT; i++)
 	{
 		tTempBullet = CBulletDirection::create(Sprite::create("bullet.png"));
@@ -37,6 +40,32 @@ bool CActor::lateInit()
 		tTempBullet->setSpeed(400);
 		mBullets.pushBack(tTempBullet);
 		mBulletLayer->addChild(tTempBullet);
+	}*/
+
+	int tBulletSpeed = 600;
+	CBulletPattern * tTempPattern = nullptr;
+	for (int i = 0; i < BULLET_MAX_COUNT; i++)
+	{
+		tTempPattern = CBulletPattern::create();
+		tTempPattern->bulletReserve(3);
+
+		tTempBullet = CBulletDirection::create(Sprite::create("bullet.png"));
+		tTempBullet->setDirection(Vec2(0, 1));
+		tTempBullet->setSpeed(tBulletSpeed);
+		tTempPattern->pushBullet(tTempBullet);
+
+		tTempBullet = CBulletDirection::create(Sprite::create("bullet.png"));
+		tTempBullet->setDirection(Vec2(-0.3, 1));
+		tTempBullet->setSpeed(tBulletSpeed);
+		tTempPattern->pushBullet(tTempBullet);
+
+		tTempBullet = CBulletDirection::create(Sprite::create("bullet.png"));
+		tTempBullet->setDirection(Vec2(0.3, 1));
+		tTempBullet->setSpeed(tBulletSpeed);
+		tTempPattern->pushBullet(tTempBullet);
+
+		mBullets.pushBack(tTempPattern);
+		mBulletLayer->addChild(tTempPattern);
 	}
 
 
@@ -46,8 +75,8 @@ bool CActor::lateInit()
 	tMouseListener->onMouseMove = [=](Event * event) 
 	{
 		auto tMouse = (EventMouse *)event;
-
-		this->setPosition(tMouse->getLocationInView());
+		//this->setPosition(tMouse->getLocationInView());
+		mLatestInputPos = tMouse->getLocationInView();
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(tMouseListener, this);
 
@@ -83,6 +112,10 @@ void CActor::update(float dt)
 		}
 		mLatestShotTime = 0;
 	}
+
+	Vec2 tPos = this->getPosition();
+	tPos = ccpLerp(tPos, mLatestInputPos, dt * mFollowSpeed);
+	this->setPosition(tPos);
 }
 
 CActor::~CActor()

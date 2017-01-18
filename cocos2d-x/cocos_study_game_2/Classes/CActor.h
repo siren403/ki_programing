@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 #include "CUnit.h"
-#include "CBulletDirection.h"
+#include "CBullet.h"
 
 using namespace cocos2d;
 
@@ -14,7 +14,10 @@ private:
 	float mLatestShotTime = 0;
 
 	int mCurrentBulletIndex = 0;
-	Vector<CBulletDirection *> mBullets;
+	float mFollowSpeed = 10.0f;
+	Vec2 mLatestInputPos;
+
+	Vector<CBullet *> mBullets;
 	Layer * mBulletLayer = nullptr;
 public:
 	virtual ~CActor();
@@ -27,7 +30,6 @@ public:
 	//Inputs
 	bool onTouchBegan(Touch * touch, Event * unused_event);
 	void onTouchMoved(Touch * touch, Event * unused_event);
-	
 };
 
 #endif // !__CACTOR_H__

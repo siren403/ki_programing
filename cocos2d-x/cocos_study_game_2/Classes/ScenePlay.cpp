@@ -25,12 +25,9 @@ bool ScenePlay::init()
 	tBulletLayer->setZOrder(ZORDER_BULLET);
 	this->addChild(tBulletLayer);
 
-
 	auto tActor = CActor::create(tBulletLayer);
-	tActor->setPosition(Vec2(tVSize.width*0.5, tVSize.height*0.5));
+	tActor->setPosition(Vec2(tVSize.width*0.5, tVSize.height*0.2));
 	this->addChild(tActor);
-
-
 
 
 	return true;

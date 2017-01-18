@@ -7,6 +7,9 @@ bool CBullet::lateInit()
 	{
 		return false;
 	}
+	this->addChild(mSprite);
+	setIsAlive(false);
+	this->scheduleUpdate();
 	return true;
 }
 
@@ -17,10 +20,9 @@ void CBullet::update(float dt)
 	{
 		bulletUpdate(dt);
 
-		if (isScreenOut())
+		if (isScreenOut(this->getPosition()))
 		{
-			mIsAlive = false;
-			this->setVisible(false);
+			setIsAlive(false);
 		}
 	}
 }
@@ -43,13 +45,13 @@ void CBullet::setSprite(Sprite * tSprite)
 	}
 }
 
-bool CBullet::isScreenOut()
+bool CBullet::isScreenOut(Vec2 tPos)
 {
 	Rect tScreen = Rect(0, 0, 
 		Director::getInstance()->getVisibleSize().width,
 		Director::getInstance()->getVisibleSize().height);
 
-	if (tScreen.containsPoint(this->getPosition()) == false)
+	if (tScreen.containsPoint(tPos) == false)
 	{
 		return true;
 	}

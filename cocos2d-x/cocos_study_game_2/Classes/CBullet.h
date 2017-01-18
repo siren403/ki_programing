@@ -14,23 +14,21 @@ protected:
 	bool mIsAlive = false;
 	
 	
-	bool isScreenOut();
-	void setIsAlive(bool tIsAlive);
-	
+	virtual bool lateInit() override;
 	virtual void bulletUpdate(float dt);
 public:
 	CREATE_FUNC(CBullet);
-	virtual bool lateInit() override;
 	virtual void update(float dt) override;
 
 	void setSprite(Sprite * tSprite);
-
+	bool isScreenOut(Vec2 tPos);
 	void setDirection(Vec2 tDir);
 	void setSpeed(float tSpeed);
 
-	bool getIsAlive();
+	virtual bool getIsAlive();
+	virtual void setIsAlive(bool tIsAlive);
 
-	void Shot(Vec2 tPos);
+	virtual void Shot(Vec2 tPos);
 };
 
 #endif // !__CBULLET_H__

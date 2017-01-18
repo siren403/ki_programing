@@ -10,11 +10,12 @@ class CBulletDirection : public CBullet
 {
 protected:
 	virtual void bulletUpdate(float dt) override;
+	virtual bool lateInit() override;
+
 public:
 	CREATE_FUNC(CBulletDirection);
 	static CBulletDirection * create(Sprite * tSprite);
 
-	virtual bool lateInit() override;
 };
 
 #endif // !__CBULLETDIRECTION_H__

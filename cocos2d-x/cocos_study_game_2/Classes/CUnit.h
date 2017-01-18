@@ -9,13 +9,11 @@ class CUnit : public Node
 {
 protected:
 	Sprite * mSprite = nullptr;
-
-public:
-	virtual bool init() override;
 	virtual bool lateInit();
 
-
+public:
 	CREATE_FUNC(CUnit);
+	virtual bool init() override;
 };
 
 #endif // !__CUNIT_H__

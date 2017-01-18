@@ -18,12 +18,6 @@ bool CBulletDirection::lateInit()
 	{
 		return false;
 	}
-
-	this->addChild(mSprite);
-
-	setIsAlive(false);
-
-	this->scheduleUpdate();
 	return true;
 }
 
@@ -34,6 +28,5 @@ void CBulletDirection::bulletUpdate(float dt)
 
 	tPos.x += mCurrenDir.x * (mCurrentSpeed * dt);
 	tPos.y += mCurrenDir.y * (mCurrentSpeed * dt);
-
 	this->setPosition(tPos);
 }
