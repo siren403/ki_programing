@@ -11,7 +11,13 @@
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Scene">
-      <UniqueIdentifier>{80cedc19-5106-4064-b608-0da83fbd63b1}</UniqueIdentifier>
+      <UniqueIdentifier>{c466f941-f636-4c3c-b0a3-1366be9e4d21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Unit">
+      <UniqueIdentifier>{8b0d5f3e-e51b-4f2e-98cc-bc62a5a197ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Unit\Bullet">
+      <UniqueIdentifier>{96979045-aa6b-429e-8f93-6d08a8b11580}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -24,11 +30,29 @@
     <ClCompile Include="..\Classes\HelloWorldScene.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\ScenePlay.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="..\Classes\SceneTitle.cpp">
       <Filter>src\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\ScenePlay.cpp">
-      <Filter>src\Scene</Filter>
+    <ClCompile Include="..\Classes\CUnit.cpp">
+      <Filter>src\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CActor.cpp">
+      <Filter>src\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CTime.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CBullet.cpp">
+      <Filter>src\Unit\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CBulletDirection.cpp">
+      <Filter>src\Unit\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CBulletPattern.cpp">
+      <Filter>src\Unit\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -41,11 +65,29 @@
     <ClInclude Include="..\Classes\HelloWorldScene.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\ScenePlay.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="..\Classes\SceneTitle.h">
       <Filter>src\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\ScenePlay.h">
-      <Filter>src\Scene</Filter>
+    <ClInclude Include="..\Classes\CUnit.h">
+      <Filter>src\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CActor.h">
+      <Filter>src\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CTime.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CBullet.h">
+      <Filter>src\Unit\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CBulletPattern.h">
+      <Filter>src\Unit\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CBulletDirection.h">
+      <Filter>src\Unit\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

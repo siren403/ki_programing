@@ -1,4 +1,8 @@
 #include "ScenePlay.h"
+#include "CActor.h"
+#include "CTime.h"
+
+#define ZORDER_BULLET 10
 
 Scene * ScenePlay::createScene()
 {
@@ -17,9 +21,39 @@ bool ScenePlay::init()
 
 	auto tVSize = Director::getInstance()->getVisibleSize();
 
-	auto tLabel = Label::create("Play", "fonts/arial.ttf", 50);
-	tLabel->setPosition(Vec2(tVSize.width*0.5, tVSize.height*0.5));
-	this->addChild(tLabel);
+	auto tBulletLayer = Layer::create();
+	tBulletLayer->setZOrder(ZORDER_BULLET);
+	this->addChild(tBulletLayer);
+
+
+	auto tActor = CActor::create(tBulletLayer);
+	tActor->setPosition(Vec2(tVSize.width*0.5, tVSize.height*0.5));
+	this->addChild(tActor);
+
+
+
 
 	return true;
+}
+
+void ScenePlay::onEnter()
+{
+	Layer::onEnter();
+
+	auto tKeyboard = EventListenerKeyboard::create();
+	tKeyboard->onKeyPressed = [](EventKeyboard::KeyCode keycode, Event * event)
+	{
+		if (keycode == EventKeyboard::KeyCode::KEY_ESCAPE)
+		{
+			Director::getInstance()->end();
+		}
+	};
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(tKeyboard, this);
+}
+
+void ScenePlay::onExit()
+{
+	_eventDispatcher->removeEventListenersForTarget(this);
+
+	Layer::onExit();
 }

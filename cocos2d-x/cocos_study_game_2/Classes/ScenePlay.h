@@ -7,10 +7,14 @@ USING_NS_CC;
 
 class ScenePlay : public Layer 
 {
+
 public:
 	static Scene * createScene();
-	virtual bool init() override;
 	CREATE_FUNC(ScenePlay);
+
+	virtual bool init() override;
+	virtual void onEnter() override;
+	virtual void onExit() override;
 };
 
 
