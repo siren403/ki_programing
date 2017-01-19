@@ -56,6 +56,8 @@ void ScenePlay::update(float dt)
 	if (mActor->getIsControl())
 	{
 		mActor->checkCollisionByEnemy(mEnemy);
+
+		mEnemy->checkCollisionToActor(mActor);
 	}
 }
 

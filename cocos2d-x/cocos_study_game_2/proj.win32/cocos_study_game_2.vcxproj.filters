@@ -60,9 +60,6 @@
     <ClCompile Include="..\Classes\SpriteAnimator.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\BulletFactory.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\CEnemy.cpp">
       <Filter>src\Unit\Enemy</Filter>
     </ClCompile>
@@ -71,6 +68,9 @@
     </ClCompile>
     <ClCompile Include="..\Classes\CEnemyFactory.cpp">
       <Filter>src\Unit\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CBulletFactory.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -110,9 +110,6 @@
     <ClInclude Include="..\Classes\SpriteAnimator.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\BulletFactory.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\CEnemy.h">
       <Filter>src\Unit\Enemy</Filter>
     </ClInclude>
@@ -121,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\CEnemyFactory.h">
       <Filter>src\Unit\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CBulletFactory.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

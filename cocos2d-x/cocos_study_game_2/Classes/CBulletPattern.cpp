@@ -1,5 +1,6 @@
 #include "CBulletPattern.h"
 #include "CEnemy.h"
+#include "CActor.h"
 
 void CBulletPattern::pushBullet(CBullet * tBullet)
 {
@@ -33,12 +34,23 @@ void CBulletPattern::setIsAlive(bool tIsAlive)
 	}
 }
 
-void CBulletPattern::Shot(Vec2 tPos)
+void CBulletPattern::shot(Vec2 tPos)
 {
 	for (int i = 0; i < mBullets.size(); i++)
 	{
 		mBullets.at(i)->setPosition(tPos);
 		mBullets.at(i)->setIsAlive(true);
+	}
+}
+
+void CBulletPattern::setColor(const Color3B & tColor)
+{
+	if (mBullets.size() > 0)
+	{
+		for (int i = 0; i < mBullets.size(); i++)
+		{
+			mBullets.at(i)->setColor(tColor);
+		}
 	}
 }
 
@@ -56,6 +68,28 @@ void CBulletPattern::checkCollisionEnemy(CEnemy * enemy)
 				{
 					tBullet->setIsAlive(false);
 				}//collision
+			}//Bullet is Alive ?
+		}//loop Bullets 
+	}//Bullets Count > 0 ?
+}
+
+void CBulletPattern::checkCollisionActor(CActor * actor)
+{
+	if (mBullets.size() > 0)
+	{
+		CBullet * tBullet = nullptr;
+		for (int i = 0; i < mBullets.size(); i++)
+		{
+			tBullet = mBullets.at(i);
+			if (tBullet->getIsAlive())
+			{
+				if (utils::getCascadeBoundingBox(tBullet).intersectsCircle(
+					actor->getPosition(), actor->getRedius()
+				))
+				{
+					actor->hit();
+					tBullet->setIsAlive(false);
+				}
 			}//Bullet is Alive ?
 		}//loop Bullets 
 	}//Bullets Count > 0 ?

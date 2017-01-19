@@ -1,5 +1,5 @@
-#ifndef __BULLETFACTORY_H__
-#define __BULLETFACTORY_H__
+#ifndef __CBULLETFACTORY_H__
+#define __CBULLETFACTORY_H__
 
 #include "cocos2d.h"
 
@@ -19,10 +19,10 @@ public:
 	float mSpeed;
 };
 
-class BulletFactory
+class CBulletFactory
 {
 public:
 	static CBullet * creataBullet3Way(DirSpeed tLeft, DirSpeed tCenter, DirSpeed tRight);
 };
 
-#endif // !__BULLETFACTORY_H__
+#endif // !__CBULLETFACTORY_H__

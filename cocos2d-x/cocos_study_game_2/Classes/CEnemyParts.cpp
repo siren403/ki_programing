@@ -11,9 +11,10 @@ bool CEnemyParts::init()
 	mSprite = Sprite::create("boss_sample.png");
 	this->addChild(mSprite);
 
-
+	mBullets.reserve(10);
 	mHP = 100;
 	mHitDelay = 0.08;
+	mBulletInterval = 1;
 
 	this->scheduleUpdate();
 	return true;
@@ -24,6 +25,26 @@ void CEnemyParts::update(float dt)
 	if (mCurrentHitDelay >= 0)
 	{
 		mCurrentHitDelay -= dt;
+	}
+	
+	mLatestShotTime += dt;
+	if (mLatestShotTime >= mBulletInterval)
+	{
+		if (mBullets.at(mCurrentBulletIndex)->getIsAlive() == false)
+		{
+			Vec2 tPos = this->getPosition();
+			tPos = convertToWorldSpace(tPos);
+			//tPos.x += mSpriteAnim->getContentSize().width;
+			//tPos.y += mSpriteAnim->getContentSize().height * 0.5;
+
+			mBullets.at(mCurrentBulletIndex)->shot(tPos);
+			mCurrentBulletIndex++;
+			if (mCurrentBulletIndex >= mBullets.size())
+			{
+				mCurrentBulletIndex = 0;
+			}
+		}
+		mLatestShotTime = 0;
 	}
 }
 
@@ -61,4 +82,20 @@ void CEnemyParts::Hit()
 		}
 
 	}
+}
+
+void CEnemyParts::addBullet(CBullet * tBullet)
+{
+	mBullets.pushBack(tBullet);
+	mBulletLayer->addChild(tBullet);
+}
+
+void CEnemyParts::setBulletLayer(Layer * tBulletLayer)
+{
+	mBulletLayer = tBulletLayer;
+}
+
+const Vector<CBullet*> & CEnemyParts::getBullets() const
+{
+	return mBullets;
 }

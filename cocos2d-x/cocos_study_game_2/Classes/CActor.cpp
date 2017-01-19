@@ -1,11 +1,12 @@
 #include "CActor.h"
 #include "SpriteAnimator.h"
-#include "BulletFactory.h"
+#include "CBulletFactory.h"
 #include "CEnemy.h"
 #include "CBulletDirection.h"
 
 #define USE_MOUSE_POSITION true
-#define BULLET_MAX_COUNT 30
+
+#define BULLET_MAX_COUNT 1
 #define BULLET_INTERVAL 0.1
 #define BULLET_SPEED 600
 #define IS_BULLET_3WAY true
@@ -32,6 +33,8 @@ bool CActor::lateInit()
 	mSpriteAnim->runAni();
 	this->addChild(mSpriteAnim);
 
+	mHP = 10;
+
 	mBulletInterval = BULLET_INTERVAL;
 	mBullets.reserve(BULLET_MAX_COUNT);
 
@@ -41,7 +44,7 @@ bool CActor::lateInit()
 	for (int i = 0; i < BULLET_MAX_COUNT; i++)
 	{
 		
-		tTempPattern = BulletFactory::creataBullet3Way(
+		tTempPattern = CBulletFactory::creataBullet3Way(
 			DirSpeed(Vec2(1, 0), BULLET_SPEED),
 			DirSpeed(Vec2(1, -0.3), BULLET_SPEED),
 			DirSpeed(Vec2(1, 0.3), BULLET_SPEED));
@@ -73,11 +76,11 @@ bool CActor::lateInit()
 	auto tTouchListener = EventListenerTouchOneByOne::create();
 	tTouchListener->setSwallowTouches(true);
 	tTouchListener->onTouchBegan = CC_CALLBACK_2(CActor::onTouchBegan, this);
-	tTouchListener->onTouchMoved = CC_CALLBACK_2(CActorW::onTouchMoved, this);
+	tTouchListener->onTouchMoved = CC_CALLBACK_2(CActor::onTouchMoved, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(tTouchListener, this);
 
 #endif
-
+	mLatestInputPos = this->getPosition();
 
 	this->scheduleUpdate();
 	return true;
@@ -86,6 +89,11 @@ bool CActor::lateInit()
 
 void CActor::update(float dt)
 {
+	if (mCurrentHitDelay >= 0)
+	{
+		mCurrentHitDelay -= dt;
+	}
+
 	if (mIsControl)
 	{
 		mLatestShotTime += dt;
@@ -97,7 +105,7 @@ void CActor::update(float dt)
 				tPos.x += mSpriteAnim->getContentSize().width;
 				tPos.y += mSpriteAnim->getContentSize().height * 0.5;
 
-				mBullets.at(mCurrentBulletIndex)->Shot(tPos);
+				mBullets.at(mCurrentBulletIndex)->shot(tPos);
 				mCurrentBulletIndex++;
 				if (mCurrentBulletIndex >= mBullets.size())
 				{
@@ -123,6 +131,10 @@ bool CActor::getIsControl()
 	return mIsControl;
 }
 
+
+//인자로 넘어온 에너미에 직접충돌체크와
+//현재 액터가 관리하는 총알에게 에너미를
+//전달하여 충돌여부 검사 후 에너미 타격
 void CActor::checkCollisionByEnemy(CEnemy * enemy)
 {
 	Rect tEnemyBox = utils::getCascadeBoundingBox(enemy);
@@ -142,6 +154,37 @@ void CActor::checkCollisionByEnemy(CEnemy * enemy)
 	}
 }
 
+float CActor::getRedius()
+{
+	return mSpriteAnim->getSprite()->getContentSize().width / 2;
+}
+
+
+void CActor::hit()
+{
+	if (mCurrentHitDelay <= 0)
+	{
+		mHP--;
+		log("parts hit count : %d", mHP);
+		mCurrentHitDelay = mHitDelay;
+
+		if (mHP <= 0)
+		{
+			mIsControl = false;
+		}
+
+		if (mIsControl)
+		{
+			auto tHitSeq = Sequence::create(
+				TintTo::create(0.05, Color3B::RED),
+				TintTo::create(0.05, Color3B::WHITE),
+				nullptr
+			);
+			mSpriteAnim->getSprite()->runAction(tHitSeq);
+		}
+	}
+}
+
 
 CActor::~CActor()
 {
@@ -151,12 +194,14 @@ CActor::~CActor()
 
 bool CActor::onTouchBegan(Touch * touch, Event * unused_event)
 {
-	this->setPosition(touch->getLocation());
+	mLatestInputPos = touch->getLocation();
+	//this->setPosition(touch->getLocation());
 	return true;
 }
 
 void CActor::onTouchMoved(Touch * touch, Event * unused_event)
 {
-	this->setPosition(touch->getLocation());
+	mLatestInputPos = touch->getLocation();
+	//this->setPosition(touch->getLocation());
 }
 

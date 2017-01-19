@@ -17,6 +17,9 @@ void CEnemy::addParts(CEnemyParts * tParts)
 	this->addChild(tParts);
 }
 
+//Actor -> this -> mParts
+//인자로 넘어온 액터의 총알에 
+//자식 파츠의 충돌여부 체크 후 결과 리턴
 bool CEnemy::checkCollisionBulletToParts(CBullet * tBullet)
 {
 	if (mParts.size() > 0)
@@ -39,6 +42,24 @@ bool CEnemy::checkCollisionBulletToParts(CBullet * tBullet)
 		}//loop Parts
 	}//Parts Count > 0
 	return false;
+}
+
+void CEnemy::checkCollisionToActor(CActor * tActor)
+{
+	if (mParts.size() > 0)
+	{
+		for (int i = 0; i < mParts.size(); i++)
+		{
+			Vector<CBullet *> tBullets = mParts.at(i)->getBullets();
+			if (tBullets.size() > 0)
+			{
+				for (int j = 0; j < tBullets.size(); j++)
+				{
+					tBullets.at(j)->checkCollisionActor(tActor);
+				}
+			}
+		}
+	}
 }
 
 

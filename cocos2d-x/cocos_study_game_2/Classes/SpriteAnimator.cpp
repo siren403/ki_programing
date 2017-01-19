@@ -83,7 +83,7 @@ void SpriteAnimator::stopAni()
 	mpSprite->stopAction(mpRepeat);
 }
 
-const Sprite * SpriteAnimator::getSprite() const
+Sprite * SpriteAnimator::getSprite() const
 {
 	return mpSprite;
 }

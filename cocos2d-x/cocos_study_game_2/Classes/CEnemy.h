@@ -8,6 +8,7 @@
 using namespace cocos2d;
 
 class CBullet;
+class CActor;
 
 class CEnemy : public CUnit
 {
@@ -19,6 +20,7 @@ public:
 
 	void addParts(CEnemyParts * tParts);
 	bool checkCollisionBulletToParts(CBullet * tBullet);
+	void checkCollisionToActor(CActor * tActor);
 };
 
 #endif // !__CENEMY_H__

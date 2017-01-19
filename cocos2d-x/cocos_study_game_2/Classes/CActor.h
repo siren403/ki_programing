@@ -16,11 +16,15 @@ class CActor : public CUnit
 private:
 	SpriteAnimator * mSpriteAnim = nullptr;
 
+	int mHP = 0;
+	float mHitDelay = 0;
+	float mCurrentHitDelay = 0;
+
 	float mBulletInterval = 0;
 	float mLatestShotTime = 0;
-	bool mIsControl = false;
-
 	int mCurrentBulletIndex = 0;
+
+	bool mIsControl = false;
 	float mFollowSpeed = 10.0f;
 	Vec2 mLatestInputPos;
 
@@ -37,7 +41,8 @@ public:
 	void setIsControl(bool tIsControl);
 	bool getIsControl();
 	void checkCollisionByEnemy(CEnemy * enemy);
-	//void checkCollisionByBullet(CBullet * bullet);
+	float getRedius();
+	void hit();
 
 	//Inputs
 	bool onTouchBegan(Touch * touch, Event * unused_event);

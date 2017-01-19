@@ -7,6 +7,7 @@
 using namespace cocos2d;
 
 class CEnemy;
+class CActor;
 
 class CBullet : public CUnit
 {
@@ -31,9 +32,11 @@ public:
 
 	virtual bool getIsAlive();
 	virtual void setIsAlive(bool tIsAlive);
-	virtual void Shot(Vec2 tPos);
-
+	virtual void shot(Vec2 tPos);
+	virtual void setColor(const Color3B & tColor);
 	virtual void checkCollisionEnemy(CEnemy * enemy);
+	virtual void checkCollisionActor(CActor * actor);
+
 };
 
 #endif // !__CBULLET_H__

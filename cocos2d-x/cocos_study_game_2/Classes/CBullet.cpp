@@ -1,6 +1,6 @@
 #include "CBullet.h"
 #include "CEnemy.h"
-
+#include "CActor.h"
 
 bool CBullet::init()
 {
@@ -71,6 +71,11 @@ void CBullet::setSpeed(float tSpeed)
 	mCurrentSpeed = tSpeed;
 }
 
+void CBullet::setColor(const Color3B & tColor)
+{
+	this->mSprite->setColor(tColor);
+}
+
 Sprite * CBullet::getSprite() const
 {
 	return mSprite;
@@ -89,7 +94,7 @@ void CBullet::setIsAlive(bool tIsAlive)
 
 #pragma endregion
 
-void CBullet::Shot(Vec2 tPos)
+void CBullet::shot(Vec2 tPos)
 {
 	this->setPosition(tPos);
 	setIsAlive(true);
@@ -101,6 +106,20 @@ void CBullet::checkCollisionEnemy(CEnemy * enemy)
 	{
 		if (enemy->checkCollisionBulletToParts(this))
 		{
+			this->setIsAlive(false);
+		}
+	}
+}
+
+void CBullet::checkCollisionActor(CActor * actor)
+{
+	if (mIsAlive)
+	{
+		if (utils::getCascadeBoundingBox(this).intersectsCircle(
+			actor->getPosition(), actor->getRedius()
+		))
+		{
+			actor->hit();
 			this->setIsAlive(false);
 		}
 	}

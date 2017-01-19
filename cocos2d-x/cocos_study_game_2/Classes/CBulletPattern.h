@@ -18,8 +18,10 @@ public:
 
 	virtual bool getIsAlive() override;
 	virtual void setIsAlive(bool tIsAlive) override;
-	virtual void Shot(Vec2 tPos) override;
+	virtual void shot(Vec2 tPos) override;
+	virtual void setColor(const Color3B & tColor) override;
 	virtual void checkCollisionEnemy(CEnemy * enemy) override;
+	virtual void checkCollisionActor(CActor * actor) override;
 
 };
 
