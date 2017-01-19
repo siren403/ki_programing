@@ -1,8 +1,10 @@
 #include "ScenePlay.h"
 #include "CActor.h"
-#include "CTime.h"
+#include "CEnemyFactory.h"
 
-#define ZORDER_BULLET 10
+#define ZORDER_ACTOR 6
+#define ZORDER_BULLET_LAYER 10
+#define ZORDER_ENEMY 5
 
 Scene * ScenePlay::createScene()
 {
@@ -22,21 +24,39 @@ bool ScenePlay::init()
 	auto tVSize = Director::getInstance()->getVisibleSize();
 
 	auto tBulletLayer = Layer::create();
-	tBulletLayer->setZOrder(ZORDER_BULLET);
+	tBulletLayer->setZOrder(ZORDER_BULLET_LAYER);
 	this->addChild(tBulletLayer);
 
-	auto tActor = CActor::create(tBulletLayer);
-	tActor->setPosition(Vec2(tVSize.width*0.3, tVSize.height*0.5));
-	this->addChild(tActor);
+	mActor = CActor::create(tBulletLayer);
+	mActor->setZOrder(ZORDER_ACTOR);
+	mActor->setPosition(Vec2(tVSize.width*0.3, tVSize.height*0.5));
+	this->addChild(mActor);
 
 	auto tSeqStart = Sequence::create(
 		DelayTime::create(1),
-		CallFunc::create([tActor]() { tActor->setIsControl(true); }),
+		CallFunc::create([this]() { mActor->setIsControl(true); }),
 		nullptr
 	);
 	this->runAction(tSeqStart);
 
+
+	mEnemy = CEnemyFactory::createBossSample(tBulletLayer);
+	mEnemy->setPosition(Vec2(tVSize.width * 0.8, tVSize.height * 0.5));
+	mEnemy->setZOrder(ZORDER_ENEMY);
+	this->addChild(mEnemy);
+
+
+
+	this->scheduleUpdate();
 	return true;
+}
+
+void ScenePlay::update(float dt)
+{
+	if (mActor->getIsControl())
+	{
+		mActor->checkCollisionByEnemy(mEnemy);
+	}
 }
 
 void ScenePlay::onEnter()

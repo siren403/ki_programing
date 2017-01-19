@@ -8,6 +8,8 @@
 using namespace cocos2d;
 
 class SpriteAnimator;
+class CEnemy;
+class CBullet;
 
 class CActor : public CUnit
 {
@@ -33,10 +35,14 @@ public:
 	virtual void update(float dt) override;
 
 	void setIsControl(bool tIsControl);
+	bool getIsControl();
+	void checkCollisionByEnemy(CEnemy * enemy);
+	//void checkCollisionByBullet(CBullet * bullet);
 
 	//Inputs
 	bool onTouchBegan(Touch * touch, Event * unused_event);
 	void onTouchMoved(Touch * touch, Event * unused_event);
+	
 };
 
 #endif // !__CACTOR_H__

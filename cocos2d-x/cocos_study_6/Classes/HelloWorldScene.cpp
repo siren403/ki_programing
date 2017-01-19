@@ -172,7 +172,7 @@ bool HelloWorld::init()
 			break;
 		}
 	};
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(tKeyboard);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(tKeyboard,this);
 
 
     return true;

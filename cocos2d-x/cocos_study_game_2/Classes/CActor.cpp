@@ -1,11 +1,14 @@
 #include "CActor.h"
 #include "SpriteAnimator.h"
 #include "BulletFactory.h"
+#include "CEnemy.h"
+#include "CBulletDirection.h"
 
 #define USE_MOUSE_POSITION true
 #define BULLET_MAX_COUNT 30
 #define BULLET_INTERVAL 0.1
 #define BULLET_SPEED 600
+#define IS_BULLET_3WAY true
 
 CActor * CActor::create(Layer * tBulletLayer)
 {
@@ -33,6 +36,8 @@ bool CActor::lateInit()
 	mBullets.reserve(BULLET_MAX_COUNT);
 
 	CBullet * tTempPattern = nullptr;
+	
+#if IS_BULLET_3WAY
 	for (int i = 0; i < BULLET_MAX_COUNT; i++)
 	{
 		
@@ -44,6 +49,13 @@ bool CActor::lateInit()
 		mBullets.pushBack(tTempPattern);
 		mBulletLayer->addChild(tTempPattern);
 	}
+#elif
+	tTempPattern = CBulletDirection::create();
+	tTempPattern->setDirection(Vec2(1,0));
+	tTempPattern->setSpeed(BULLET_SPEED);
+	mBullets.pushBack(tTempPattern);
+	mBulletLayer->addChild(tTempPattern);
+#endif
 
 
 #if USE_MOUSE_POSITION
@@ -52,7 +64,6 @@ bool CActor::lateInit()
 	tMouseListener->onMouseMove = [=](Event * event) 
 	{
 		auto tMouse = (EventMouse *)event;
-		//this->setPosition(tMouse->getLocationInView());
 		mLatestInputPos = tMouse->getLocationInView();
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(tMouseListener, this);
@@ -66,6 +77,8 @@ bool CActor::lateInit()
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(tTouchListener, this);
 
 #endif
+
+
 	this->scheduleUpdate();
 	return true;
 }
@@ -104,6 +117,31 @@ void CActor::setIsControl(bool tIsControl)
 {
 	mIsControl = tIsControl;
 }
+
+bool CActor::getIsControl()
+{
+	return mIsControl;
+}
+
+void CActor::checkCollisionByEnemy(CEnemy * enemy)
+{
+	Rect tEnemyBox = utils::getCascadeBoundingBox(enemy);
+	Rect tActorBox = utils::getCascadeBoundingBox(this);
+
+	if (tActorBox.intersectsRect(tEnemyBox))
+	{
+		//log("collision");
+	}
+
+	if (mBullets.size() > 0)
+	{
+		for (int i = 0; i < mBullets.size(); i++)
+		{
+			mBullets.at(i)->checkCollisionEnemy(enemy);
+		}
+	}
+}
+
 
 CActor::~CActor()
 {

@@ -19,6 +19,9 @@
     <Filter Include="src\Unit\Bullet">
       <UniqueIdentifier>{96979045-aa6b-429e-8f93-6d08a8b11580}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Unit\Enemy">
+      <UniqueIdentifier>{b4c60846-f9f1-46eb-8025-3446adec2e80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -60,6 +63,15 @@
     <ClCompile Include="..\Classes\BulletFactory.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\CEnemy.cpp">
+      <Filter>src\Unit\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CEnemyParts.cpp">
+      <Filter>src\Unit\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CEnemyFactory.cpp">
+      <Filter>src\Unit\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -100,6 +112,15 @@
     </ClInclude>
     <ClInclude Include="..\Classes\BulletFactory.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CEnemy.h">
+      <Filter>src\Unit\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CEnemyParts.h">
+      <Filter>src\Unit\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CEnemyFactory.h">
+      <Filter>src\Unit\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

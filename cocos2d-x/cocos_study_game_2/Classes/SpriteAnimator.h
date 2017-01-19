@@ -31,6 +31,7 @@ public:
 	
 	void runAni();
 	void stopAni();
+	const Sprite * getSprite() const;
 	const Size & getContentSize() const;
 };
 

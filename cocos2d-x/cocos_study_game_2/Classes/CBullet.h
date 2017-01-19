@@ -6,6 +6,8 @@
 
 using namespace cocos2d;
 
+class CEnemy;
+
 class CBullet : public CUnit
 {
 protected:
@@ -25,11 +27,13 @@ public:
 	bool isScreenOut(Vec2 tPos);
 	void setDirection(Vec2 tDir);
 	void setSpeed(float tSpeed);
+	Sprite * getSprite() const;
 
 	virtual bool getIsAlive();
 	virtual void setIsAlive(bool tIsAlive);
-
 	virtual void Shot(Vec2 tPos);
+
+	virtual void checkCollisionEnemy(CEnemy * enemy);
 };
 
 #endif // !__CBULLET_H__

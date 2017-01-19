@@ -19,6 +19,7 @@ public:
 	virtual bool getIsAlive() override;
 	virtual void setIsAlive(bool tIsAlive) override;
 	virtual void Shot(Vec2 tPos) override;
+	virtual void checkCollisionEnemy(CEnemy * enemy) override;
 
 };
 

@@ -3,16 +3,23 @@
 
 #include "cocos2d.h"
 
-USING_NS_CC;
+using namespace cocos2d;
+
+class CActor;
+class CEnemy;
+
 
 class ScenePlay : public Layer 
 {
-
+private:
+	CActor * mActor = nullptr;
+	CEnemy * mEnemy = nullptr;
 public:
 	static Scene * createScene();
 	CREATE_FUNC(ScenePlay);
 
 	virtual bool init() override;
+	virtual void update(float dt) override;
 	virtual void onEnter() override;
 	virtual void onExit() override;
 };

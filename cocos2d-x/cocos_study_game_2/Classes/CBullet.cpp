@@ -1,4 +1,5 @@
 #include "CBullet.h"
+#include "CEnemy.h"
 
 
 bool CBullet::init()
@@ -70,6 +71,11 @@ void CBullet::setSpeed(float tSpeed)
 	mCurrentSpeed = tSpeed;
 }
 
+Sprite * CBullet::getSprite() const
+{
+	return mSprite;
+}
+
 bool CBullet::getIsAlive()
 {
 	return mIsAlive;
@@ -87,6 +93,17 @@ void CBullet::Shot(Vec2 tPos)
 {
 	this->setPosition(tPos);
 	setIsAlive(true);
+}
+
+void CBullet::checkCollisionEnemy(CEnemy * enemy)
+{
+	if (mIsAlive)
+	{
+		if (enemy->checkCollisionBulletToParts(this))
+		{
+			this->setIsAlive(false);
+		}
+	}
 }
 
 

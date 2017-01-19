@@ -150,6 +150,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\CBullet.cpp" />
     <ClCompile Include="..\Classes\CBulletDirection.cpp" />
     <ClCompile Include="..\Classes\CBulletPattern.cpp" />
+    <ClCompile Include="..\Classes\CEnemy.cpp" />
+    <ClCompile Include="..\Classes\CEnemyFactory.cpp" />
+    <ClCompile Include="..\Classes\CEnemyParts.cpp" />
     <ClCompile Include="..\Classes\CTime.cpp" />
     <ClCompile Include="..\Classes\CUnit.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
@@ -165,8 +168,11 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\CBullet.h" />
     <ClInclude Include="..\Classes\CBulletDirection.h" />
     <ClInclude Include="..\Classes\CBulletPattern.h" />
+    <ClInclude Include="..\Classes\CEnemy.h" />
     <ClInclude Include="..\Classes\CTime.h" />
     <ClInclude Include="..\Classes\CUnit.h" />
+    <ClInclude Include="..\Classes\CEnemyParts.h" />
+    <ClInclude Include="..\Classes\CEnemyFactory.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\ScenePlay.h" />
     <ClInclude Include="..\Classes\SceneTitle.h" />
