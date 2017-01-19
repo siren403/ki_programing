@@ -9,6 +9,7 @@ bool CEnemyParts::init()
 	}
 
 	mSprite = Sprite::create("boss_sample.png");
+	mSprite->setPosition(Vec2::ZERO);
 	this->addChild(mSprite);
 
 	mBullets.reserve(10);
@@ -32,6 +33,7 @@ void CEnemyParts::update(float dt)
 	{
 		if (mBullets.at(mCurrentBulletIndex)->getIsAlive() == false)
 		{
+			//todo : 탄 발사 위치 조정
 			Vec2 tPos = this->getPosition();
 			tPos = convertToWorldSpace(tPos);
 			//tPos.x += mSpriteAnim->getContentSize().width;

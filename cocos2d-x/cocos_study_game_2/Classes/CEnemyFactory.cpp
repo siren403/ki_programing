@@ -7,11 +7,14 @@ CEnemy * CEnemyFactory::createBossSample(Layer * tBulletLayer)
 {
 	auto tBoss = CEnemy::create();
 
+	CBullet * tBullet = nullptr;
+	CEnemyParts * tParts = nullptr;
 
-	auto tParts = CEnemyParts::create();
+
+	tParts = CEnemyParts::create();
+	tParts->setPosition(Vec2(0, 0));
 	tParts->setHP(100);
 	tParts->setBulletLayer(tBulletLayer);
-	CBullet * tBullet = nullptr;
 	for (int i = 0; i < 3; i++)
 	{
 		tBullet = CBulletFactory::creataBullet3Way(
@@ -22,6 +25,23 @@ CEnemy * CEnemyFactory::createBossSample(Layer * tBulletLayer)
 		tBullet->setColor(Color3B::RED);
 		tParts->addBullet(tBullet);
 	}
+	tBoss->addParts(tParts);
+
+	/*tParts = CEnemyParts::create();
+	tParts->setPosition(Vec2(0, -100));
+	tParts->setHP(100);
+	tParts->setBulletLayer(tBulletLayer);
+	for (int i = 0; i < 3; i++)
+	{
+		tBullet = CBulletFactory::creataBullet3Way(
+			DirSpeed(Vec2(-1, 0), 500),
+			DirSpeed(Vec2(-1, -0.3), 500),
+			DirSpeed(Vec2(-1, 0.3), 500)
+		);
+		tBullet->setColor(Color3B::RED);
+		tParts->addBullet(tBullet);
+	}
+	tBoss->addParts(tParts);*/
 
 	/*tBullet = CBulletDirection::create();
 	tBullet->setSpeed(400);
@@ -29,6 +49,5 @@ CEnemy * CEnemyFactory::createBossSample(Layer * tBulletLayer)
 	tBullet->setColor(Color3B::RED);
 	tParts->addBullet(tBullet);*/
 
-	tBoss->addParts(tParts);
 	return tBoss;
 }
