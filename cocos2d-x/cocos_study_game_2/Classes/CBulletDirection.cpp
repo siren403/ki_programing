@@ -18,6 +18,7 @@ bool CBulletDirection::lateInit()
 	{
 		return false;
 	}
+
 	return true;
 }
 

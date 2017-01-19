@@ -25,6 +25,7 @@ bool CActor::lateInit()
 	}
 
 	mSprite = Sprite::create("actor.png");
+	mSprite->setRotation(90);
 	this->addChild(mSprite);
 
 
@@ -50,17 +51,17 @@ bool CActor::lateInit()
 		tTempPattern->bulletReserve(3);
 
 		tTempBullet = CBulletDirection::create(Sprite::create("bullet.png"));
-		tTempBullet->setDirection(Vec2(0, 1));
+		tTempBullet->setDirection(Vec2(1, 0));
 		tTempBullet->setSpeed(tBulletSpeed);
 		tTempPattern->pushBullet(tTempBullet);
 
 		tTempBullet = CBulletDirection::create(Sprite::create("bullet.png"));
-		tTempBullet->setDirection(Vec2(-0.3, 1));
+		tTempBullet->setDirection(Vec2(1, -0.3));
 		tTempBullet->setSpeed(tBulletSpeed);
 		tTempPattern->pushBullet(tTempBullet);
 
 		tTempBullet = CBulletDirection::create(Sprite::create("bullet.png"));
-		tTempBullet->setDirection(Vec2(0.3, 1));
+		tTempBullet->setDirection(Vec2(1, 0.3));
 		tTempBullet->setSpeed(tBulletSpeed);
 		tTempPattern->pushBullet(tTempBullet);
 
@@ -102,7 +103,7 @@ void CActor::update(float dt)
 		if (mBullets.at(mCurrentBulletIndex)->getIsAlive() == false)
 		{
 			Vec2 tPos = this->getPosition();
-			tPos.y += mSprite->getContentSize().height;
+			tPos.x += mSprite->getContentSize().height;
 			mBullets.at(mCurrentBulletIndex)->Shot(tPos);
 			mCurrentBulletIndex++;
 			if (mCurrentBulletIndex >= mBullets.size())
