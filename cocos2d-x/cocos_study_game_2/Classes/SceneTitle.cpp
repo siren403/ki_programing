@@ -31,7 +31,7 @@ bool SceneTitle::init()
 		auto tTransition = TransitionSplitRows::create(0.5, ScenePlay::createScene());
 		Director::getInstance()->replaceScene(tTransition);
 	});
-	tMenuPlay->setPosition(Vec2(tCenter.x,tVSize.height * 0.45));
+	tMenuPlay->setPosition(Vec2(tVSize.width * 0.9,tVSize.height * 0.1));
 	
 	auto tMenu = Menu::create(tMenuPlay, nullptr);
 	tMenu->setAnchorPoint(Vec2::ZERO);
@@ -46,22 +46,25 @@ bool SceneTitle::init()
 	tBgLayer->setZOrder(0);
 	this->addChild(tBgLayer);
 	
-	auto tCache = SpriteFrameCache::getInstance();
-	tCache->addSpriteFramesWithFile("bg.plist","bg.png");
 
-	auto tBg_0 = Sprite::createWithSpriteFrameName("bg_top_0.png");
-	tBg_0->setScale(1.8, 2);
-	tBg_0->setRotation(-90);
-	tBg_0->setZOrder(0);
-	tBg_0->setPosition(Vec2(tVSize.width * 0.5, tVSize.height * 0.7));
+	auto tBg = Sprite::create("bg_top.png");
+	tBg->setScale(1.8);
+	tBg->setAnchorPoint(Vec2(0, 1));
+	tBg->setZOrder(0);
+	tBg->setPosition(Vec2(0, tVSize.height));
+	tBgLayer->addChild(tBg);
+	tBg = Sprite::create("bg_bot.png");
+	tBg->setScale(1.6);
+	tBg->setAnchorPoint(Vec2(0, 0));
+	tBg->setZOrder(1);
+	tBg->setPosition(Vec2(0, 0));
+	tBgLayer->addChild(tBg);
+	auto tBg_0 = Sprite::create("bg_bot.png");
+	tBg_0->setScale(1.6);
+	tBg_0->setAnchorPoint(Vec2(0, 0));
+	tBg_0->setZOrder(1);
+	tBg_0->setPosition(Vec2(tBg->getContentSize().width, 0));
 	tBgLayer->addChild(tBg_0);
-	auto tBg_1 = Sprite::createWithSpriteFrameName("bg_top_1.png");
-	tBg_1->setScale(1.8, 2);
-	tBg_1->setRotation(-90);
-	tBg_1->setZOrder(1);
-	tBg_1->setPosition(Vec2(tVSize.width * 0.5, tVSize.height * 0.2));
-	tBgLayer->addChild(tBg_1);
-
 #pragma endregion
 	return true;
 }

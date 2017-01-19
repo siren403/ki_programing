@@ -3,13 +3,14 @@
 #include "CBulletFactory.h"
 #include "CEnemy.h"
 #include "CBulletDirection.h"
+#include "CBulletCurve.h"
 
 #define USE_MOUSE_POSITION true
 
-#define BULLET_MAX_COUNT 1
+#define BULLET_MAX_COUNT 30
 #define BULLET_INTERVAL 0.1
 #define BULLET_SPEED 600
-#define IS_BULLET_3WAY true
+#define IS_BULLET_3WAY false
 
 CActor * CActor::create(Layer * tBulletLayer)
 {
@@ -31,33 +32,41 @@ bool CActor::lateInit()
 
 	mSpriteAnim = SpriteAnimator::create("actor", 0, 20, 0.1);
 	mSpriteAnim->runAni();
+	mSpriteAnim->setScale(1.8);
 	this->addChild(mSpriteAnim);
 
 	mHP = 10;
+	mFollowSpeed = 15.0f;
 
 	mBulletInterval = BULLET_INTERVAL;
 	mBullets.reserve(BULLET_MAX_COUNT);
 
-	CBullet * tTempPattern = nullptr;
+	CBullet * tTempBullet = nullptr;
 	
 #if IS_BULLET_3WAY
 	for (int i = 0; i < BULLET_MAX_COUNT; i++)
 	{
 		
-		tTempPattern = CBulletFactory::creataBullet3Way(
+		tTempBullet = CBulletFactory::creataBullet3Way(
 			DirSpeed(Vec2(1, 0), BULLET_SPEED),
 			DirSpeed(Vec2(1, -0.3), BULLET_SPEED),
 			DirSpeed(Vec2(1, 0.3), BULLET_SPEED));
 
-		mBullets.pushBack(tTempPattern);
-		mBulletLayer->addChild(tTempPattern);
+		mBullets.pushBack(tTempBullet);
+		mBulletLayer->addChild(tTempBullet);
 	}
-#elif
-	tTempPattern = CBulletDirection::create();
-	tTempPattern->setDirection(Vec2(1,0));
-	tTempPattern->setSpeed(BULLET_SPEED);
-	mBullets.pushBack(tTempPattern);
-	mBulletLayer->addChild(tTempPattern);
+#else
+	for (int i = 0; i < 30; i++)
+	{
+		auto tCurve = CBulletFactory::creataBulletCurveSide3Way(
+			DirSpeed(Vec2(1,1),600),
+			DirSpeed(Vec2(1,0), 600),
+			DirSpeed(Vec2(1,-1),600),
+			500
+		);
+		mBullets.pushBack(tCurve);
+		mBulletLayer->addChild(tCurve);
+	}
 #endif
 
 
@@ -171,6 +180,7 @@ void CActor::hit()
 		if (mHP <= 0)
 		{
 			mIsControl = false;
+			mIsAlive = false;
 		}
 
 		if (mIsControl)

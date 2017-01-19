@@ -8,6 +8,12 @@ bool CBullet::init()
 	{
 		return false;
 	}
+
+	mSprite = Sprite::create("bullet.png");
+	mSprite->setScale(0.5f);
+	//mSprite->setVisible(false);
+	this->addChild(mSprite);
+
 	setIsAlive(false);
 	this->scheduleUpdate();
 	return true;
@@ -47,11 +53,16 @@ void CBullet::setSprite(Sprite * tSprite)
 
 bool CBullet::isScreenOut(Vec2 tPos)
 {
-	Rect tScreen = Rect(0, 0, 
+	/*Rect tScreen = Rect(0, 0,
 		Director::getInstance()->getVisibleSize().width,
-		Director::getInstance()->getVisibleSize().height);
+		Director::getInstance()->getVisibleSize().height *  1.5);
 
 	if (tScreen.containsPoint(tPos) == false)
+	{
+		return true;
+	}*/
+	if (tPos.x < 0 || tPos.x > Director::getInstance()->getVisibleSize().width ||
+		tPos.y < -100 || tPos.y > Director::getInstance()->getVisibleSize().height + 100)
 	{
 		return true;
 	}
@@ -98,6 +109,7 @@ void CBullet::shot(Vec2 tPos)
 {
 	this->setPosition(tPos);
 	setIsAlive(true);
+	mShotPos = tPos;
 }
 
 void CBullet::checkCollisionEnemy(CEnemy * enemy)

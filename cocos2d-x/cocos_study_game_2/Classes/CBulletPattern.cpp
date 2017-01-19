@@ -38,7 +38,7 @@ void CBulletPattern::shot(Vec2 tPos)
 {
 	for (int i = 0; i < mBullets.size(); i++)
 	{
-		mBullets.at(i)->setPosition(tPos);
+		mBullets.at(i)->shot(tPos);
 		mBullets.at(i)->setIsAlive(true);
 	}
 }

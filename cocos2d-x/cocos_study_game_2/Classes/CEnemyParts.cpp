@@ -1,5 +1,5 @@
 #include "CEnemyParts.h"
-
+#include "CEnemy.h"
 
 bool CEnemyParts::init()
 {
@@ -8,14 +8,12 @@ bool CEnemyParts::init()
 		return false;
 	}
 
-	mSprite = Sprite::create("boss_sample.png");
-	mSprite->setPosition(Vec2::ZERO);
-	this->addChild(mSprite);
-
 	mBullets.reserve(10);
 	mHP = 100;
 	mHitDelay = 0.08;
 	mBulletInterval = 1;
+
+	mCurrentState = STATE_IDLE;
 
 	this->scheduleUpdate();
 	return true;
@@ -28,31 +26,53 @@ void CEnemyParts::update(float dt)
 		mCurrentHitDelay -= dt;
 	}
 	
-	mLatestShotTime += dt;
-	if (mLatestShotTime >= mBulletInterval)
+	switch (mCurrentState)
 	{
-		if (mBullets.at(mCurrentBulletIndex)->getIsAlive() == false)
+	case STATE_IDLE:
+		break;
+	case STATE_ATTACK:
+		mLatestShotTime += dt;
+		if (mLatestShotTime >= mBulletInterval)
 		{
-			//todo : 탄 발사 위치 조정
-			Vec2 tPos = this->getPosition();
-			tPos = convertToWorldSpace(tPos);
-			//tPos.x += mSpriteAnim->getContentSize().width;
-			//tPos.y += mSpriteAnim->getContentSize().height * 0.5;
-
-			mBullets.at(mCurrentBulletIndex)->shot(tPos);
-			mCurrentBulletIndex++;
-			if (mCurrentBulletIndex >= mBullets.size())
+			if (mBullets.at(mCurrentBulletIndex)->getIsAlive() == false)
 			{
-				mCurrentBulletIndex = 0;
+				//todo : 탄 발사 위치 조정
+
+				Vec2 tPos = getParent()->convertToWorldSpace(this->getPosition());
+				log("x:%f,y:%f", tPos.x, tPos.y);
+
+				tPos += mShotOffset;
+				//tPos.x += mSpriteAnim->getContentSize().width;
+				//tPos.y += mSpriteAnim->getContentSize().height * 0.5;
+
+				mBullets.at(mCurrentBulletIndex)->shot(tPos);
+				mCurrentBulletIndex++;
+				if (mCurrentBulletIndex >= mBullets.size())
+				{
+					mCurrentBulletIndex = 0;
+				}
 			}
+			mLatestShotTime = 0;
 		}
-		mLatestShotTime = 0;
+		break;
 	}
+	
 }
 
 void CEnemyParts::setHP(int tHP)
 {
 	mHP = tHP;
+}
+
+void CEnemyParts::setSprite(Sprite * tSprite)
+{
+	if (mSprite != nullptr)
+	{
+		this->removeChild(mSprite);
+	}
+	mSprite = tSprite;
+	mSprite->setPosition(Vec2::ZERO);
+	this->addChild(mSprite);
 }
 
 Sprite * CEnemyParts::getSprite() const
@@ -70,10 +90,13 @@ void CEnemyParts::Hit()
 
 		if (mHP <= 0)
 		{
-			setVisible(true);
+			setIsAlive(false);
+			this->unscheduleUpdate();
+			auto tParent = (CEnemy *)getParent();
+			tParent->DestroyParts();
 		}
 
-		if (this->isVisible())
+		if (this->mIsAlive)
 		{
 			auto tHitSeq = Sequence::create(
 				TintTo::create(0.05, Color3B::RED),
@@ -97,7 +120,27 @@ void CEnemyParts::setBulletLayer(Layer * tBulletLayer)
 	mBulletLayer = tBulletLayer;
 }
 
+void CEnemyParts::setState(int state)
+{
+	mCurrentState = state;
+}
+
 const Vector<CBullet*> & CEnemyParts::getBullets() const
 {
 	return mBullets;
+}
+
+void CEnemyParts::setIsAlive(bool tIsAlive)
+{
+	mIsAlive = tIsAlive;
+	mSprite->setOpacity(tIsAlive ? 1 : 255 * 0.5);
+}
+void CEnemyParts::setShotOffset(Vec2 tOffset)
+{
+	mShotOffset = tOffset;
+}
+
+void CEnemyParts::setShotInterval(float tInterval)
+{
+	mBulletInterval = tInterval;
 }

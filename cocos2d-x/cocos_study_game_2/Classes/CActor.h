@@ -25,7 +25,7 @@ private:
 	int mCurrentBulletIndex = 0;
 
 	bool mIsControl = false;
-	float mFollowSpeed = 10.0f;
+	float mFollowSpeed = 0;
 	Vec2 mLatestInputPos;
 
 	Vector<CBullet *> mBullets;

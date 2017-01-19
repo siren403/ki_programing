@@ -10,10 +10,12 @@ class CUnit : public Node
 protected:
 	//Sprite * mSprite = nullptr;
 	virtual bool lateInit();
-
+	bool mIsAlive = true;
 public:
 	CREATE_FUNC(CUnit);
 	virtual bool init() override;
+	virtual bool getIsAlive();
+	virtual void setIsAlive(bool tIsAlive);
 };
 
 #endif // !__CUNIT_H__

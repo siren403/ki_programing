@@ -15,10 +15,8 @@ protected:
 	Sprite * mSprite = nullptr;
 	Vec2 mCurrenDir;
 	float mCurrentSpeed = 0;
-	bool mIsAlive = false;
-	
-	
 	virtual void bulletUpdate(float dt);
+	Vec2 mShotPos;
 public:
 	CREATE_FUNC(CBullet);
 	virtual bool init() override;
@@ -30,8 +28,8 @@ public:
 	void setSpeed(float tSpeed);
 	Sprite * getSprite() const;
 
-	virtual bool getIsAlive();
-	virtual void setIsAlive(bool tIsAlive);
+	virtual bool getIsAlive() override;
+	virtual void setIsAlive(bool tIsAlive) override;
 	virtual void shot(Vec2 tPos);
 	virtual void setColor(const Color3B & tColor);
 	virtual void checkCollisionEnemy(CEnemy * enemy);

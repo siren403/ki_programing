@@ -9,7 +9,7 @@ class CActor;
 class CEnemy;
 
 
-class ScenePlay : public Layer 
+class ScenePlay : public LayerColor 
 {
 private:
 	CActor * mActor = nullptr;
@@ -22,6 +22,7 @@ public:
 	virtual void update(float dt) override;
 	virtual void onEnter() override;
 	virtual void onExit() override;
+
 };
 
 

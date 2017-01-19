@@ -9,9 +9,6 @@ bool CBulletDirection::init()
 		return false;
 	}
 
-	mSprite = Sprite::create("bullet.png");
-	mSprite->setScale(0.5f);
-	this->addChild(mSprite);
 
 	return true;
 }

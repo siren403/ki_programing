@@ -72,6 +72,9 @@
     <ClCompile Include="..\Classes\CBulletFactory.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\CBulletCurve.cpp">
+      <Filter>src\Unit\Bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -121,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\CBulletFactory.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CBulletCurve.h">
+      <Filter>src\Unit\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
