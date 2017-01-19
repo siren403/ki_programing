@@ -146,6 +146,35 @@ bool HelloWorld::init()
 
 	this->scheduleUpdate();
 
+
+	LoadFromFile();
+
+	auto tKeyboard = EventListenerKeyboard::create();
+	tKeyboard->onKeyPressed = [&](EventKeyboard::KeyCode keycode, Event * event) 
+	{
+		switch (keycode)
+		{
+		case EventKeyboard::KeyCode::KEY_Q:
+			mPlayInfo.mName = "pokpoongryu";
+
+			mPlayInfo.mScore = mPlayInfo.mScore + 1;
+			mPlayInfo.mX = 240.0f;
+			mPlayInfo.mY = 160.0f;
+			break;
+		case EventKeyboard::KeyCode::KEY_W:
+			LoadFromFile();
+			break;
+		case EventKeyboard::KeyCode::KEY_E:
+			SaveToFile();
+			break;
+		case EventKeyboard::KeyCode::KEY_R:
+			DisplayPlayInfo();
+			break;
+		}
+	};
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(tKeyboard);
+
+
     return true;
 }
 
@@ -166,7 +195,6 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     
     
 }
-
 
 void HelloWorld::onExit()
 {
@@ -252,4 +280,44 @@ void HelloWorld::update(float dt)
 	}
 
 
+}
+
+void HelloWorld::LoadFromFile()
+{
+	mPlayInfo.mName = UserDefault::getInstance()->getStringForKey("key_name");
+
+	mPlayInfo.mScore = UserDefault::getInstance()->getIntegerForKey("key_score");
+	mPlayInfo.mX = UserDefault::getInstance()->getFloatForKey("key_x");
+	mPlayInfo.mY = UserDefault::getInstance()->getFloatForKey("key_y");
+
+	DisplayPlayInfo();
+
+}
+
+void HelloWorld::SaveToFile()
+{
+	UserDefault::getInstance()->setStringForKey("key_name", mPlayInfo.mName);
+
+	UserDefault::getInstance()->setIntegerForKey("key_score", mPlayInfo.mScore);
+	UserDefault::getInstance()->setFloatForKey("key_x", mPlayInfo.mX);
+	UserDefault::getInstance()->setFloatForKey("key_y", mPlayInfo.mY);
+
+	UserDefault::getInstance()->flush();
+}
+
+void HelloWorld::DisplayPlayInfo()
+{
+	string tString = "";
+
+	char tszTemp[256];
+	memset(tszTemp, 0, 256);
+	sprintf(tszTemp, "%s, %d, %f, %f ",
+		mPlayInfo.mName.c_str(),
+		mPlayInfo.mScore,
+		mPlayInfo.mX,
+		mPlayInfo.mY);
+
+	tString = tString + tszTemp;
+
+	log(tString.c_str());
 }

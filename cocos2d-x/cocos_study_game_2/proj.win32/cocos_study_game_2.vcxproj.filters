@@ -54,6 +54,12 @@
     <ClCompile Include="..\Classes\CBulletPattern.cpp">
       <Filter>src\Unit\Bullet</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\SpriteAnimator.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BulletFactory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -88,6 +94,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\CBulletDirection.h">
       <Filter>src\Unit\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SpriteAnimator.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BulletFactory.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

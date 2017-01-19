@@ -1,10 +1,11 @@
 #include "CActor.h"
-#include "CBulletDirection.h"
-#include "CBulletPattern.h"
+#include "SpriteAnimator.h"
+#include "BulletFactory.h"
 
 #define USE_MOUSE_POSITION true
 #define BULLET_MAX_COUNT 30
 #define BULLET_INTERVAL 0.1
+#define BULLET_SPEED 600
 
 CActor * CActor::create(Layer * tBulletLayer)
 {
@@ -24,46 +25,21 @@ bool CActor::lateInit()
 		return false;
 	}
 
-	mSprite = Sprite::create("actor.png");
-	mSprite->setRotation(90);
-	this->addChild(mSprite);
-
+	mSpriteAnim = SpriteAnimator::create("actor", 0, 20, 0.1);
+	mSpriteAnim->runAni();
+	this->addChild(mSpriteAnim);
 
 	mBulletInterval = BULLET_INTERVAL;
 	mBullets.reserve(BULLET_MAX_COUNT);
 
-	CBulletDirection * tTempBullet = nullptr;
-	/*
+	CBullet * tTempPattern = nullptr;
 	for (int i = 0; i < BULLET_MAX_COUNT; i++)
 	{
-		tTempBullet = CBulletDirection::create(Sprite::create("bullet.png"));
-		tTempBullet->setDirection(Vec2(0, 1));
-		tTempBullet->setSpeed(400);
-		mBullets.pushBack(tTempBullet);
-		mBulletLayer->addChild(tTempBullet);
-	}*/
-
-	int tBulletSpeed = 600;
-	CBulletPattern * tTempPattern = nullptr;
-	for (int i = 0; i < BULLET_MAX_COUNT; i++)
-	{
-		tTempPattern = CBulletPattern::create();
-		tTempPattern->bulletReserve(3);
-
-		tTempBullet = CBulletDirection::create(Sprite::create("bullet.png"));
-		tTempBullet->setDirection(Vec2(1, 0));
-		tTempBullet->setSpeed(tBulletSpeed);
-		tTempPattern->pushBullet(tTempBullet);
-
-		tTempBullet = CBulletDirection::create(Sprite::create("bullet.png"));
-		tTempBullet->setDirection(Vec2(1, -0.3));
-		tTempBullet->setSpeed(tBulletSpeed);
-		tTempPattern->pushBullet(tTempBullet);
-
-		tTempBullet = CBulletDirection::create(Sprite::create("bullet.png"));
-		tTempBullet->setDirection(Vec2(1, 0.3));
-		tTempBullet->setSpeed(tBulletSpeed);
-		tTempPattern->pushBullet(tTempBullet);
+		
+		tTempPattern = BulletFactory::creataBullet3Way(
+			DirSpeed(Vec2(1, 0), BULLET_SPEED),
+			DirSpeed(Vec2(1, -0.3), BULLET_SPEED),
+			DirSpeed(Vec2(1, 0.3), BULLET_SPEED));
 
 		mBullets.pushBack(tTempPattern);
 		mBulletLayer->addChild(tTempPattern);
@@ -86,7 +62,7 @@ bool CActor::lateInit()
 	auto tTouchListener = EventListenerTouchOneByOne::create();
 	tTouchListener->setSwallowTouches(true);
 	tTouchListener->onTouchBegan = CC_CALLBACK_2(CActor::onTouchBegan, this);
-	tTouchListener->onTouchMoved = CC_CALLBACK_2(CActor::onTouchMoved, this);
+	tTouchListener->onTouchMoved = CC_CALLBACK_2(CActorW::onTouchMoved, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(tTouchListener, this);
 
 #endif
@@ -97,26 +73,36 @@ bool CActor::lateInit()
 
 void CActor::update(float dt)
 {
-	mLatestShotTime += dt;
-	if (mLatestShotTime >= mBulletInterval)
+	if (mIsControl)
 	{
-		if (mBullets.at(mCurrentBulletIndex)->getIsAlive() == false)
+		mLatestShotTime += dt;
+		if (mLatestShotTime >= mBulletInterval)
 		{
-			Vec2 tPos = this->getPosition();
-			tPos.x += mSprite->getContentSize().height;
-			mBullets.at(mCurrentBulletIndex)->Shot(tPos);
-			mCurrentBulletIndex++;
-			if (mCurrentBulletIndex >= mBullets.size())
+			if (mBullets.at(mCurrentBulletIndex)->getIsAlive() == false)
 			{
-				mCurrentBulletIndex = 0;
-			}
-		}
-		mLatestShotTime = 0;
-	}
+				Vec2 tPos = this->getPosition();
+				tPos.x += mSpriteAnim->getContentSize().width;
+				tPos.y += mSpriteAnim->getContentSize().height * 0.5;
 
-	Vec2 tPos = this->getPosition();
-	tPos = ccpLerp(tPos, mLatestInputPos, dt * mFollowSpeed);
-	this->setPosition(tPos);
+				mBullets.at(mCurrentBulletIndex)->Shot(tPos);
+				mCurrentBulletIndex++;
+				if (mCurrentBulletIndex >= mBullets.size())
+				{
+					mCurrentBulletIndex = 0;
+				}
+			}
+			mLatestShotTime = 0;
+		}
+
+		Vec2 tPos = this->getPosition();
+		tPos = ccpLerp(tPos, mLatestInputPos, dt * mFollowSpeed);
+		this->setPosition(tPos);
+	}
+}
+
+void CActor::setIsControl(bool tIsControl)
+{
+	mIsControl = tIsControl;
 }
 
 CActor::~CActor()

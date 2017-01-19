@@ -8,7 +8,7 @@ using namespace cocos2d;
 class CUnit : public Node
 {
 protected:
-	Sprite * mSprite = nullptr;
+	//Sprite * mSprite = nullptr;
 	virtual bool lateInit();
 
 public:

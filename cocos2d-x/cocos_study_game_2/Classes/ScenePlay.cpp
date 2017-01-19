@@ -26,9 +26,15 @@ bool ScenePlay::init()
 	this->addChild(tBulletLayer);
 
 	auto tActor = CActor::create(tBulletLayer);
-	tActor->setPosition(Vec2(tVSize.width*0.5, tVSize.height*0.2));
+	tActor->setPosition(Vec2(tVSize.width*0.3, tVSize.height*0.5));
 	this->addChild(tActor);
 
+	auto tSeqStart = Sequence::create(
+		DelayTime::create(1),
+		CallFunc::create([tActor]() { tActor->setIsControl(true); }),
+		nullptr
+	);
+	this->runAction(tSeqStart);
 
 	return true;
 }

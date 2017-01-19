@@ -1,13 +1,12 @@
 #include "CBullet.h"
 
 
-bool CBullet::lateInit()
+bool CBullet::init()
 {
-	if (!CUnit::lateInit())
+	if (!CUnit::init())
 	{
 		return false;
 	}
-	this->addChild(mSprite);
 	setIsAlive(false);
 	this->scheduleUpdate();
 	return true;

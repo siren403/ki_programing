@@ -7,11 +7,16 @@
 
 using namespace cocos2d;
 
+class SpriteAnimator;
+
 class CActor : public CUnit
 {
 private:
+	SpriteAnimator * mSpriteAnim = nullptr;
+
 	float mBulletInterval = 0;
 	float mLatestShotTime = 0;
+	bool mIsControl = false;
 
 	int mCurrentBulletIndex = 0;
 	float mFollowSpeed = 10.0f;
@@ -19,13 +24,15 @@ private:
 
 	Vector<CBullet *> mBullets;
 	Layer * mBulletLayer = nullptr;
-public:
 	virtual ~CActor();
+public:
+	static CActor * create(Layer * tBulletLayer);
 
 	CREATE_FUNC(CActor);
 	virtual bool lateInit() override;
-	static CActor * create(Layer * tBulletLayer);
 	virtual void update(float dt) override;
+
+	void setIsControl(bool tIsControl);
 
 	//Inputs
 	bool onTouchBegan(Touch * touch, Event * unused_event);

@@ -2,6 +2,7 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include "CPlayInfo.h"
 
 using namespace cocos2d;
 
@@ -14,7 +15,7 @@ private:
 
 	Sprite * mSpriteA = nullptr;
 	Sprite * mSpriteB = nullptr;
-
+	CPlayInfo mPlayInfo;
 public:
     static cocos2d::Scene* createScene();
 
@@ -34,6 +35,11 @@ public:
 	void doSoundAction(Ref* pSender);
 
 	virtual void update(float dt) override;
+
+	void LoadFromFile();
+	void SaveToFile();
+	void DisplayPlayInfo();
+
 };
 
 #endif // __HELLOWORLD_SCENE_H__
