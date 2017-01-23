@@ -24,10 +24,6 @@ bool SceneBox2DCollision::init()
 		return false;
 	}
 
-
-	
-
-
 	mpLayerUI = Layer::create();
 	this->addChild(mpLayerUI, 100);
 
@@ -53,6 +49,24 @@ bool SceneBox2DCollision::init()
 
 void SceneBox2DCollision::update(float dt)
 {
+	static float time = 0;
+	time += dt;
+	if (time >= 1)
+	{
+		time = 0;
+		if (mpCurBody == nullptr)
+		{
+			log("mpCurBody is Null");
+		}
+		else
+		{
+			log("mpCurbody : %f,%f", mpCurBody->GetPosition().x, mpCurBody->GetPosition().y);
+			if (((Sprite *)mpCurBody->GetUserData()) == nullptr)
+			{
+				log("Sprite is null");
+			}
+		}
+	}
 }
 
 void SceneBox2DCollision::onEnter()
@@ -70,6 +84,7 @@ void SceneBox2DCollision::onEnter()
 
 	this->scheduleUpdate();
 
+	this->runAction(ScaleTo::create(1, 0.99));
 }
 
 void SceneBox2DCollision::onExit()
@@ -99,8 +114,12 @@ void SceneBox2DCollision::onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * 
 {
 	auto tTouchPos = touch->getLocation();
 
-	if ((tTouchPos.x >= 700 - 40 && tTouchPos.x <= 700 + 40) &&
+	/*if ((tTouchPos.x >= 700 - 40 && tTouchPos.x <= 700 + 40) &&
 		(tTouchPos.y >= 240 - 40 && tTouchPos.y <= 240 + 40))
+	{
+		return;
+	}*/
+	if (mpSprBtn->getBoundingBox().containsPoint(tTouchPos))
 	{
 		doFire();
 		return;
@@ -113,23 +132,31 @@ void SceneBox2DCollision::onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * 
 	tpSprite->setPosition(tTouchPos);
 	this->addChild(tpSprite);
 
+	//Body 데이터 정의
 	b2BodyDef tBodyDef;
+	//b2_dynamicBody : 동적Body, 움직이는 캐릭터,미사일 등
+	//b2_staticBody : 정적Body, 움직이지 않는 벽, 장애물 등 
+	//b2_kinematicBody : staticBody와 같은 정적 Body이지만 속도와 방향을 지정하여 이동할 수 있다.
 	tBodyDef.type = b2_dynamicBody;
 	tBodyDef.position.Set(tTouchPos.x / PTM_RATIO, tTouchPos.y / PTM_RATIO);
 	tBodyDef.userData = tpSprite;
+	//월드에 Body생성 후 만들어진 Body에 Fixture를 생성하기 위해 Body를 변수에 참조
 	b2Body * tpBody = mpWorld->CreateBody(&tBodyDef);
 
+	//Fixture의 Shape 생성
 	b2CircleShape tCircle;
 	tCircle.m_radius = 1.0f;
 
+	//Fixture생성에 필요한 데이터 정의
+	//Fixture : 물체의 성질을 Body에 부여할 수 있음
 	b2FixtureDef tFixtureDef;
 	tFixtureDef.shape = &tCircle;
 	tFixtureDef.density = 1.0f;
 	tFixtureDef.friction = 0.5f;
 	tFixtureDef.restitution = 0.0f;
-
+	//Body에 Fixture생성, CreateBody와 마찬가지로 Body에 만들어진 Fixture를 
+	//리턴받아 참조 가능
 	tpBody->CreateFixture(&tFixtureDef);
-
 
 	/*
 	//사각형을 만듦( 사각형도 폴리곤에 속하므로 b2PolygonShape로 만듦
@@ -166,6 +193,7 @@ void SceneBox2DCollision::onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * 
 	*/
 
 	//카메라가 이 Layer를 보도록 설정한다.
+	//Body생성 후 Push버튼이 보이도록 화면 이동
 	Rect myBoundary = Rect(0, 0, mWinSize.width * 2, mWinSize.height * 2);
 	this->runAction(Follow::create(this, myBoundary));
 
@@ -173,12 +201,13 @@ void SceneBox2DCollision::onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * 
 
 void SceneBox2DCollision::doFire()
 {
+	//대상 월드의 현재 Body들의 LinkedList를 받아옴
+	//가장 마지막에 생성된 Body가 리턴
+	//LinkedList로 Body들이 연결되어 있기 때문에
+	//하나의 Body를 통해서 다른 Body들에 순차적으로 접근가능하다.
 	mpCurBody = mpWorld->GetBodyList();
 
-	if (nullptr == (Sprite *)(mpCurBody->GetUserData()))
-	{
-		return;
-	}
+	
 
 	//방향은 각도 70도, 힘의 크기는 100의 경우를 보이고 있다.
 	double tTrigonoV = tan(CC_DEGREES_TO_RADIANS(70));
@@ -186,18 +215,24 @@ void SceneBox2DCollision::doFire()
 
 	//닮은 삼각형임을 이용하여 각 축의 힘의 크기를 구하였다.
 	double tFX = tFScalar / sqrt((tTrigonoV*tTrigonoV + 1));
-	double tFY = sqrt(tFScalar * tFScalar -
+	double tFY = sqrt(
+		tFScalar * tFScalar - 
 		(tFScalar / sqrt(1 + tTrigonoV * tTrigonoV))*
-		(tFScalar / sqrt(1 + tTrigonoV*tTrigonoV))
+		(tFScalar / sqrt(1 + tTrigonoV * tTrigonoV))
 	);
 
 	//주어진 벡터만큼의 힘을 가하는 코드이다.
 	mpCurBody->ApplyLinearImpulse(b2Vec2(tFX, tFY), b2Vec2(0.0f, 0.0f), true);
 
 	//메인카메라가 해당객체를 따라다니게 하는 액션이다.
+	//카메라의 Follow범위
 	Rect myBoundary = Rect(0, 0, mWinSize.width * 2, mWinSize.height * 2);
-	this->runAction(Follow::create((Sprite *)(mpCurBody->GetUserData()), myBoundary));
 
+	if (nullptr == (Sprite *)(mpCurBody->GetUserData()))
+	{
+		return;
+	}
+	this->runAction(Follow::create((Sprite *)(mpCurBody->GetUserData()), myBoundary));
 }
 
 void SceneBox2DCollision::createPhysicsWorld()
@@ -218,12 +253,19 @@ void SceneBox2DCollision::createPhysicsWorld()
 	tGroundBodyDef.type = b2_staticBody;
 
 	b2Body * tpGroundBody = mpWorld->CreateBody(&tGroundBodyDef);
-
+	
+	//각 4면을 구성할 Fixture의 Shape데이터
 	b2EdgeShape tGroundEdge;
+
+	//GroundBody의 Fixture를 생성할 데이터
 	b2FixtureDef tBoxShapeDef;
+	//Fixture데이터에 Shape데이터를 참조시킴으로서 
+	//Shape데이터 조작 후 Fixture데이터의 추가 접근없이 Fixture를 생성할 수 있도록 한다.
 	tBoxShapeDef.shape = &tGroundEdge;
 
 	//left
+	//Fixture데이터에 참조 시켜둔 Shape데이터를 변경하여 왼쪽벽을 표현하고 
+	//Fixture데이터를 넘겨 GroundBody에 왼쪽벽Fixture를 생성
 	tGroundEdge.Set(b2Vec2(0, 0), b2Vec2(0, mWinSize.height * 2 / PTM_RATIO));
 	tpGroundBody->CreateFixture(&tBoxShapeDef);
 
@@ -242,8 +284,16 @@ void SceneBox2DCollision::createPhysicsWorld()
 		b2Vec2(mWinSize.width * 2 / PTM_RATIO, 0));
 	tpGroundBody->CreateFixture(&tBoxShapeDef);
 
+	//참고 : http://thrillfighter.tistory.com/187
+	//위 처럼 경계면을 만들어 놓지 않으면 중력에 의해 Body 화면밖까지 나가게
+	//되는데 이 경우 Sprite는 해제가 되어 사라지지만 Body는 사라지지 않아 화면에
+	//표시되지는 않지만 월드의 영향을 받는다. 결과적으로 사용되지 않는 객체에 메모리에 쌓이게 됨
+	//해결 및 방지 방법은 step loop에서 객체가 화면밖으로 나갈 시 월드에서 body를 Destroy되도록
+	//처리하면 된다.
+	
+
 	//물리세계의 정보들을 갱신하기 위한 루프를 만든다.
-	//this->schedule(schedule_selector(SceneBox2DCollision::updatePhysicsWorld));
+	//this->schedule(schedule_selector(SceneBox2DCollision::updatePhysicsWorld)); //구 Api
 	this->schedule(CC_SCHEDULE_SELECTOR(SceneBox2DCollision::updatePhysicsWorld));
 
 
@@ -270,16 +320,17 @@ void SceneBox2DCollision::destroyPhysicsWorld()
 	//물리 객체에 연결된 스프라이트(노드)도 삭제해야 한다.
 
 
-	for (b2Body *tpBody = mpWorld->GetBodyList(); tpBody; tpBody = tpBody->GetNext())
-	{
-		if (nullptr != tpBody->GetUserData())
-		{
-			Sprite * tpSprite = (Sprite *)tpBody->GetUserData();
-			this->removeChild(tpSprite);
+	//for (b2Body *tpBody = mpWorld->GetBodyList(); tpBody; tpBody = tpBody->GetNext())
+	//{
+	//	if (nullptr != tpBody->GetUserData())
+	//	{
+	//		Sprite * tpSprite = (Sprite *)tpBody->GetUserData();
+	//		this->removeChild(tpSprite);
 
-			mpWorld->DestroyBody(tpBody);
-		}
-	}
+	//	}
+	//	mpWorld->DestroyBody(tpBody);
+	//
+	//}
 
 	//물리세계를 파괴한다.
 	if (nullptr != mpWorld)
@@ -335,8 +386,9 @@ void SceneBox2DCollision::updatePhysicsWorld(float dt)
 	std::vector<b2Body *> tDestroyVec;
 	std::vector<SContacts>::iterator tIterator;
 
-
-	//충돌 감지 리스트에 담긴 Physical Body들을 가져와 삭제대상목록에 넣는다.
+	//등록한 리스너에 멤버로 있는 
+	//충돌 감지 리스트에 담긴 Physical Body들을 가져와 삭제대상목록(tDestroyVec)에 넣는다.
+	
 	for (tIterator = mpContactListener->mSContacts.begin();
 		tIterator != mpContactListener->mSContacts.end(); ++tIterator)
 	{
