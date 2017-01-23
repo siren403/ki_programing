@@ -31,6 +31,7 @@ private:
 	Vector<CBullet *> mBullets;
 	Layer * mBulletLayer = nullptr;
 	virtual ~CActor();
+	bool mIsFirstTouch = false;
 public:
 	static CActor * create(Layer * tBulletLayer);
 

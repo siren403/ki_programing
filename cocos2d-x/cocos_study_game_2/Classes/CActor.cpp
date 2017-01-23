@@ -35,7 +35,7 @@ bool CActor::lateInit()
 	mSpriteAnim->setScale(1.8);
 	this->addChild(mSpriteAnim);
 
-	mHP = 10;
+	mHP = 30;
 	mFollowSpeed = 15.0f;
 
 	mBulletInterval = BULLET_INTERVAL;
@@ -69,9 +69,7 @@ bool CActor::lateInit()
 	}
 #endif
 
-
 #if USE_MOUSE_POSITION
-
 	auto tMouseListener = EventListenerMouse::create();
 	tMouseListener->onMouseMove = [=](Event * event) 
 	{
@@ -79,6 +77,7 @@ bool CActor::lateInit()
 		mLatestInputPos = tMouse->getLocationInView();
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(tMouseListener, this);
+	mIsFirstTouch = true;
 
 #else
 
@@ -124,9 +123,13 @@ void CActor::update(float dt)
 			mLatestShotTime = 0;
 		}
 
-		Vec2 tPos = this->getPosition();
-		tPos = ccpLerp(tPos, mLatestInputPos, dt * mFollowSpeed);
-		this->setPosition(tPos);
+		if (mIsFirstTouch)
+		{
+
+			Vec2 tPos = this->getPosition();
+			tPos = ccpLerp(tPos, mLatestInputPos, dt * mFollowSpeed);
+			this->setPosition(tPos);
+		}
 	}
 }
 
@@ -204,6 +207,7 @@ CActor::~CActor()
 
 bool CActor::onTouchBegan(Touch * touch, Event * unused_event)
 {
+	mIsFirstTouch = true;
 	mLatestInputPos = touch->getLocation();
 	//this->setPosition(touch->getLocation());
 	return true;

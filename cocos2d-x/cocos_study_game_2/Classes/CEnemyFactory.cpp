@@ -104,7 +104,7 @@ CEnemy * CEnemyFactory::createBossSample(Layer * tBulletLayer)
 	tParts->setPosition(Vec2(50, 25));
 	tParts->setShotInterval(0.4);
 	tParts->setShotOffset(Vec2(20, 30));
-	tParts->setHP(DEFAULT_HP * 4);
+	tParts->setHP(DEFAULT_HP * 1.5);
 	tParts->setZOrder(7);
 	tParts->setBulletLayer(tBulletLayer);
 
@@ -142,7 +142,7 @@ CEnemy * CEnemyFactory::createBossSample(Layer * tBulletLayer)
 	tParts->setPosition(Vec2(50, 42));
 	tParts->setShotInterval(0.2);
 	tParts->setShotOffset(Vec2(20, 30));
-	tParts->setHP(DEFAULT_HP * 4);
+	tParts->setHP(DEFAULT_HP * 1.5);
 	tParts->setZOrder(6);
 	tParts->setBulletLayer(tBulletLayer);
 
