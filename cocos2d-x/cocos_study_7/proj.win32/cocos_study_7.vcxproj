@@ -150,6 +150,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\SceneBox2D.cpp" />
     <ClCompile Include="..\Classes\SceneBox2dCollision.cpp" />
+    <ClCompile Include="..\Classes\SceneBox2dJoint.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +160,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\SceneBox2D.h" />
     <ClInclude Include="..\Classes\SceneBox2dCollision.h" />
+    <ClInclude Include="..\Classes\SceneBox2dJoint.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

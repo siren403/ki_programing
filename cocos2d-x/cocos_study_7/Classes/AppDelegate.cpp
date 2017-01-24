@@ -2,6 +2,8 @@
 #include "HelloWorldScene.h"
 #include "SceneBox2D.h"
 #include "SceneBox2dCollision.h"
+#include "SceneBox2dJoint.h"
+
 USING_NS_CC;
 
 static cocos2d::Size designResolutionSize = cocos2d::Size(1024, 768);

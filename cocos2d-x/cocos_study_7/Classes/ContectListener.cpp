@@ -35,11 +35,12 @@ void ContactListener::EndContact(b2Contact * contact)
 		mSContacts.erase(pos);
 	}
 }
-
+//접촉중 
 void ContactListener::PreSolve(b2Contact * contact, const b2Manifold * oldManifold)
 {
 }
-
+//접촉을 했고, 충돌을 이미 처리 했을 떄 호출
+//impulse에 충격량이 전달되어 온다.
 void ContactListener::PostSolve(b2Contact * contact, const b2ContactImpulse * impulse)
 {
 }
