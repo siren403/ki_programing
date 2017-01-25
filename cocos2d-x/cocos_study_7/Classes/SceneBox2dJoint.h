@@ -6,7 +6,8 @@
 #include "Box2D\Box2D.h"
 #include "ContectListener.h"
 
-#include <GLES-Render.h>
+#include "b2Custom\GLES-Render.h"
+
 #include <vector>
 
 

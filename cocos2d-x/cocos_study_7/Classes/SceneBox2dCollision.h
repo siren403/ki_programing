@@ -6,7 +6,7 @@
 #include "Box2D\Box2D.h"
 #include "ContectListener.h"
 
-#include <GLES-Render.h>
+#include "b2Custom\GLES-Render.h"
 #include <vector>
 
 
@@ -21,8 +21,6 @@ protected:
 	Label * mpLabelDebug = nullptr;
 
 	b2Body * mpCurBody = nullptr;
-
-	
 
 	CustomCommand mCustomCmd;
 	void onDraw(const Mat4& transform, uint32_t flags);

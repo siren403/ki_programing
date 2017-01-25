@@ -52,7 +52,7 @@ void SceneBox2dJoint::onEnter()
 	//마우스 조인트 바디 생성 후 월드 추가
 	gbody = this->addNewSprite(Point(0, 0), Size(0, 0), b2_staticBody, "blocks.png", 0);
 	this->addNewSprite(Point(240, 260), Size(32, 32), b2_dynamicBody, "test", 0);
-	//================================================
+	//================================================ revolute
 	b2Body * body1 = this->addNewSprite(Point(240, 260), Size(32, 32), b2_staticBody, "test", 0);
 	b2Body * body2 = this->addNewSprite(Point(140, 260), Size(32, 32), b2_dynamicBody, "test", 0);
 
@@ -72,7 +72,7 @@ void SceneBox2dJoint::onEnter()
 	tRevoluteJoint = (b2RevoluteJoint *)mpWorld->CreateJoint(&tDef);
 
 
-	//================================================
+	//================================================ weldjoint
 	b2WeldJointDef tWeldJointDef;
 	b2Body * body3 = this->addNewSprite(Point(200, mWinSize.height / 2),
 		Size(60, 60), b2_dynamicBody, "test", 0);
@@ -82,7 +82,7 @@ void SceneBox2dJoint::onEnter()
 
 	mpWorld->CreateJoint(&tWeldJointDef);
 
-	//================================================
+	//================================================ prismaticjoint
 	float start = 100;
 	for (int i = 0; i < 10; i++)
 	{
@@ -107,7 +107,7 @@ void SceneBox2dJoint::onEnter()
 		b2PrismaticJoint * tPrismaticJoint = (b2PrismaticJoint*)mpWorld->CreateJoint(&tPrismaticJointDef);
 	}
 
-	//================================================
+	//================================================ distance
 
 	b2Body * body7 = this->addNewSprite(Point(440, 480), Size(40, 40),
 		b2_staticBody, "test", 0);
@@ -122,7 +122,112 @@ void SceneBox2dJoint::onEnter()
 	
 	mpWorld->CreateJoint(&tDistanceJointDef);
 
-	//================================================
+	//================================================ ropejoint
+
+	b2Body * body9 = this->addNewSprite(Point(240, 280), Size(40, 40), b2_dynamicBody, "test", 0);
+	b2Body * body10 = this->addNewSprite(Point(340, 280), Size(40, 40), b2_dynamicBody, "test", 0);
+
+	b2RopeJointDef tRopeJointDef;
+	tRopeJointDef.bodyA = body9;
+	tRopeJointDef.bodyB = body10;
+	tRopeJointDef.localAnchorA = b2Vec2(1.0f, 0.0f);
+	tRopeJointDef.localAnchorB = b2Vec2(-1.0f, 0.0f);
+	tRopeJointDef.maxLength = 1.5;
+	tRopeJointDef.collideConnected = true;
+	mpWorld->CreateJoint(&tRopeJointDef);
+
+
+	//================================================ friction
+
+	b2Body * body11 = this->addNewSprite(Point(340, 280), Size(40, 40), b2_staticBody, "test", 0);
+	b2Body * body12 = this->addNewSprite(Point(440, 280), Size(40, 40), b2_dynamicBody, "test", 0);
+
+	b2FrictionJointDef tFrictionJointDef;
+	tFrictionJointDef.Initialize(body11, body12, body11->GetPosition());
+	tFrictionJointDef.maxForce = 20;
+	tFrictionJointDef.maxTorque = 10;
+	tFrictionJointDef.collideConnected = true;
+	mpWorld->CreateJoint(&tFrictionJointDef);
+
+	//================================================ PullyJoint
+
+	b2Body * body13 = this->addNewSprite(Point(340, 280), Size(40, 40), b2_dynamicBody, "test", 0);
+	b2Body * body14 = this->addNewSprite(Point(440, 280), Size(40, 40), b2_dynamicBody, "test", 0);
+
+	b2PulleyJointDef tPulleyJointDef;
+	tPulleyJointDef.Initialize(body13, body14,
+		b2Vec2(100 / PTM_RATIO, 700 / PTM_RATIO),
+		b2Vec2(300 / PTM_RATIO, 700 / PTM_RATIO),
+		body13->GetPosition(), body14->GetPosition(), 1);
+
+	tPulleyJointDef.lengthA = 160 / PTM_RATIO;
+	tPulleyJointDef.lengthB = 160 / PTM_RATIO;
+	tPulleyJointDef.collideConnected = true;
+	mpWorld->CreateJoint(&tPulleyJointDef);
+
+	body13->ApplyLinearImpulse(b2Vec2(-0.5f, -0.5f), b2Vec2(0.0f, 0.0f), true);
+	body14->ApplyLinearImpulse(b2Vec2(-1.0f, -1.0f), b2Vec2(0.0f, 0.0f), true);
+
+	//================================================ gear
+	b2Body * body15 = this->addNewSprite(Point(540, 160), Size(160, 60), b2_staticBody, nullptr, 0);
+	b2Body * body16 = this->addNewSprite(Point(540 - 22, 160), Size(40, 40), b2_dynamicBody, "CloseNormal.png", 1);
+	b2Body * body17 = this->addNewSprite(Point(540 + 22, 160), Size(40, 40), b2_dynamicBody, "CloseNormal.png", 1);
+
+
+	b2RevoluteJointDef tRevolutejointDef1;
+	b2RevoluteJointDef tRevolutejointDef2;
+	b2RevoluteJoint *tRevolutejoint1;
+	b2RevoluteJoint *tRevolutejoint2;
+
+	tRevolutejointDef1.Initialize(body15, body16, body16->GetPosition());
+	tRevolutejointDef2.Initialize(body15, body17, body17->GetPosition());
+
+	tRevolutejointDef1.enableMotor = true;
+	tRevolutejointDef1.motorSpeed = 1;
+	tRevolutejointDef1.maxMotorTorque = 10;
+
+	tRevolutejoint1 = (b2RevoluteJoint *)mpWorld->CreateJoint(&tRevolutejointDef1);
+	tRevolutejoint2 = (b2RevoluteJoint *)mpWorld->CreateJoint(&tRevolutejointDef2);
+
+	b2GearJointDef tGearJointDef;
+
+	tGearJointDef.bodyA = body16;
+	tGearJointDef.bodyB = body17;
+
+	tGearJointDef.joint1 = (b2Joint *)tRevolutejoint1;
+	tGearJointDef.joint2 = (b2Joint *)tRevolutejoint2;
+
+	tGearJointDef.ratio = 1.0;
+
+	mpWorld->CreateJoint(&tGearJointDef);
+
+	//================================================ wheel
+	b2Body * bodyCar = this->addNewSprite(Point(740, 70), Size(100, 40), b2_dynamicBody, NULL, 0);
+	b2Body * bodyLWheel = this->addNewSprite(Point(710, 50), Size(30, 30), b2_dynamicBody, NULL, 1);
+	b2Body * bodyRWheel = this->addNewSprite(Point(770, 50), Size(30, 30), b2_dynamicBody, NULL, 1);
+
+	b2Vec2 axis(0.0f, 1.0f);
+
+	b2WheelJointDef tWheelJointDef1;
+	tWheelJointDef1.Initialize(bodyCar, bodyLWheel, bodyLWheel->GetPosition(), axis);
+	tWheelJointDef1.motorSpeed = -30.0f;
+	tWheelJointDef1.maxMotorTorque = 20.0f;
+	tWheelJointDef1.enableMotor = true;
+	tWheelJointDef1.frequencyHz = 4.0f;
+	//tWheelJointDef1.dampingRatio = 0.7f;
+
+	b2WheelJointDef tWheelJointDef2;
+	tWheelJointDef2.Initialize(bodyCar, bodyRWheel, bodyRWheel->GetPosition(), axis);
+	tWheelJointDef2.motorSpeed = 30.0f;
+	tWheelJointDef2.maxMotorTorque = 20.0f;
+	tWheelJointDef2.enableMotor = true;
+	tWheelJointDef2.frequencyHz = 4.0f;
+	//tWheelJointDef2.dampingRatio = 1.0f;
+
+	mpWorld->CreateJoint(&tWheelJointDef1);
+	mpWorld->CreateJoint(&tWheelJointDef2);
+
+	//================================================ 
 
 	this->scheduleUpdate();
 

@@ -3,6 +3,7 @@
 #include "SceneBox2D.h"
 #include "SceneBox2dCollision.h"
 #include "SceneBox2dJoint.h"
+#include "b2Custom\exam\SceneShooter.h"
 
 USING_NS_CC;
 
@@ -77,7 +78,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    auto scene = SceneBox2DCollision::createScene();
+    //auto scene = SceneBox2DCollision::createScene();
+	//auto scene = SceneBox2dJoint::createScene();
+	auto scene = SceneShooter::createScene();
 
     // run
     director->runWithScene(scene);

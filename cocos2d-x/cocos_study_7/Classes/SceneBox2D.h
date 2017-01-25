@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 #include "Box2D\Box2D.h"
-#include <GLES-Render.h>
+#include "b2Custom\GLES-Render.h"
 
 using namespace cocos2d;
 
