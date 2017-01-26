@@ -3,12 +3,19 @@
 
 #include "b2Custom\b2Layer.h"
 
+class b2Bullet;
+
 class SceneShooter : public b2Layer
 {
 private:
 	Sprite * mpSpriteShooter = nullptr;
 	float mTouchDistance = 0;
 	float mShootDegree = 0;
+	bool mIsShootable = false;
+	b2Bullet * mpLatestBullet = nullptr;
+	bool mIsLatestBulletTrace = false;
+
+	void updateLatestBulletTrace(float dt);
 public:
 	static Scene * createScene();
 	CREATE_FUNC(SceneShooter);

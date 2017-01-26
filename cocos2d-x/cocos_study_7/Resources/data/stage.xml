@@ -1,0 +1,23 @@
+<stage>
+    <stage_info>
+        <id>0</id>
+        <total_enemy_count>3</total_enemy_count>
+        <blocks>
+            <block_info>
+                <x>0.65</x>
+                <y>0.1</y>
+                <r>0</r>
+            </block_info>
+            <block_info>
+                <x>0.85</x>
+                <y>0.1</y>
+                <r>0</r>
+            </block_info>
+            <block_info>
+                <x>0.75</x>
+                <y>0.3</y>
+                <r>90</r>
+            </block_info>
+        </blocks>
+    </stage_info>
+</stage>

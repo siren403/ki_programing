@@ -18,8 +18,15 @@ bool b2Layer::init()
 		return false;
 	}
 
-
 	mWinSize = Director::getInstance()->getWinSize();
+	if (mWorldSizeRatio == Vec2::ZERO)
+	{
+		mWorldSize = mWinSize;
+	}
+	else
+	{
+		mWorldSize = Size(mWinSize.width*mWorldSizeRatio.x, mWinSize.height*mWorldSizeRatio.y);
+	}
 
 	if (mGravity == b2Vec2(0, 0))
 	{
@@ -58,9 +65,9 @@ bool b2Layer::init()
 	tBoxShapeDef.shape = &tGroundEdge;
 
 	b2Vec2 tLeftBottom = b2Util::ConvertTob2Vec(mWorldBoxMargin, mWorldBoxMargin);
-	b2Vec2 tLeftTop = b2Util::ConvertTob2Vec(mWorldBoxMargin,mWinSize.height - mWorldBoxMargin);
-	b2Vec2 tRightBottom = b2Util::ConvertTob2Vec(mWinSize.width - mWorldBoxMargin, mWorldBoxMargin);
-	b2Vec2 tRightTop = b2Util::ConvertTob2Vec(mWinSize.width - mWorldBoxMargin, mWinSize.height - mWorldBoxMargin);
+	b2Vec2 tLeftTop = b2Util::ConvertTob2Vec(mWorldBoxMargin, mWorldSize.height - mWorldBoxMargin);
+	b2Vec2 tRightBottom = b2Util::ConvertTob2Vec(mWorldSize.width - mWorldBoxMargin, mWorldBoxMargin);
+	b2Vec2 tRightTop = b2Util::ConvertTob2Vec(mWorldSize.width - mWorldBoxMargin, mWorldSize.height - mWorldBoxMargin);
 
 
 	//left

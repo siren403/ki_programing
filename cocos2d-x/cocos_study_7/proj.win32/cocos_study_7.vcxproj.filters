@@ -16,6 +16,9 @@
     <Filter Include="src\b2Custom\exam">
       <UniqueIdentifier>{87f37d62-2eb2-4351-a99f-fef8adce6185}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\pugixml">
+      <UniqueIdentifier>{fe9ccc77-462a-42f3-b5a3-34c970925552}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -68,6 +71,12 @@
     </ClCompile>
     <ClCompile Include="..\Classes\b2Custom\b2WorldBoxData.cpp">
       <Filter>src\b2Custom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\pugixml\pugixml.cpp">
+      <Filter>src\pugixml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\b2Custom\exam\b2RopeTarget.cpp">
+      <Filter>src\b2Custom\exam</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -125,10 +134,22 @@
     <ClInclude Include="..\Classes\b2Custom\b2WorldBoxData.h">
       <Filter>src\b2Custom</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\pugixml\pugiconfig.hpp">
+      <Filter>src\pugixml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\pugixml\pugixml.hpp">
+      <Filter>src\pugixml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\b2Custom\exam\b2RopeTarget.h">
+      <Filter>src\b2Custom\exam</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
       <Filter>resource</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

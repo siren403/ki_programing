@@ -152,11 +152,13 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\b2Custom\b2WorldBoxData.cpp" />
     <ClCompile Include="..\Classes\b2Custom\exam\b2Block.cpp" />
     <ClCompile Include="..\Classes\b2Custom\exam\b2Bullet.cpp" />
+    <ClCompile Include="..\Classes\b2Custom\exam\b2RopeTarget.cpp" />
     <ClCompile Include="..\Classes\b2Custom\exam\b2Tag.cpp" />
     <ClCompile Include="..\Classes\b2Custom\exam\SceneShooter.cpp" />
     <ClCompile Include="..\Classes\b2Custom\GLES-Render.cpp" />
     <ClCompile Include="..\Classes\ContectListener.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
+    <ClCompile Include="..\Classes\pugixml\pugixml.cpp" />
     <ClCompile Include="..\Classes\SceneBox2D.cpp" />
     <ClCompile Include="..\Classes\SceneBox2dCollision.cpp" />
     <ClCompile Include="..\Classes\SceneBox2dJoint.cpp" />
@@ -172,11 +174,14 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\b2Custom\b2WorldBoxData.h" />
     <ClInclude Include="..\Classes\b2Custom\exam\b2Block.h" />
     <ClInclude Include="..\Classes\b2Custom\exam\b2Bullet.h" />
+    <ClInclude Include="..\Classes\b2Custom\exam\b2RopeTarget.h" />
     <ClInclude Include="..\Classes\b2Custom\exam\b2Tag.h" />
     <ClInclude Include="..\Classes\b2Custom\exam\SceneShooter.h" />
     <ClInclude Include="..\Classes\b2Custom\GLES-Render.h" />
     <ClInclude Include="..\Classes\ContectListener.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
+    <ClInclude Include="..\Classes\pugixml\pugiconfig.hpp" />
+    <ClInclude Include="..\Classes\pugixml\pugixml.hpp" />
     <ClInclude Include="..\Classes\SceneBox2D.h" />
     <ClInclude Include="..\Classes\SceneBox2dCollision.h" />
     <ClInclude Include="..\Classes\SceneBox2dJoint.h" />
@@ -197,7 +202,17 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\rapidjson.1.0.2\build\native\rapidjson.targets" Condition="Exists('packages\rapidjson.1.0.2\build\native\rapidjson.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\rapidjson.1.0.2\build\native\rapidjson.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\rapidjson.1.0.2\build\native\rapidjson.targets'))" />
+  </Target>
 </Project>

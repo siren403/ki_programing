@@ -1,20 +1,23 @@
-#ifndef __B2BLOCK_H__
-#define __B2BLOCK_H__
+#ifndef __B2ROPETARGET_H__
+#define __B2ROPETARGET_H__
 
 #include "b2Custom\b2Node.h"
 
-class b2Block : public b2Node
+class b2RopeTarget : public b2Node
 {
 private:
-	Sprite * mSprite = nullptr;
+	b2RopeJoint * mpRope = nullptr;
 public:
-	CREATE_FUNC(b2Block);
+	CREATE_FUNC(b2RopeTarget);
+
 	virtual bool init() override;
 
 	virtual void CreateBody(b2World * world) override;
 	virtual void OnCollisionEnter(b2CollisionData * data) override;
 	virtual void OnCollisionStay(b2CollisionData * data) override;
 	virtual void OnCollisionExit(b2CollisionData * data) override;
+
+	void AttachTarget(b2Node * tTargetNode);
 };
 
-#endif // !__B2BLOCK_H__
+#endif // !__B2ROPETARGET_H__

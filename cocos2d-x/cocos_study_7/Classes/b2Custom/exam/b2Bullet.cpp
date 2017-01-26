@@ -11,8 +11,9 @@ bool b2Bullet::init()
 
 	Setb2Tag(TAG_BULLET);
 	SetWorldBoxCollision(true);
-	auto tSprite = Sprite::create("actor.png");
-	this->addChild(tSprite, 0);
+	mpSprite = Sprite::create("actor.png");
+	mpSprite->setScale(0.3);
+	this->addChild(mpSprite, 0);
 
 	return true;
 }
@@ -21,20 +22,21 @@ void b2Bullet::CreateBody(b2World * world)
 {
 	b2BodyDef tBodyDef;
 	tBodyDef.type = b2_dynamicBody;
-	b2Vec2 tPos = b2Util::ConvertTob2Vec(this->getPosition());
-	tBodyDef.position.Set(tPos.x, tPos.y);
-	tBodyDef.userData = this;
-	mpBody = world->CreateBody(&tBodyDef);
+	tBodyDef.angularDamping = 10.0f;
+	mpBody = this->CreateBodyByNodeSync(world, &tBodyDef);
 
-	b2CircleShape tCircle;
-	tCircle.m_radius = 1.0f;
+	//b2PolygonShape tShape;
+	//tShape.SetAsBox(1.3f, 0.5f, b2Vec2(1.3, 0), 0);//1.3, 0.5
+	b2CircleShape tShape;
+	tShape.m_radius = mpSprite->getContentSize().width /6/ b2Util::GetRatio();
 	b2FixtureDef tFixDef;
-	tFixDef.shape = &tCircle;
-	tFixDef.density = 1.0f;
-	tFixDef.friction = 0.5f;
-	tFixDef.restitution = 0.0f;
+	tFixDef.shape = &tShape;
+	tFixDef.density = 5.0f;//밀도
+	tFixDef.friction = 0.15f;//마찰
+	tFixDef.restitution = 0.3f;//반발
 
 	mpBody->CreateFixture(&tFixDef);
+
 }
 
 void b2Bullet::OnCollisionEnter(b2CollisionData * data)
@@ -44,7 +46,7 @@ void b2Bullet::OnCollisionEnter(b2CollisionData * data)
 		if (data->worldBoxTag == WorldBoxTag::TAG_BOTTOM)
 		{
 			log("collision bottom worldbox");
-			this->SetDestroyTag();
+			//this->SetDestroyTag();
 		}
 		else
 		{

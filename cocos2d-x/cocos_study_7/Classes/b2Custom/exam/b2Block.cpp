@@ -20,19 +20,20 @@ void b2Block::CreateBody(b2World * world)
 {
 	b2BodyDef tBodyDef;
 	tBodyDef.type = b2_dynamicBody;
+	tBodyDef.angularDamping = 5.0f;
 	mpBody = this->CreateBodyByNodeSync(world, &tBodyDef);
 
 
 	b2PolygonShape tBoxShape;
 	b2Vec2 tBoxSize = b2Util::ConvertTob2Vec(
-		mSprite->getContentSize().width * 0.2,
-		mSprite->getContentSize().height * 0.9);
+		(mSprite->getContentSize().width * 0.2)*this->getScaleX(),
+		(mSprite->getContentSize().height * 0.9)*this->getScaleY());
 	tBoxShape.SetAsBox(tBoxSize.x, tBoxSize.y);
 
 	b2FixtureDef tFixDef;
 	tFixDef.shape = &tBoxShape;
-	tFixDef.density = 1.0f;
-	tFixDef.friction = 0.5f;
+	tFixDef.density = 1.5f;
+	tFixDef.friction = 5.5f;
 
 	mpBody->CreateFixture(&tFixDef);
 }

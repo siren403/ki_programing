@@ -17,6 +17,8 @@ protected:
 	bool mIsDebug = false;
 	b2Vec2 mGravity;
 	Size mWinSize;
+	Vec2 mWorldSizeRatio;
+	Size mWorldSize;
 	float mWorldBoxMargin = 0;
 
 	virtual void AddTouchListener();
