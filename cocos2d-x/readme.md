@@ -10,7 +10,7 @@ Action, Ease, CallBack
 
 1.	study_2
 
-Animation
+Animation, Listener
 
 1.	study_3
 
