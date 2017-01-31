@@ -28,8 +28,8 @@ void SpriteAnimator::createAnimation()
 
 	std::string tPlistName = mAniFileName + ".plist";
 	std::string tFileName = mAniFileName + ".png";
-	log(tPlistName.c_str());
-	log(tFileName.c_str());
+	//log(tPlistName.c_str());
+	//log(tFileName.c_str());
 
 	auto tCache = SpriteFrameCache::getInstance();
 	
@@ -54,7 +54,7 @@ void SpriteAnimator::createAnimation()
 		sprintf(tStr, "_%d.png", ti);
 		tFrameName.append(mAniFileName);
 		tFrameName.append(tStr);
-		log(tFrameName.c_str());
+		//log(tFrameName.c_str());
 
 
 		tSpriteFrame = tCache->getSpriteFrameByName(tFrameName);

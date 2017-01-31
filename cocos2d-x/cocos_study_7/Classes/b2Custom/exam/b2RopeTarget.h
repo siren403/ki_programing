@@ -7,6 +7,7 @@ class b2RopeTarget : public b2Node
 {
 private:
 	b2RopeJoint * mpRope = nullptr;
+	b2Body * mpRopeHead = nullptr;
 public:
 	CREATE_FUNC(b2RopeTarget);
 

@@ -8,9 +8,9 @@ bool b2RopeTarget::init()
 		return false;
 	}
 
-
 	return true;
 }
+
 
 void b2RopeTarget::CreateBody(b2World * world)
 {
@@ -63,6 +63,7 @@ void b2RopeTarget::AttachTarget(b2Node * tTargetNode)
 	tRopeBodyDef.position.y = 20;
 	tRopeBodyDef.type = b2_kinematicBody;
 	b2Body * tRopeBody = mpBody->GetWorld()->CreateBody(&tRopeBodyDef);
+	mpRopeHead = tRopeBody;
 
 	b2PolygonShape tShape;
 	tShape.SetAsBox(2, 0.5);

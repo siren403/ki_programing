@@ -5,7 +5,7 @@
 #include "CBulletDirection.h"
 #include "CBulletCurve.h"
 
-#define USE_MOUSE_POSITION true
+#define USE_MOUSE_POSITION false
 
 #define BULLET_MAX_COUNT 30
 #define BULLET_INTERVAL 0.1
@@ -29,10 +29,11 @@ bool CActor::lateInit()
 	{
 		return false;
 	}
+	//float tSF = Director::getInstance()->getContentScaleFactor();
 
 	mSpriteAnim = SpriteAnimator::create("actor", 0, 20, 0.1);
 	mSpriteAnim->runAni();
-	mSpriteAnim->setScale(1.8);
+	mSpriteAnim->setScale(/*tSF**/1.8);
 	this->addChild(mSpriteAnim);
 
 	mHP = 30;

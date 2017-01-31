@@ -96,7 +96,7 @@ bool SceneShooter::init()
 	this->schedule(CC_SCHEDULE_SELECTOR(SceneShooter::updateLatestBulletTrace));
 
 	auto tRopeTarget = b2RopeTarget::create();
-	tRopeTarget->setPosition(mWorldSize.width*0.3, mWorldSize.height*0.4);
+	tRopeTarget->setPosition(mWorldSize.width*0.3, mWorldSize.height*0.8);
 	this->Addb2Child(tRopeTarget, 1);
 
 	auto tBlock = b2Block::create();
