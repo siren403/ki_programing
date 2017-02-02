@@ -5,6 +5,8 @@
 
 USING_NS_CC;
 
+#pragma execution_character_set("utf-8");
+
 class SceneTitle : public Layer
 {
 public:

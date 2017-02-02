@@ -26,7 +26,7 @@ bool SceneTitle::init()
 	this->addChild(tUILayer);
 
 
-	auto tMenuPlay = MenuItemFont::create("Play", [](Ref * pSender) 
+	auto tMenuPlay = MenuItemFont::create("시작",[](Ref * pSender) 
 	{
 		auto tTransition = TransitionSplitRows::create(0.5, ScenePlay::createScene());
 		Director::getInstance()->replaceScene(tTransition);
@@ -38,7 +38,21 @@ bool SceneTitle::init()
 	tMenu->setPosition(Vec2::ZERO);
 	tUILayer->addChild(tMenu);
 
-	
+	auto tTestLabel = Label::createWithTTF(
+		"한글 테스트.... 가나다라마바사쯍듉긁궳",
+		"fonts/NanumGothic.ttf",
+		32
+	);
+	tTestLabel->setPosition(tVSize.width / 2, tVSize.height *0.5);
+
+	this->addChild(tTestLabel,1);
+	tTestLabel = Label::createWithTTF(
+		"한글 테스트.... 가나다라마바사쯍듉긁궳",
+		"fonts/BMJUA_ttf.ttf",
+		32
+	);
+	tTestLabel->setPosition(tVSize.width / 2, tVSize.height * 0.4);
+	this->addChild(tTestLabel, 1);
 
 #pragma region Bg
 
