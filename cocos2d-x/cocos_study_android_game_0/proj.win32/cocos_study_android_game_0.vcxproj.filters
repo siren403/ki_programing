@@ -10,6 +10,15 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Scene">
+      <UniqueIdentifier>{500b394f-22d9-451a-98ba-b30f82fe5948}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Support">
+      <UniqueIdentifier>{d065bd66-04ce-4182-8e22-4167afa09980}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor">
+      <UniqueIdentifier>{56d8b3f7-203e-4ad5-aeda-552d1a166f63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -21,6 +30,27 @@
     <ClCompile Include="..\Classes\HelloWorldScene.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Actor.cpp">
+      <Filter>src\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Player.cpp">
+      <Filter>src\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CollisionUtils.cpp">
+      <Filter>src\Support</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SpriteAnimator.cpp">
+      <Filter>src\Support</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ScenePlay.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SceneTitle.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\StopWatch.cpp">
+      <Filter>src\Support</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -31,6 +61,27 @@
     </ClInclude>
     <ClInclude Include="..\Classes\HelloWorldScene.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Actor.h">
+      <Filter>src\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Player.h">
+      <Filter>src\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CollisionUtils.h">
+      <Filter>src\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SpriteAnimator.h">
+      <Filter>src\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ScenePlay.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SceneTitle.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\StopWatch.h">
+      <Filter>src\Support</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

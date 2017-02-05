@@ -1,12 +1,18 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
+#include "SceneTitle.h"
+#include "ScenePlay.h"
+
 
 USING_NS_CC;
 
-static cocos2d::Size designResolutionSize = cocos2d::Size(1280, 720);
-static cocos2d::Size smallResolutionSize = cocos2d::Size(1280, 720);
-static cocos2d::Size mediumResolutionSize = cocos2d::Size(1280, 720);
-static cocos2d::Size largeResolutionSize = cocos2d::Size(1280, 720);
+#define WIDTH 720
+#define HEIGHT 1280
+
+static cocos2d::Size designResolutionSize = cocos2d::Size(WIDTH, HEIGHT);
+static cocos2d::Size smallResolutionSize = cocos2d::Size(WIDTH, HEIGHT);
+static cocos2d::Size mediumResolutionSize = cocos2d::Size(WIDTH, HEIGHT);
+static cocos2d::Size largeResolutionSize = cocos2d::Size(WIDTH, HEIGHT);
 
 AppDelegate::AppDelegate()
 {
@@ -53,7 +59,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     director->setAnimationInterval(1.0f / 60);
 
     // Set the design resolution
-    glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::FIXED_HEIGHT);
+    glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::FIXED_WIDTH);
     auto frameSize = glview->getFrameSize();
     // if the frame's height is larger than the height of medium size.
     if (frameSize.height > mediumResolutionSize.height)
@@ -74,7 +80,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
+	//auto scene = HelloWorld::createScene();
+	//auto scene = SceneTitle::createScene();
+	auto scene = ScenePlay::createScene();
+
 
     // run
     director->runWithScene(scene);
