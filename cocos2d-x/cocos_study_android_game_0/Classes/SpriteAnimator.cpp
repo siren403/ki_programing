@@ -67,7 +67,6 @@ void SpriteAnimator::CreateAnimation()
 
 	sprintf(tStr, "_%d.png", mStartFrame);
 	mpSprite = Sprite::createWithSpriteFrameName(mAniFileName + tStr);
-	//mpSprite->setPosition(Vec2::ZERO);
 	this->addChild(mpSprite);
 
 }

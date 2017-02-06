@@ -51,6 +51,9 @@
     <ClCompile Include="..\Classes\StopWatch.cpp">
       <Filter>src\Support</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Arrow.cpp">
+      <Filter>src\Actor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -82,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\StopWatch.h">
       <Filter>src\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Arrow.h">
+      <Filter>src\Actor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

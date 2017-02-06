@@ -3,6 +3,8 @@
 
 #include "cocos2d.h"
 #include "Player.h"
+#include "Arrow.h"
+
 
 using namespace cocos2d;
 
@@ -23,7 +25,10 @@ private:
 	Node * mUINode = nullptr;//RenderNode에 속하는 UI부분 노드 ex) 컨트롤러,...
 	Node * mPlayNode = nullptr;//UI노드와 같은 레벨의 플레이 부분 노드, ex) 맵,플레이어,적,...
 
+	//player
 	Player * mPlayer = nullptr;
+	Arrow * mArrow = nullptr;
+
 
 	//ui
 	Sprite * mUIPadBack = nullptr;

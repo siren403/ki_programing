@@ -13,6 +13,7 @@ bool Player::init()
 	mSpriteAnim = SpriteAnimator::Create("actor", 0, 20, 0.1);
 	mSpriteAnim->RunAni();
 	mSpriteAnim->setScale(1.7);
+	mSpriteAnim->setPosition(Vec2(-mSpriteAnim->GetSprite()->getContentSize().width * 0.04, -mSpriteAnim->GetSprite()->getContentSize().height * 0.65));
 	this->addChild(mSpriteAnim);
 
 	mHP = 30;
@@ -64,7 +65,10 @@ void Player::update(float dt)
 			break;
 		}
 
-		pos.clamp(Vec2(mSpriteAnim->GetSprite()->getContentSize().width*0.5f, 0), mMoveArea);
+		pos.clamp(Vec2(mSpriteAnim->GetSprite()->getContentSize().width*0.5f, 
+			mSpriteAnim->GetSprite()->getContentSize().width*0.5f), mMoveArea);
+
+		//pos.clamp(Vec2(0, 0), mMoveArea);
 		this->setPosition(pos);
 	}
 	/*if (mMoveDir != Vec2::ZERO)
@@ -134,7 +138,7 @@ void Player::OnRoll(float rollRadian)
 		mRollStartPos = this->getPosition();
 		mRollDestPos.x = mRollStartPos.x + (cos(rollRadian) * mRollDistance);
 		mRollDestPos.y = mRollStartPos.y + (sin(rollRadian) * mRollDistance);
-		log("start[%f,%f] dest[%f,%f]", mRollStartPos.x, mRollStartPos.y,mRollDestPos.x, mRollDestPos.y);
+		//log("start[%f,%f] dest[%f,%f]", mRollStartPos.x, mRollStartPos.y,mRollDestPos.x, mRollDestPos.y);
 		auto roll = EaseSineInOut::create(
 			MoveTo::create(mRollDuration, mRollDestPos)
 		);
