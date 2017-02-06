@@ -12,6 +12,7 @@ bool Arrow::init()
 	}
 
 	mSprite = Sprite::create("samples/arrow.png");
+	//frontBG->getTexture()->setAliasTexParameters();
 	this->addChild(mSprite);
 
 	mState = State::State_Idle;
