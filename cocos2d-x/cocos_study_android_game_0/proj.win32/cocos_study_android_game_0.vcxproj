@@ -147,7 +147,13 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Actor.cpp" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\Arrow.cpp" />
+    <ClCompile Include="..\Classes\Boss.cpp" />
+    <ClCompile Include="..\Classes\BossBody.cpp" />
+    <ClCompile Include="..\Classes\BossHand.cpp" />
+    <ClCompile Include="..\Classes\BossHead.cpp" />
     <ClCompile Include="..\Classes\CollisionUtils.cpp" />
+    <ClCompile Include="..\Classes\Enemy.cpp" />
+    <ClCompile Include="..\Classes\EnemyParts.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\Player.cpp" />
     <ClCompile Include="..\Classes\ScenePlay.cpp" />
@@ -160,7 +166,13 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Actor.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\Arrow.h" />
+    <ClInclude Include="..\Classes\Boss.h" />
+    <ClInclude Include="..\Classes\BossBody.h" />
+    <ClInclude Include="..\Classes\BossHand.h" />
+    <ClInclude Include="..\Classes\BossHead.h" />
     <ClInclude Include="..\Classes\CollisionUtils.h" />
+    <ClInclude Include="..\Classes\Enemy.h" />
+    <ClInclude Include="..\Classes\EnemyParts.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\Player.h" />
     <ClInclude Include="..\Classes\ScenePlay.h" />

@@ -34,6 +34,7 @@ int main()
 		cout << ptr->Data;
 		ptr = ptr->Next;
 	}
+	cout << endl;
 
 	//삽입할 새로운 노드 생성
 	temp = new Node();
@@ -50,6 +51,7 @@ int main()
 		cout << ptr->Data;
 		ptr = ptr->Next;
 	}
+	cout << endl;
 
 	//노드의 삭제
 	DeleteNode(temp);
@@ -63,6 +65,7 @@ int main()
 		cout << ptr->Data;
 		ptr = ptr->Next;
 	}
+	cout << endl;
 
     return 0;
 }

@@ -13,9 +13,8 @@ public:
 	CREATE_FUNC(Actor);
 	virtual bool init() override;
 
-
-	virtual bool GetIsAlive();
-	virtual void SetIsAlive(bool tIsAlive);
+	virtual bool IsAlive();
+	virtual void SetAlive(bool tIsAlive);
 };
 
 #endif // !__ACTOR_H__

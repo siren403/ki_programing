@@ -19,6 +19,9 @@
     <Filter Include="src\Actor">
       <UniqueIdentifier>{56d8b3f7-203e-4ad5-aeda-552d1a166f63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Actor\Boss">
+      <UniqueIdentifier>{c1540d0a-2d57-48b6-b0b3-f9cc7c8bbaaf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,6 +57,24 @@
     <ClCompile Include="..\Classes\Arrow.cpp">
       <Filter>src\Actor</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Enemy.cpp">
+      <Filter>src\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\EnemyParts.cpp">
+      <Filter>src\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Boss.cpp">
+      <Filter>src\Actor\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BossBody.cpp">
+      <Filter>src\Actor\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BossHand.cpp">
+      <Filter>src\Actor\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BossHead.cpp">
+      <Filter>src\Actor\Boss</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -88,6 +109,24 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Arrow.h">
       <Filter>src\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Enemy.h">
+      <Filter>src\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\EnemyParts.h">
+      <Filter>src\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Boss.h">
+      <Filter>src\Actor\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BossBody.h">
+      <Filter>src\Actor\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BossHead.h">
+      <Filter>src\Actor\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BossHand.h">
+      <Filter>src\Actor\Boss</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

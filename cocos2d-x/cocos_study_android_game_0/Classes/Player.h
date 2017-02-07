@@ -10,14 +10,15 @@ class SpriteAnimator;
 
 class Player : public Actor
 {
-private:
+public:
 	enum State
 	{
 		Idle = 0,
 		Move = 1,
 		Roll = 2,
 	};
-
+private:
+	
 	SpriteAnimator * mSpriteAnim = nullptr;
 
 	bool mIsControl = false;
@@ -60,6 +61,7 @@ public:
 	bool GetIsControl();
 	void SetMoveDir(Vec2 dir);
 	void SetMoveArea(Size area);
+	Player::State GetState();
 
 	void Hit();
 	void OnRoll(float rollRadian);

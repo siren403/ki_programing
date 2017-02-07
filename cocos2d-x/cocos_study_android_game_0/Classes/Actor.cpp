@@ -9,12 +9,12 @@ bool Actor::init()
 	return true;
 }
 
-bool Actor::GetIsAlive()
+bool Actor::IsAlive()
 {
 	return mIsAlive;
 }
 
-void Actor::SetIsAlive(bool tIsAlive)
+void Actor::SetAlive(bool tIsAlive)
 {
 	mIsAlive = tIsAlive;
 }

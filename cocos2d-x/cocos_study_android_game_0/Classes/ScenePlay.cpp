@@ -1,7 +1,7 @@
 #include "ScenePlay.h"
 #include "CollisionUtils.h"
 #include "StopWatch.h"
-
+#include "Boss.h"
 
 
 Scene * ScenePlay::createScene()
@@ -68,16 +68,15 @@ bool ScenePlay::init()
 	mRenderNode->addChild(mPlayNode, 0);
 
 	mPlayer = Player::create();
-	mPlayer->setPosition(visibleSize.width*0.25, mPlayNodeSize.height*0.5);
-
-	mPlayNode->addChild(mPlayer, 1);
+	mPlayer->setPosition(mPlayNodeSize.width*0.5, mPlayNodeSize.height*0.2);
 	mPlayer->SetIsControl(true);
 	mPlayer->SetMoveArea(mPlayNodeSize);
+	mPlayNode->addChild(mPlayer, 5);
 
 
 	mArrow = Arrow::create();
 	mArrow->InitWithPlayer(mPlayer);
-	mPlayNode->addChild(mArrow, 2);
+	mPlayNode->addChild(mArrow, mPlayer->getLocalZOrder() + 1);
 
 	/*auto arrow = Sprite::create("samples/arrow.png");
 	arrow->setPosition(mPlayer->getPosition());
@@ -85,6 +84,14 @@ bool ScenePlay::init()
 
 #pragma endregion
 
+#pragma region Enemy
+
+	auto boss = Boss::create();
+	boss->setPosition(mPlayNodeSize.width * 0.5, mPlayNodeSize.height * 0.7);
+	mPlayNode->addChild(boss, 1);
+
+
+#pragma endregion
 
 	
 

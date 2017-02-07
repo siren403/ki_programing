@@ -14,6 +14,7 @@ bool Player::init()
 	mSpriteAnim->RunAni();
 	mSpriteAnim->setScale(1.7);
 	mSpriteAnim->setPosition(Vec2(-mSpriteAnim->GetSprite()->getContentSize().width * 0.04, -mSpriteAnim->GetSprite()->getContentSize().height * 0.65));
+	mSpriteAnim->GetSprite()->getTexture()->setAliasTexParameters();
 	this->addChild(mSpriteAnim);
 
 	mHP = 30;
@@ -94,7 +95,14 @@ void Player::SetMoveDir(Vec2 dir)
 	if (mState == State::Idle || mState == State::Move)
 	{
 		this->mMoveDir = dir;
-		mState = State::Move;
+		if (this->mMoveDir != Vec2::ZERO)
+		{
+			mState = State::Move;
+		}
+		else
+		{
+			mState = State::Idle;
+		}
 	}
 }
 void Player::SetMoveArea(Size area)
@@ -102,6 +110,10 @@ void Player::SetMoveArea(Size area)
 	mMoveArea = area;
 	mMoveArea.width -= mSpriteAnim->GetSprite()->getContentSize().width*0.5;
 	mMoveArea.height -= mSpriteAnim->GetSprite()->getContentSize().height;
+}
+Player::State Player::GetState()
+{
+	return mState;
 }
 void Player::Hit()
 {

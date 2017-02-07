@@ -58,6 +58,7 @@ void Push(int num)
 	ptrNode->Data = num;
 	ptrNode->Next = Head->Next;
 	Head->Next = ptrNode;
+	cout << "Push : " << num << endl;
 }
 
 int Pop(void)
