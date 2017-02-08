@@ -10,7 +10,7 @@ class Player;
 
 class Arrow : public Actor
 {
-private:
+public:
 	enum State
 	{
 		State_Idle = 0,
@@ -18,13 +18,15 @@ private:
 		State_Shot = 2,
 		State_Drop = 3,
 	};
+private:
 	
 	Sprite * mSprite = nullptr;
 	Player * mPlayer = nullptr;
 
 	State mState;
-	//발사 각도(라디안) 
-	float mShotRadian = 0;
+	//발사 방향
+	Vec2 mMoveDirection;
+	
 	//최대 속력
 	float mMaxSpeedPower = 0;
 	//현재 속력
@@ -36,12 +38,13 @@ private:
 	bool mIsPrevCollision = false;
 	bool mIsCollision = false;
 
+	bool mIsReturnArrow = false;
+
 	//각 상태 별 업데이트
 	void updateLock(float dt);
 	void updateShot(float dt);
 	void updateDrop(float dt);
 
-	Vec2 GetShotRadianToVector();
 public:
 	CREATE_FUNC(Arrow);
 	
@@ -49,13 +52,17 @@ public:
 	virtual void update(float dt) override;
 
 	//get,set
+	Arrow::State GetState();
+	void SetReturnArrow(bool isReturn);
 
 
 	void InitWithPlayer(Player * player);
-	void LockOn(float radian);
+	void LockOn(Vec2 dir);
 	void DisableLockOn();
 	void Shot();
 	void OnCollisionOther(bool isCollision, Actor * other,Vec2 normal = Vec2::ZERO);
+
+	bool IsShooting();
 };
 
 #endif // !__ARROW_H__

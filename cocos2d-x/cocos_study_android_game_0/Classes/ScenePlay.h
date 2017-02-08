@@ -15,7 +15,8 @@ enum TouchState
 {
 	None = 0,
 	Move = 1,
-	Shot = 2
+	Shot = 2,
+	Collect = 3,
 };
 
 class ScenePlay : public LayerColor

@@ -126,7 +126,8 @@ void ScenePlay::onExit()
 
 void ScenePlay::update(float dt)
 {
-	if (mCurrentEnemy != nullptr)
+	if (mCurrentEnemy != nullptr &&
+		mArrow->GetState() == Arrow::State::State_Shot)
 	{
 		mCurrentEnemy->CheckCollisionArrow(mArrow);
 	}
@@ -144,19 +145,25 @@ bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)
 			//mTouchBeganPos = touch->getLocation();
 			mTouchBeganPos = convertToWorldSpace(mUIPadFront->getPosition());
 			mTouchState = TouchState::Move;
-			isTouchMoved = true;
-
 			mTouchStopWatch->OnStart();
+			isTouchMoved = true;
 		}
-		else//attack
+		else if(mArrow->GetState() != Arrow::State::State_Drop)//attack
 		{
 			mTouchBeganPos = touch->getLocation();
 			mTouchState = TouchState::Shot;
 
 			Vec2 dir = mTouchBeganPos - convertToWorldSpace(mUIPadFront->getPosition());
-			mArrow->LockOn(atan2(dir.y, dir.x));
+			mArrow->LockOn(dir.getNormalized());
 			isTouchMoved = true;
 		}
+		else//ArrowDrop...
+		{
+			mArrow->SetReturnArrow(true);
+			mTouchState = TouchState::Collect;
+			isTouchMoved = true;
+		}
+		//isTouchMoved = true;
 	}
 
 
@@ -181,18 +188,23 @@ void ScenePlay::onTouchMoved(Touch * touch, Event * unused_event)
 
 		mPlayer->SetMoveDir(dir);
 
-		mArrow->LockOn(atan2(dir.y, dir.x));
+		//mArrow->LockOn(atan2(dir.y, dir.x));
+		mArrow->LockOn(dir.getNormalized());
+
 		//log("%f", atan2(dir.y, dir.x));
 		break;
 	case TouchState::Shot:
 		dir = mTouchBeganPos - touchPos;
-		mArrow->LockOn(atan2(dir.y, dir.x));
+		//mArrow->LockOn(atan2(dir.y, dir.x));
+		mArrow->LockOn(dir.getNormalized());
+
 		break;
 	}
 }
 
 void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 {
+	auto touchPos = mUINode->convertToNodeSpace(touch->getLocation());
 	
 	switch (mTouchState)
 	{
@@ -200,7 +212,6 @@ void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 		mArrow->Shot();
 		break;
 	case TouchState::Move:
-		auto touchPos = mUINode->convertToNodeSpace(touch->getLocation());
 		if (mUIPadBack->getBoundingBox().containsPoint(touchPos))
 		{
 			if (!(mUIPadFront->getBoundingBox().containsPoint(touchPos) &&
@@ -212,6 +223,9 @@ void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 			}
 		}
 		mArrow->DisableLockOn();
+		break;
+	case TouchState::Collect:
+		mArrow->SetReturnArrow(false);
 		break;
 	}
 	
