@@ -7,8 +7,7 @@ bool BossHead::init()
 		return false;
 	}
 
-	mSprite = Sprite::create("samples/boss_1_head.png");
-	this->addChild(mSprite, 1);
+	auto sprite = this->SetSprite(Sprite::create("samples/boss_1_head.png"), 1);
 
 	return true;
 }
@@ -19,5 +18,5 @@ void BossHead::update(float dt)
 
 const Size BossHead::GetPartsSize()
 {
-	return mSprite->getContentSize();
+	return this->GetSprite()->getContentSize();
 }

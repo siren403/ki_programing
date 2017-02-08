@@ -32,10 +32,16 @@ private:
 	//최대 속력를 기준으로 감속 할 비율
 	float mDecelRatio = 0;
 
+	//충돌
+	bool mIsPrevCollision = false;
+	bool mIsCollision = false;
+
 	//각 상태 별 업데이트
 	void updateLock(float dt);
 	void updateShot(float dt);
 	void updateDrop(float dt);
+
+	Vec2 GetShotRadianToVector();
 public:
 	CREATE_FUNC(Arrow);
 	
@@ -49,6 +55,7 @@ public:
 	void LockOn(float radian);
 	void DisableLockOn();
 	void Shot();
+	void OnCollisionOther(bool isCollision, Actor * other,Vec2 normal = Vec2::ZERO);
 };
 
 #endif // !__ARROW_H__

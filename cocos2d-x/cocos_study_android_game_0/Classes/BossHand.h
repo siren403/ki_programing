@@ -13,7 +13,6 @@ public:
 		HandDir_Right = 1,
 	};
 private:
-	Sprite * mSprite = nullptr;
 	char mHandDir = 0;
 public:
 	CREATE_FUNC(BossHand);

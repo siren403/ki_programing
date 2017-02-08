@@ -86,14 +86,18 @@ bool ScenePlay::init()
 
 #pragma region Enemy
 
-	auto boss = Boss::create();
-	boss->setPosition(mPlayNodeSize.width * 0.5, mPlayNodeSize.height * 0.7);
-	mPlayNode->addChild(boss, 1);
+	mCurrentEnemy = Boss::create();
+	mCurrentEnemy->setPosition(mPlayNodeSize.width * 0.5, mPlayNodeSize.height * 0.7);
+	mPlayNode->addChild(mCurrentEnemy, 1);
 
 
 #pragma endregion
 
-	
+	auto Spr = Sprite::create("CloseNormal.png");
+	Spr->setScale(0.5);
+	Spr->setPosition(360,905);
+	Spr->setGlobalZOrder(10);
+	this->addChild(Spr);
 
 	this->scheduleUpdate();
 	return true;
@@ -122,6 +126,10 @@ void ScenePlay::onExit()
 
 void ScenePlay::update(float dt)
 {
+	if (mCurrentEnemy != nullptr)
+	{
+		mCurrentEnemy->CheckCollisionArrow(mArrow);
+	}
 }
 
 bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)
@@ -131,7 +139,7 @@ bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)
 	if (mUIPadBack->getBoundingBox().containsPoint(touchPos))
 	{
 		if (mUIPadFront->getBoundingBox().containsPoint(touchPos) &&
-			CollisionUtils::ContainsPointToPixel(mUIPadFront, mUIPadFrontImage, touchPos))//move
+			CollisionUtils::GetInst()->ContainsPointToPixel(mUIPadFront, mUIPadFrontImage, touchPos))//move
 		{
 			//mTouchBeganPos = touch->getLocation();
 			mTouchBeganPos = convertToWorldSpace(mUIPadFront->getPosition());
@@ -196,7 +204,7 @@ void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 		if (mUIPadBack->getBoundingBox().containsPoint(touchPos))
 		{
 			if (!(mUIPadFront->getBoundingBox().containsPoint(touchPos) &&
-				CollisionUtils::ContainsPointToPixel(mUIPadFront, mUIPadFrontImage, touchPos)))//move
+				CollisionUtils::GetInst()->ContainsPointToPixel(mUIPadFront, mUIPadFrontImage, touchPos)))//move
 			{
 				Vec2 dir = touch->getLocation() - mTouchBeganPos;
 				float endedRadian = atan2(dir.y, dir.x);

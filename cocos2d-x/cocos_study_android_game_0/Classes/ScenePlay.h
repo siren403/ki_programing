@@ -9,6 +9,7 @@
 using namespace cocos2d;
 
 class StopWatch;
+class Enemy;
 
 enum TouchState
 {
@@ -44,7 +45,7 @@ private:
 
 	Size mPlayNodeSize;
 
-
+	Enemy * mCurrentEnemy = nullptr;
 public:
 	static Scene * createScene();
 	CREATE_FUNC(ScenePlay);

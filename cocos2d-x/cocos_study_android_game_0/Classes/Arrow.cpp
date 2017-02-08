@@ -1,5 +1,6 @@
 #include "Arrow.h"
 #include "Player.h"
+#include "CollisionUtils.h"
 
 #define PI 3.14159
 #define EPSILON 1
@@ -74,6 +75,30 @@ void Arrow::Shot()
 	}
 }
 
+void Arrow::OnCollisionOther(bool isCollision, Actor * other,Vec2 normal)
+{
+	mIsCollision = isCollision;
+	if (mIsCollision && !mIsPrevCollision)
+	{
+		if (other != nullptr)
+		{
+			Vec2 worldPos = this->getParent()->convertToWorldSpace(this->getPosition());
+			Vec2 normal = CollisionUtils::GetInst()->GetPosToRectNormal(other, worldPos);
+			log("collision normal : %f,%f", normal.x, normal.y);
+
+			Vec2 dir = GetShotRadianToVector();
+
+			
+		}
+		else//normal direct
+		{
+
+		}
+		log("collision");
+	}
+	mIsPrevCollision = mIsCollision;
+}
+
 void Arrow::updateLock(float dt)
 {
 	Vec2 arrowPos;
@@ -98,9 +123,9 @@ void Arrow::updateShot(float dt)
 		mState = State::State_Drop;
 	}*/
 
-	Vec2 dir;
-	dir.x = cos(mShotRadian);
-	dir.y = sin(mShotRadian);
+	Vec2 dir = GetShotRadianToVector();
+	//dir.x = cos(mShotRadian);
+	//dir.y = sin(mShotRadian);
 	//log("%f,%f,%f", mShotRadian,dir.x, dir.y);
 	Vec2 pos = this->getPosition();
 	pos.x += (dir.x * mCurrentSpeedPower) * dt;
@@ -118,7 +143,6 @@ void Arrow::updateShot(float dt)
 
 void Arrow::updateDrop(float dt)
 {
-
 #pragma region 자동회수
 
 	//if (mPlayer->GetState() == Player::State::Move)
@@ -167,6 +191,11 @@ void Arrow::updateDrop(float dt)
 
 
 #pragma endregion
+}
+
+Vec2 Arrow::GetShotRadianToVector()
+{
+	return Vec2(cos(mShotRadian), sin(mShotRadian));
 }
 
 

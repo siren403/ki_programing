@@ -5,8 +5,6 @@
 
 class BossHead : public EnemyParts
 {
-private:
-	Sprite * mSprite = nullptr;
 public:
 	CREATE_FUNC(BossHead);
 	virtual bool init() override;

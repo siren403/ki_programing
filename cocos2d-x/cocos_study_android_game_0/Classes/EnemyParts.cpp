@@ -1,6 +1,8 @@
 #include "EnemyParts.h"
 #include "Enemy.h"
 
+
+
 bool EnemyParts::init()
 {
 	if (!Actor::init())
@@ -53,6 +55,27 @@ void EnemyParts::SetHP(int tHP)
 	mHP = tHP;
 }
 
+Sprite * EnemyParts::GetSprite()
+{
+	if (mSprite == nullptr)
+	{
+		mSprite = Sprite::create("CloseNormal.png");
+		mSprite->setScale(0.5);
+		this->addChild(mSprite);
+	}
+	return mSprite;
+}
+Sprite *  EnemyParts::SetSprite(Sprite * sprite, int localZOrder)
+{
+	if (mSprite != nullptr)
+	{
+		this->removeChild(mSprite);
+	}
+	mSprite = sprite;
+	this->addChild(mSprite, localZOrder);
+
+	return mSprite;
+}
 void EnemyParts::SetAlive(bool tIsAlive)
 {
 	mIsAlive = tIsAlive;
