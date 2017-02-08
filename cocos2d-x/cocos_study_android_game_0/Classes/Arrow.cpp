@@ -1,8 +1,10 @@
 #include "Arrow.h"
 #include "Player.h"
+#include "CollisionUtils.h"
 
 #define PI 3.14159
 #define EPSILON 1
+#define AUTO_RETURN false
 
 bool Arrow::init()
 {
@@ -43,16 +45,22 @@ void Arrow::update(float dt)
 
 }
 
+Arrow::State Arrow::GetState()
+{
+	return this->mState;
+}
+
 void Arrow::InitWithPlayer(Player * player)
 {
 	mPlayer = player;
 }
 
-void Arrow::LockOn(float radian)
+
+void Arrow::LockOn(Vec2 dir)
 {
 	if (mState == State::State_Idle || mState == State::State_LockOn)
 	{
-		mShotRadian = radian;
+		mMoveDirection = dir;
 	}
 }
 
@@ -61,6 +69,10 @@ void Arrow::DisableLockOn()
 	if (mState == State::State_LockOn)
 	{
 		mState = State::State_Idle;
+	}
+	if (mState == State::State_Drop)
+	{
+		mIsReturnArrow = false;
 	}
 }
 
@@ -74,37 +86,56 @@ void Arrow::Shot()
 	}
 }
 
-void Arrow::OnCollisionOther(bool isCollision, Actor * other)
+void Arrow::OnCollisionOther(bool isCollision, Actor * other,Vec2 normal)
 {
 	mIsCollision = isCollision;
 	if (mState == State::State_Shot)
 	{
 		if (mIsCollision && !mIsPrevCollision)
 		{
-			Vec2 dir;
-			dir.x = cos(mShotRadian);
-			dir.y = sin(mShotRadian);
-			dir = -dir;
-			mShotRadian = atan2(dir.y, dir.x);
+			if (other != nullptr)
+			{
+				Vec2 worldPos = this->getParent()->convertToWorldSpace(this->getPosition());
+				Vec2 normal = CollisionUtils::GetInst()->GetPosToRectNormal(other, worldPos);
+				log("collision normal : %f,%f", normal.x, normal.y);
 
+				Vec2 reflectDir;
+				reflectDir = mMoveDirection + ((normal * 2)*ccpDot(-mMoveDirection, normal));
+				mMoveDirection = reflectDir;
 
-			mCurrentSpeedPower *= 0.3;
+				float radian = atan2(mMoveDirection.y, mMoveDirection.x);
+				this->setRotation(-CC_RADIANS_TO_DEGREES((PI * 0.5) + radian));
+				mCurrentSpeedPower *= 0.3;
+			}
+			else//normal direct
+			{
+
+			}
 		}
 	}
 	mIsPrevCollision = mIsCollision;
 }
 
+
+void Arrow::SetReturnArrow(bool isReturn)
+{
+	mIsReturnArrow = isReturn;
+}
+
+bool Arrow::IsShooting()
+{
+	return mState == State::State_Shot;
+}
+
 void Arrow::updateLock(float dt)
 {
 	Vec2 arrowPos;
-	//mShotRadian += dt;
-	//if (mShotRadian >= 2)
-	//mShotRadian = 0;
 
-	arrowPos.x = mPlayer->getPosition().x + cos(/*PI **/ mShotRadian) * mPlayer->GetSprite()->getContentSize().width;
-	arrowPos.y = mPlayer->getPosition().y + sin(/*PI **/ mShotRadian) * mPlayer->GetSprite()->getContentSize().width;
+	float radian = atan2(mMoveDirection.y, mMoveDirection.x);
+	arrowPos.x = mPlayer->getPosition().x + cos(radian) * mPlayer->GetSprite()->getContentSize().width;
+	arrowPos.y = mPlayer->getPosition().y + sin(radian) * mPlayer->GetSprite()->getContentSize().width;
 
-	this->setRotation(-CC_RADIANS_TO_DEGREES((PI * 0.5) + /*PI **/ mShotRadian));
+	this->setRotation(-CC_RADIANS_TO_DEGREES((PI * 0.5) + radian));
 	this->setPosition(arrowPos);
 }
 
@@ -118,13 +149,13 @@ void Arrow::updateShot(float dt)
 		mState = State::State_Drop;
 	}*/
 
-	Vec2 dir;
-	dir.x = cos(mShotRadian);
-	dir.y = sin(mShotRadian);
+	//Vec2 dir = GetShotRadianToVector();
+	//dir.x = cos(mShotRadian);
+	//dir.y = sin(mShotRadian);
 	//log("%f,%f,%f", mShotRadian,dir.x, dir.y);
 	Vec2 pos = this->getPosition();
-	pos.x += (dir.x * mCurrentSpeedPower) * dt;
-	pos.y += (dir.y * mCurrentSpeedPower) * dt;
+	pos.x += (mMoveDirection.x * mCurrentSpeedPower) * dt;
+	pos.y += (mMoveDirection.y * mCurrentSpeedPower) * dt;
 
 	this->setPosition(pos);
 	mCurrentSpeedPower -= mCurrentSpeedPower * mDecelRatio;
@@ -139,7 +170,8 @@ void Arrow::updateShot(float dt)
 void Arrow::updateDrop(float dt)
 {
 
-#pragma region ÀÚµ¿È¸¼ö
+#if AUTO_RETURN
+#pragma region ï¿½Úµï¿½È¸ï¿½ï¿½
 
 	//if (mPlayer->GetState() == Player::State::Move)
 	//{
@@ -184,13 +216,36 @@ void Arrow::updateDrop(float dt)
 	dir = dist.getNormalized();
 	float arrowRadian = atan2(dir.y, dir.x);
 	this->setRotation(-CC_RADIANS_TO_DEGREES((PI * 0.5) + arrowRadian));
-
-
 #pragma endregion
+
+#else // !AUTO_RETURN
+#pragma region ï¿½ï¿½ï¿½ï¿½È¸ï¿½ï¿½
+	if (mIsReturnArrow)
+	{
+		Vec2 dist;
+		Vec2 dir;
+
+		dist = mPlayer->getPosition() - this->getPosition();
+		dir = dist.getNormalized();
+
+		Vec2 pos = this->getPosition();
+		pos.x += (dir.x * mCurrentSpeedPower) * dt;
+		pos.y += (dir.y * mCurrentSpeedPower) * dt;
+		this->setPosition(pos);
+
+		if (dist.getLength() < 30)
+		{
+			mState = State_Idle;
+		}
+		//log("%f", dist.getLength());
+
+		dist = this->getPosition() - mPlayer->getPosition();
+		dir = dist.getNormalized();
+		float arrowRadian = atan2(dir.y, dir.x);
+		this->setRotation(-CC_RADIANS_TO_DEGREES((PI * 0.5) + arrowRadian));
+
+	}
+#pragma endregion
+#endif // END AUTO_RETURN
+
 }
-
-
-
-
-
-

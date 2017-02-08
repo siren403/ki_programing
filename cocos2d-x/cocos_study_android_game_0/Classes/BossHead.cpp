@@ -7,9 +7,8 @@ bool BossHead::init()
 		return false;
 	}
 
-	mSprite = Sprite::create("samples/boss_1_bighead.png");
-	mSprite->getTexture()->setAliasTexParameters();
-	this->addChild(mSprite, 1);
+	auto sprite = this->SetSprite(Sprite::create("samples/boss_1_head.png"), 1);
+	sprite->getTexture()->setAliasTexParameters();
 
 	auto tIdleSeq = Sequence::create(
 		MoveBy::create(0.5,Vec2(0,5)),
@@ -28,5 +27,5 @@ void BossHead::update(float dt)
 
 const Size BossHead::GetPartsSize()
 {
-	return mSprite->getContentSize();
+	return this->GetSprite()->getContentSize();
 }

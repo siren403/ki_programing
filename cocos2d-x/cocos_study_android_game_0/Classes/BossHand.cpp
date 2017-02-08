@@ -10,20 +10,19 @@ bool BossHand::init()
 		return false;
 	}
 
-	mSprite = Sprite::create("samples/boss_1_lefthand.png");
-	mSprite->getTexture()->setAliasTexParameters();
-	this->addChild(mSprite);
-
+	auto sprite = this->SetSprite(Sprite::create("samples/boss_1_lefthand.png"));
+	sprite->getTexture()->setAliasTexParameters();
 	mHandDir = HandDir::HandDir_Left;
 
 	this->scheduleUpdate();
+
 	return true;
 }
 
 void BossHand::InitHand(HandDir dir)
 {
 	mHandDir = dir;
-	mSprite->setFlipX(mHandDir == HandDir::HandDir_Left ? false : true);
+	GetSprite()->setFlipX(mHandDir == HandDir::HandDir_Left ? false : true);
 }
 
 void BossHand::onEnter()
@@ -44,6 +43,3 @@ void BossHand::update(float dt)
 	pos.y += sin(mIdleRadian) * 10;
 	this->setPosition(pos);
 }
-
-
-

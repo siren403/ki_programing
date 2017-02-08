@@ -131,6 +131,7 @@ bool HelloWorld::init()
 
 	this->scheduleUpdate();
 
+
     return true;
 }
 

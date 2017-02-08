@@ -39,7 +39,7 @@ bool ScenePlay::init()
 	//mUIPadBack->setScale(CC_CONTENT_SCALE_FACTOR());
 	mUINode->addChild(mUIPadBack, 0);
 
-	
+
 	mUIPadFront = Sprite::create("ui/pad/ui_pad_front.png");
 	Size uiPadBackSize = mUIPadBack->getContentSize();
 	mUIPadFront->setPosition(Vec2(uiPadBackSize.width*0.5, uiPadBackSize.height*0.5));
@@ -52,7 +52,7 @@ bool ScenePlay::init()
 	mUIPadFrontImage->autorelease();
 	mUIPadFrontImage->retain();
 
-	
+
 
 	mPadMaxDistance = 3;
 #pragma endregion
@@ -94,6 +94,12 @@ bool ScenePlay::init()
 
 #pragma endregion
 
+	auto Spr = Sprite::create("CloseNormal.png");
+	Spr->setScale(0.5);
+	Spr->setPosition(360,905);
+	Spr->setGlobalZOrder(10);
+	this->addChild(Spr);
+
 	this->scheduleUpdate();
 	return true;
 }
@@ -121,8 +127,10 @@ void ScenePlay::onExit()
 
 void ScenePlay::update(float dt)
 {
-	//Director::getInstance()->getScheduler()->setTimeScale(0.5);
-	mCurrentEnemy->CheckCollisionArrow(mArrow);
+	if (mCurrentEnemy != nullptr)
+	{
+		mCurrentEnemy->CheckCollisionArrow(mArrow);
+	}
 }
 
 bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)
@@ -132,24 +140,30 @@ bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)
 	if (mUIPadBack->getBoundingBox().containsPoint(touchPos))
 	{
 		if (mUIPadFront->getBoundingBox().containsPoint(touchPos) &&
-			CollisionUtils::ContainsPointToPixel(mUIPadFront, mUIPadFrontImage, touchPos))//move
+			CollisionUtils::GetInst()->ContainsPointToPixel(mUIPadFront, mUIPadFrontImage, touchPos))//move
 		{
 			//mTouchBeganPos = touch->getLocation();
 			mTouchBeganPos = convertToWorldSpace(mUIPadFront->getPosition());
 			mTouchState = TouchState::Move;
-			isTouchMoved = true;
-
 			mTouchStopWatch->OnStart();
+			isTouchMoved = true;
 		}
-		else//attack
+		else if(mArrow->GetState() != Arrow::State::State_Drop)//attack
 		{
 			mTouchBeganPos = touch->getLocation();
 			mTouchState = TouchState::Shot;
 
 			Vec2 dir = mTouchBeganPos - convertToWorldSpace(mUIPadFront->getPosition());
-			mArrow->LockOn(atan2(dir.y, dir.x));
+			mArrow->LockOn(dir.getNormalized());
 			isTouchMoved = true;
 		}
+		else//ArrowDrop...
+		{
+			mArrow->SetReturnArrow(true);
+			mTouchState = TouchState::Collect;
+			isTouchMoved = true;
+		}
+		//isTouchMoved = true;
 	}
 
 
@@ -174,30 +188,34 @@ void ScenePlay::onTouchMoved(Touch * touch, Event * unused_event)
 
 		mPlayer->SetMoveDir(dir);
 
-		mArrow->LockOn(atan2(dir.y, dir.x));
+		//mArrow->LockOn(atan2(dir.y, dir.x));
+		mArrow->LockOn(dir.getNormalized());
+
 		//log("%f", atan2(dir.y, dir.x));
 		break;
 	case TouchState::Shot:
 		dir = mTouchBeganPos - touchPos;
-		mArrow->LockOn(atan2(dir.y, dir.x));
+		//mArrow->LockOn(atan2(dir.y, dir.x));
+		mArrow->LockOn(dir.getNormalized());
+
 		break;
 	}
 }
 
 void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 {
-	
+	auto touchPos = mUINode->convertToNodeSpace(touch->getLocation());
+
 	switch (mTouchState)
 	{
 	case TouchState::Shot:
 		mArrow->Shot();
 		break;
 	case TouchState::Move:
-		auto touchPos = mUINode->convertToNodeSpace(touch->getLocation());
 		if (mUIPadBack->getBoundingBox().containsPoint(touchPos))
 		{
 			if (!(mUIPadFront->getBoundingBox().containsPoint(touchPos) &&
-				CollisionUtils::ContainsPointToPixel(mUIPadFront, mUIPadFrontImage, touchPos)))//move
+				CollisionUtils::GetInst()->ContainsPointToPixel(mUIPadFront, mUIPadFrontImage, touchPos)))//move
 			{
 				Vec2 dir = touch->getLocation() - mTouchBeganPos;
 				float endedRadian = atan2(dir.y, dir.x);
@@ -206,8 +224,11 @@ void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 		}
 		mArrow->DisableLockOn();
 		break;
+	case TouchState::Collect:
+		mArrow->SetReturnArrow(false);
+		break;
 	}
-	
+
 
 	/*float touchTime = mTouchStopWatch->OnStop();
 
@@ -221,10 +242,9 @@ void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 		float endedRadian = atan2(pos.y, pos.x);
 		mPlayer->OnRoll(endedRadian);
 	}*/
-	
+
 	mTouchState = TouchState::None;
 	mPlayer->SetMoveDir(Vec2::ZERO);
 
 
 }
-

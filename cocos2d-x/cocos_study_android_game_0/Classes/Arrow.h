@@ -4,13 +4,15 @@
 #include "cocos2d.h"
 #include "Actor.h"
 
+#pragma execution_character_set("utf-8")
+
 using namespace cocos2d;
 
 class Player;
 
 class Arrow : public Actor
 {
-private:
+public:
 	enum State
 	{
 		State_Idle = 0,
@@ -18,43 +20,51 @@ private:
 		State_Shot = 2,
 		State_Drop = 3,
 	};
-	
+private:
+
 	Sprite * mSprite = nullptr;
 	Player * mPlayer = nullptr;
 
 	State mState;
-	//¹ß»ç °¢µµ(¶óµğ¾È) 
-	float mShotRadian = 0;
-	//ÃÖ´ë ¼Ó·Â
+	//ë°œì‚¬ ë°©í–¥
+	Vec2 mMoveDirection;
+
+	//ìµœëŒ€ ì†ë ¥
 	float mMaxSpeedPower = 0;
-	//ÇöÀç ¼Ó·Â
+	//í˜„ì¬ ì†ë ¥
 	float mCurrentSpeedPower = 0;
-	//ÃÖ´ë ¼Ó·Â¸¦ ±âÁØÀ¸·Î °¨¼Ó ÇÒ ºñÀ²
+	//ìµœëŒ€ ì†ë ¥ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ê°ì† í•  ë¹„ìœ¨
 	float mDecelRatio = 0;
 
-
-	//Ãæµ¹
+	//ì¶©ëŒ
 	bool mIsPrevCollision = false;
 	bool mIsCollision = false;
 
-	//°¢ »óÅÂ º° ¾÷µ¥ÀÌÆ®
+	bool mIsReturnArrow = false;
+
+	//ê° ìƒíƒœ ë³„ ì—…ë°ì´íŠ¸
 	void updateLock(float dt);
 	void updateShot(float dt);
 	void updateDrop(float dt);
+
 public:
 	CREATE_FUNC(Arrow);
-	
+
 	virtual bool init() override;
 	virtual void update(float dt) override;
 
 	//get,set
+	Arrow::State GetState();
+	void SetReturnArrow(bool isReturn);
 
 
 	void InitWithPlayer(Player * player);
-	void LockOn(float radian);
+	void LockOn(Vec2 dir);
 	void DisableLockOn();
 	void Shot();
-	void OnCollisionOther(bool isCollision,Actor * other);
+
+	void OnCollisionOther(bool isCollision, Actor * other,Vec2 normal = Vec2::ZERO);
+	bool IsShooting();
 };
 
 #endif // !__ARROW_H__

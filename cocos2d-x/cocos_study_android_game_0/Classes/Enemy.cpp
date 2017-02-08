@@ -9,15 +9,6 @@ bool Enemy::init()
 	}
 
 
-	/*auto tSeq = Sequence::create(
-		MoveBy::create(0.6,Vec2(0, 10)),
-		MoveBy::create(0.6, Vec2(0, -10)),
-		nullptr
-	);
-	auto tRepeat = RepeatForever::create(tSeq);
-	this->runAction(tRepeat);*/
-
-
 	return true;
 }
 
@@ -54,16 +45,6 @@ void Enemy::AddParts(EnemyParts * tParts)
 // 	return false;
 // }
 
-//void Enemy::CheckCollisionToActor(Actor * tActor)
-//{
-//	if (mParts.size() > 0)
-//	{
-//		for (int i = 0; i < mParts.size(); i++)
-//		{
-//
-//		}
-//	}
-//}
 
 bool Enemy::GetPartsAlive()
 {
@@ -123,23 +104,28 @@ void Enemy::DestroyParts()
 	//}
 }
 
-void Enemy::CheckCollisionArrow(Arrow * tArrow)
+
+void Enemy::CheckCollisionArrow(Arrow * arrow)
 {
-	bool result = false;
+	bool isCollision = false;
 	Actor * other = nullptr;
+	Rect arrowRect = utils::getCascadeBoundingBox(arrow);
+	Rect partsRect;
 
 	if (mParts.size() > 0)
 	{
 		for (int i = 0; i < mParts.size(); i++)
 		{
-			if (utils::getCascadeBoundingBox(mParts.at(i))
-				.intersectsRect(utils::getCascadeBoundingBox(tArrow)))
+			arrowRect = utils::getCascadeBoundingBox(arrow);
+			partsRect = utils::getCascadeBoundingBox(mParts.at(i));
+			if (arrowRect.intersectsRect(partsRect))
 			{
-				result = true;
+				isCollision = true;
 				other = mParts.at(i);
 				break;
 			}
 		}
 	}
-	tArrow->OnCollisionOther(result, other);
+	
+	arrow->OnCollisionOther(isCollision, other);
 }

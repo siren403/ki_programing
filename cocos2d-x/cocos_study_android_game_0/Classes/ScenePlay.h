@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Arrow.h"
 
+#pragma execution_character_set("utf-8")
 
 using namespace cocos2d;
 
@@ -15,16 +16,17 @@ enum TouchState
 {
 	None = 0,
 	Move = 1,
-	Shot = 2
+	Shot = 2,
+	Collect = 3,
 };
 
 class ScenePlay : public LayerColor
 {
 private:
-	//·¹ÀÌ¾î ±¸ºĞ
-	Node * mRenderNode = nullptr;//this ´ÙÀ½À¸·Î ÃÖ»óÀ§ ³ëµå
-	Node * mUINode = nullptr;//RenderNode¿¡ ¼ÓÇÏ´Â UIºÎºĞ ³ëµå ex) ÄÁÆ®·Ñ·¯,...
-	Node * mPlayNode = nullptr;//UI³ëµå¿Í °°Àº ·¹º§ÀÇ ÇÃ·¹ÀÌ ºÎºĞ ³ëµå, ex) ¸Ê,ÇÃ·¹ÀÌ¾î,Àû,...
+	//ë ˆì´ì–´ êµ¬ë¶„
+	Node * mRenderNode = nullptr;//this ë‹¤ìŒìœ¼ë¡œ ìµœìƒìœ„ ë…¸ë“œ
+	Node * mUINode = nullptr;//RenderNodeì— ì†í•˜ëŠ” UIë¶€ë¶„ ë…¸ë“œ ex) ì»¨íŠ¸ë¡¤ëŸ¬,...
+	Node * mPlayNode = nullptr;//UIë…¸ë“œì™€ ê°™ì€ ë ˆë²¨ì˜ í”Œë ˆì´ ë¶€ë¶„ ë…¸ë“œ, ex) ë§µ,í”Œë ˆì´ì–´,ì ,...
 
 	//player
 	Player * mPlayer = nullptr;
@@ -35,7 +37,7 @@ private:
 	Sprite * mUIPadBack = nullptr;
 	Sprite * mUIPadFront = nullptr;
 	Image * mUIPadFrontImage = nullptr;
-	
+
 	//input
 	float mPadMaxDistance;
 	Vec2 mTouchBeganPos;
@@ -45,20 +47,18 @@ private:
 
 	Size mPlayNodeSize;
 
-
 	Enemy * mCurrentEnemy = nullptr;
-
 public:
 	static Scene * createScene();
 	CREATE_FUNC(ScenePlay);
 
-	//¶óÀÌÇÁ »çÀÌÅ¬ ¿À¹ö¶óÀÌµå
+	//ë¼ì´í”„ ì‚¬ì´í´ ì˜¤ë²„ë¼ì´ë“œ
 	virtual bool init() override;
 	virtual void onEnter() override;
 	virtual void onExit() override;
 	virtual void update(float dt) override;
 
-	//Input ÀÎÅÍÆäÀÌ½º ¿À¹ö¶óÀÌµå
+	//Input ì¸í„°í˜ì´ìŠ¤ ì˜¤ë²„ë¼ì´ë“œ
 	virtual bool onTouchBegan(Touch * touch, Event * unused_event) override;
 	virtual void onTouchMoved(Touch * touch, Event * unused_event) override;
 	virtual void onTouchEnded(Touch * touch, Event * unused_event) override;

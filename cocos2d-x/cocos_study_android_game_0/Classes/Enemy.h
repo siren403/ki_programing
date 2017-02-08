@@ -29,6 +29,7 @@ public:
 	void CheckCollisionArrow(Arrow * tArrow);
 
 	void DestroyParts();
+	void CheckCollisionArrow(Arrow * arrow);
 };
 
 #endif // !__CENEMY_H__

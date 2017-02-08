@@ -9,9 +9,14 @@ using namespace cocos2d;
 class EnemyParts : public Actor
 {
 private:
+	Sprite * mSprite = nullptr;
 	int mHP = 0;
 	float mHitDelay = 0;
 	float mCurrentHitDelay = 0;
+protected:
+
+	//get,set
+	Sprite * SetSprite(Sprite * sprite,int localZOrder = 0);
 public:
 	CREATE_FUNC(EnemyParts);
 	virtual bool init() override;
@@ -21,7 +26,7 @@ public:
 	virtual void SetAlive(bool tIsAlive) override;
 	virtual const Size GetPartsSize();
 	void SetHP(int tHP);
-
+	Sprite * GetSprite();
 
 	void Hit();
 };
