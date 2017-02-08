@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "Arrow.h"
 
 bool Enemy::init()
 {
@@ -80,6 +81,7 @@ bool Enemy::GetPartsAlive()
 	return false;
 }
 
+
 void Enemy::SetAlive(bool tIsAlive)
 {
 	if (mParts.size() > 0)
@@ -119,4 +121,25 @@ void Enemy::DestroyParts()
 	//{
 	//	mParts.at(mParts.size() - 2)->setState(EnemyParts::STATE_ATTACK);
 	//}
+}
+
+void Enemy::CheckCollisionArrow(Arrow * tArrow)
+{
+	bool result = false;
+	Actor * other = nullptr;
+
+	if (mParts.size() > 0)
+	{
+		for (int i = 0; i < mParts.size(); i++)
+		{
+			if (utils::getCascadeBoundingBox(mParts.at(i))
+				.intersectsRect(utils::getCascadeBoundingBox(tArrow)))
+			{
+				result = true;
+				other = mParts.at(i);
+				break;
+			}
+		}
+	}
+	tArrow->OnCollisionOther(result, other);
 }

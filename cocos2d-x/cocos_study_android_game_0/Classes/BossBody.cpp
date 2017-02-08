@@ -8,6 +8,7 @@ bool BossBody::init()
 	}
 
 	mSprite = Sprite::create("samples/boss_1_body.png");
+	mSprite->getTexture()->setAliasTexParameters();
 	this->addChild(mSprite, 1);
 
 

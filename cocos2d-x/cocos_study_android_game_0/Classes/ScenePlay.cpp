@@ -36,12 +36,14 @@ bool ScenePlay::init()
 	mUIPadBack = Sprite::create("ui/pad/ui_pad_back.jpg");
 	mUIPadBack->setAnchorPoint(Vec2(0.5, 0));
 	mUIPadBack->setPosition(Vec2(visibleSize.width*0.5, 0));
+	//mUIPadBack->setScale(CC_CONTENT_SCALE_FACTOR());
 	mUINode->addChild(mUIPadBack, 0);
 
 	
 	mUIPadFront = Sprite::create("ui/pad/ui_pad_front.png");
 	Size uiPadBackSize = mUIPadBack->getContentSize();
 	mUIPadFront->setPosition(Vec2(uiPadBackSize.width*0.5, uiPadBackSize.height*0.5));
+	//mUIPadFront->setScale(CC_CONTENT_SCALE_FACTOR());
 	mUINode->addChild(mUIPadFront, 1);
 
 
@@ -71,7 +73,7 @@ bool ScenePlay::init()
 	mPlayer->setPosition(mPlayNodeSize.width*0.5, mPlayNodeSize.height*0.2);
 	mPlayer->SetIsControl(true);
 	mPlayer->SetMoveArea(mPlayNodeSize);
-	mPlayNode->addChild(mPlayer, 5);
+	mPlayNode->addChild(mPlayer, 1);
 
 
 	mArrow = Arrow::create();
@@ -86,14 +88,11 @@ bool ScenePlay::init()
 
 #pragma region Enemy
 
-	auto boss = Boss::create();
-	boss->setPosition(mPlayNodeSize.width * 0.5, mPlayNodeSize.height * 0.7);
-	mPlayNode->addChild(boss, 1);
-
+	mCurrentEnemy = Boss::create();
+	mCurrentEnemy->setPosition(mPlayNodeSize.width * 0.5, mPlayNodeSize.height * 0.7);
+	mPlayNode->addChild(mCurrentEnemy, 5);
 
 #pragma endregion
-
-	
 
 	this->scheduleUpdate();
 	return true;
@@ -122,6 +121,8 @@ void ScenePlay::onExit()
 
 void ScenePlay::update(float dt)
 {
+	//Director::getInstance()->getScheduler()->setTimeScale(0.5);
+	mCurrentEnemy->CheckCollisionArrow(mArrow);
 }
 
 bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)

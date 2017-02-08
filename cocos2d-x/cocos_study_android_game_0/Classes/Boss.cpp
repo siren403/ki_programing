@@ -14,19 +14,20 @@ bool Boss::init()
 	this->AddParts(body);
 
 	auto head = BossHead::create();
-	head->setPosition(0, body->GetPartsSize().height* 0.5);
+	head->setPosition(0, body->GetPartsSize().height* 0.55);
 	this->AddParts(head);
 
 	auto hand = BossHand::create();
 	hand->InitHand(BossHand::HandDir::HandDir_Left);
-	hand->setPosition(-body->GetPartsSize().width*0.5, 0);
+	hand->setPosition(body->GetPartsSize().width * -0.6, body->GetPartsSize().height * -0.3);
 	this->AddParts(hand);
 
 	hand = BossHand::create();
 	hand->InitHand(BossHand::HandDir::HandDir_Right);
-	hand->setPosition(body->GetPartsSize().width*0.5, 0);
+	hand->setPosition(body->GetPartsSize().width * 0.6, body->GetPartsSize().height * -0.3);
 	this->AddParts(hand);
 
+	this->setScale(1.5);
 	this->scheduleUpdate();
 	return true;
 }

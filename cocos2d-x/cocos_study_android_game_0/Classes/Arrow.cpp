@@ -74,6 +74,26 @@ void Arrow::Shot()
 	}
 }
 
+void Arrow::OnCollisionOther(bool isCollision, Actor * other)
+{
+	mIsCollision = isCollision;
+	if (mState == State::State_Shot)
+	{
+		if (mIsCollision && !mIsPrevCollision)
+		{
+			Vec2 dir;
+			dir.x = cos(mShotRadian);
+			dir.y = sin(mShotRadian);
+			dir = -dir;
+			mShotRadian = atan2(dir.y, dir.x);
+
+
+			mCurrentSpeedPower *= 0.3;
+		}
+	}
+	mIsPrevCollision = mIsCollision;
+}
+
 void Arrow::updateLock(float dt)
 {
 	Vec2 arrowPos;
