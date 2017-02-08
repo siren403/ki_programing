@@ -26,8 +26,6 @@ public:
 	virtual bool IsAlive() override;
 	virtual bool GetPartsAlive();
 
-	void CheckCollisionArrow(Arrow * tArrow);
-
 	void DestroyParts();
 	void CheckCollisionArrow(Arrow * arrow);
 };

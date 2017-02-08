@@ -60,6 +60,7 @@ public:
 	void SetIsControl(bool tIsControl);
 	bool GetIsControl();
 	void SetMoveDir(Vec2 dir);
+	Vec2 GetMoveDir();
 	void SetMoveArea(Size area);
 	Player::State GetState();
 

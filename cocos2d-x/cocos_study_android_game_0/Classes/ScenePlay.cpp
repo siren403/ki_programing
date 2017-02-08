@@ -3,6 +3,8 @@
 #include "StopWatch.h"
 #include "Boss.h"
 
+#include <map>
+using namespace std;
 
 Scene * ScenePlay::createScene()
 {
@@ -23,11 +25,12 @@ bool ScenePlay::init()
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
-#pragma region Layers
+	//root
 	mRenderNode = Node::create();
 	this->addChild(mRenderNode, 0);
-#pragma endregion
 
+
+	//root->uiNode
 	mUINode = Node::create();
 	mRenderNode->addChild(mUINode, 10);
 
@@ -37,6 +40,7 @@ bool ScenePlay::init()
 	mUIPadBack->setAnchorPoint(Vec2(0.5, 0));
 	mUIPadBack->setPosition(Vec2(visibleSize.width*0.5, 0));
 	//mUIPadBack->setScale(CC_CONTENT_SCALE_FACTOR());
+	mUIPadBack->setColor(Color3B::GRAY);
 	mUINode->addChild(mUIPadBack, 0);
 
 
@@ -46,12 +50,10 @@ bool ScenePlay::init()
 	//mUIPadFront->setScale(CC_CONTENT_SCALE_FACTOR());
 	mUINode->addChild(mUIPadFront, 1);
 
-
 	mUIPadFrontImage = new Image();
 	mUIPadFrontImage->initWithImageFile("ui/pad/ui_pad_front.png");
 	mUIPadFrontImage->autorelease();
 	mUIPadFrontImage->retain();
-
 
 
 	mPadMaxDistance = 3;
@@ -61,16 +63,82 @@ bool ScenePlay::init()
 	mTouchStopWatch = StopWatch::create();
 	this->addChild(mTouchStopWatch);
 
-#pragma region Player
 
+	//root->playNode
 	mPlayNodeSize = Size(visibleSize.width, visibleSize.height - uiPadBackSize.height);
 	mPlayNode = Node::create();
 	mPlayNode->setPosition(Vec2(0, uiPadBackSize.height));
 
 	mRenderNode->addChild(mPlayNode, 0);
 
+#pragma region Map
+	
+	//root->playNode->mapNode
+	auto mMapNode = Node::create();
+	mPlayNode->addChild(mMapNode, 0);
+
+
+	map<int, string> tiles;
+	tiles[0] = "samples/t_stone_floor.png";
+	tiles[1] = "samples/t_stone_wall_left.png";
+	tiles[2] = "samples/t_stone_wall_right.png";
+	tiles[3] = "samples/t_stone_wall_top.png";
+
+	//25.30
+	int tileSet[25][30] = { 
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2 },
+		{ 1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2 },
+	};
+
+	float tileWidth = 18;
+
+	for (int y = 0; y < 25; y++)
+	{
+		for (int x = 0; x < 30; x++)
+		{
+			auto sprTile = Sprite::create(tiles[tileSet[y][x]]);
+			Vec2 pos;
+			pos.x = (tileWidth*0.5) + tileWidth * x;
+			pos.y = (tileWidth*0.5) + tileWidth * y;
+			sprTile->setPosition(pos);
+			mMapNode->addChild(sprTile, 0);
+		}
+	}
+
+	mMapNode->setScale(2 * CC_CONTENT_SCALE_FACTOR());
+	//Size mapContentSize = Size(tileWidth * 25, tileWidth * 30);
+
+#pragma endregion
+
+
+#pragma region Player
+
+
 	mPlayer = Player::create();
-	mPlayer->setPosition(mPlayNodeSize.width*0.5, mPlayNodeSize.height*0.2);
+	mPlayer->setPosition(mPlayNodeSize.width*0.5, mPlayNodeSize.height*0.5);
 	mPlayer->SetIsControl(true);
 	mPlayer->SetMoveArea(mPlayNodeSize);
 	mPlayNode->addChild(mPlayer, 1);
@@ -93,6 +161,7 @@ bool ScenePlay::init()
 	mPlayNode->addChild(mCurrentEnemy, 5);
 
 #pragma endregion
+
 
 	auto Spr = Sprite::create("CloseNormal.png");
 	Spr->setScale(0.5);
@@ -131,6 +200,28 @@ void ScenePlay::update(float dt)
 	{
 		mCurrentEnemy->CheckCollisionArrow(mArrow);
 	}
+
+#pragma region Map Scroll
+
+	Vec2 pos = mPlayer->getPosition();
+	//log("%f,%f", pos.x, pos.y);
+
+	pos.x = mPlayNodeSize.width * 0.5;
+	pos.y = (mPlayNodeSize.height * 0.5) + mUIPadBack->getContentSize().height;
+	//log("%f,%f", pos.x, pos.y);
+
+	Vec2 origin;
+	origin.x = mPlayNodeSize.width * 0.5;
+	origin.y = (mPlayNodeSize.height * 0.5) + mUIPadBack->getContentSize().height;
+
+	pos = origin - mPlayer->getPosition();
+	
+	//log("%f,%f", pos.y, mUIPadBack->getContentSize().height);
+	pos.y = MIN(pos.y, mUIPadBack->getContentSize().height);
+	mPlayNode->setPosition(pos);
+
+#pragma endregion
+
 }
 
 bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)

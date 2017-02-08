@@ -27,7 +27,7 @@ bool Boss::init()
 	hand->setPosition(body->GetPartsSize().width * 0.6, body->GetPartsSize().height * -0.3);
 	this->AddParts(hand);
 
-	this->setScale(1.5);
+	this->setScale(1.5*CC_CONTENT_SCALE_FACTOR());
 	this->scheduleUpdate();
 	return true;
 }

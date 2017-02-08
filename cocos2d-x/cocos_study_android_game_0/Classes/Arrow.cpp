@@ -15,7 +15,7 @@ bool Arrow::init()
 
 	mSprite = Sprite::create("samples/arrow.png");
 	//frontBG->getTexture()->setAliasTexParameters();
-	mSprite->setScale(2);
+	mSprite->setScale(2*CC_CONTENT_SCALE_FACTOR());
 	mSprite->getTexture()->setAliasTexParameters();
 	this->addChild(mSprite);
 

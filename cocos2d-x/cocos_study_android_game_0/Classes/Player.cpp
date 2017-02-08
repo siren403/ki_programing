@@ -12,7 +12,7 @@ bool Player::init()
 
 	mSpriteAnim = SpriteAnimator::Create("actor", 0, 20, 0.1);
 	mSpriteAnim->RunAni();
-	mSpriteAnim->setScale(1.7);
+	mSpriteAnim->setScale(1.7 * CC_CONTENT_SCALE_FACTOR());
 	mSpriteAnim->setPosition(Vec2(-mSpriteAnim->GetSprite()->getContentSize().width * 0.04, -mSpriteAnim->GetSprite()->getContentSize().height * 0.65));
 	mSpriteAnim->GetSprite()->getTexture()->setAliasTexParameters();
 	this->addChild(mSpriteAnim);
@@ -66,8 +66,9 @@ void Player::update(float dt)
 			break;
 		}
 
-		pos.clamp(Vec2(mSpriteAnim->GetSprite()->getContentSize().width*0.5f, 
-			mSpriteAnim->GetSprite()->getContentSize().width*0.5f), mMoveArea);
+		//playNodeSize clamp
+		//pos.clamp(Vec2(mSpriteAnim->GetSprite()->getContentSize().width*0.5f, 
+		//	mSpriteAnim->GetSprite()->getContentSize().width*0.5f), mMoveArea);
 
 		//pos.clamp(Vec2(0, 0), mMoveArea);
 		this->setPosition(pos);
@@ -104,6 +105,10 @@ void Player::SetMoveDir(Vec2 dir)
 			mState = State::Idle;
 		}
 	}
+}
+Vec2 Player::GetMoveDir()
+{
+	return mMoveDir;
 }
 void Player::SetMoveArea(Size area)
 {
