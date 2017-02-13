@@ -145,6 +145,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\Actor.cpp" />
+    <ClCompile Include="..\Classes\ActorManager.cpp" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\Arrow.cpp" />
     <ClCompile Include="..\Classes\Boss.cpp" />
@@ -159,11 +160,13 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\ScenePlay.cpp" />
     <ClCompile Include="..\Classes\SceneTitle.cpp" />
     <ClCompile Include="..\Classes\SpriteAnimator.cpp" />
+    <ClCompile Include="..\Classes\SpriteVector.cpp" />
     <ClCompile Include="..\Classes\StopWatch.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\Actor.h" />
+    <ClInclude Include="..\Classes\ActorManager.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\Arrow.h" />
     <ClInclude Include="..\Classes\Boss.h" />
@@ -178,6 +181,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\ScenePlay.h" />
     <ClInclude Include="..\Classes\SceneTitle.h" />
     <ClInclude Include="..\Classes\SpriteAnimator.h" />
+    <ClInclude Include="..\Classes\SpriteVector.h" />
     <ClInclude Include="..\Classes\StopWatch.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>

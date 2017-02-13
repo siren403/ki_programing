@@ -55,6 +55,7 @@ public:
 
 	//get,set
 	Arrow::State GetState();
+	Vec2 GetMoveDirection();
 	void SetReturnArrow(bool isReturn);
 
 
@@ -63,7 +64,7 @@ public:
 	void DisableLockOn();
 	void Shot();
 
-	void OnCollisionOther(bool isCollision, Actor * other,Vec2 normal = Vec2::ZERO);
+	void OnCollisionOther(bool isCollision, Node * other,Vec2 normal = Vec2::ZERO);
 	bool IsShooting();
 };
 

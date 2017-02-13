@@ -50,6 +50,11 @@ Arrow::State Arrow::GetState()
 	return this->mState;
 }
 
+Vec2 Arrow::GetMoveDirection()
+{
+	return mMoveDirection;
+}
+
 void Arrow::InitWithPlayer(Player * player)
 {
 	mPlayer = player;
@@ -86,7 +91,7 @@ void Arrow::Shot()
 	}
 }
 
-void Arrow::OnCollisionOther(bool isCollision, Actor * other,Vec2 normal)
+void Arrow::OnCollisionOther(bool isCollision, Node * other,Vec2 normal)
 {
 	mIsCollision = isCollision;
 	if (mState == State::State_Shot)

@@ -26,6 +26,7 @@ bool Player::init()
 	mRollDistance = 130;
 	mRollDuration = 0.3;
 
+
 	this->scheduleUpdate();
 	return true;
 }
