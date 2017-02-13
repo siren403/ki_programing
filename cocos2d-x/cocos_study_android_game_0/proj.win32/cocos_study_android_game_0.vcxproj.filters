@@ -22,6 +22,9 @@
     <Filter Include="src\Actor\Boss">
       <UniqueIdentifier>{c1540d0a-2d57-48b6-b0b3-f9cc7c8bbaaf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Map">
+      <UniqueIdentifier>{cc7cd48f-6e85-4c5c-a474-5e887198f7f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -80,6 +83,8 @@
     </ClCompile>
     <ClCompile Include="..\Classes\SpriteVector.cpp">
       <Filter>src\Support</Filter>
+    <ClCompile Include="..\Classes\PlayMap.cpp">
+      <Filter>src\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -134,11 +139,16 @@
     <ClInclude Include="..\Classes\BossHand.h">
       <Filter>src\Actor\Boss</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="..\Classes\ActorManager.h">
       <Filter>src\Actor</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\SpriteVector.h">
       <Filter>src\Support</Filter>
+=======
+    <ClInclude Include="..\Classes\PlayMap.h">
+      <Filter>src\Map</Filter>
+>>>>>>> 68237eb79252ec80b0ef29bcc1e1e9addd36bcf5
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
