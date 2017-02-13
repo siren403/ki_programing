@@ -1,7 +1,9 @@
 #include "Player.h"
 #include "SpriteAnimator.h"
+#include "CollisionUtils.h"
+#include "EasingFunc.h"
 
-#define PI 3.14159
+//#define PI 3.14159
 
 bool Player::init()
 {
@@ -9,6 +11,8 @@ bool Player::init()
 	{
 		return false;
 	}
+
+	mType = ActorType::Actor_Player;
 
 	mSpriteAnim = SpriteAnimator::Create("actor", 0, 20, 0.1);
 	mSpriteAnim->RunAni();
@@ -40,44 +44,22 @@ void Player::update(float dt)
 
 	if (mIsControl)
 	{
-		Vec2 pos = this->getPosition();
-
 		switch (mState)
 		{
 		case State::Roll:
-			mRollCurTime += dt;
-			if (mRollCurTime >= mRollDuration)
-			{
-				mRollCurTime = 0;
-				mState = State::Idle;
-			}
-			else
-			{
-				//pos.x = -mRollDestPos.x / 2 * (cos(PI*mRollCurTime / mRollDuration) - 1) + mRollStartPos.x;
-				//pos.y = -mRollDestPos.y / 2 * (cos(PI*mRollCurTime / mRollDuration) - 1) + mRollStartPos.y;
-				//pos = -mRollDestPos / 2 * (cos(PI*mRollCurTime / mRollDuration) - 1) + mRollStartPos;
-				//log("%f,%f", this->getPosition().y, pos.y);
-				
-			}
-
+			updateRoll(dt);
+			
 			break;
 		case State::Move:
-			pos.x += (mMoveDir.x * mMoveSpeedPower) * dt;
-			pos.y += (mMoveDir.y * mMoveSpeedPower) * dt;
+			updateMove(dt);
 			break;
 		}
+		Vec2 pos = this->getPosition();
+		pos.clamp(Vec2(mSpriteAnim->GetSprite()->getContentSize().width*0.5f, 
+			mSpriteAnim->GetSprite()->getContentSize().width*0.5f), mMoveArea);
 
-		//playNodeSize clamp
-		//pos.clamp(Vec2(mSpriteAnim->GetSprite()->getContentSize().width*0.5f, 
-		//	mSpriteAnim->GetSprite()->getContentSize().width*0.5f), mMoveArea);
-
-		//pos.clamp(Vec2(0, 0), mMoveArea);
 		this->setPosition(pos);
 	}
-	/*if (mMoveDir != Vec2::ZERO)
-	{
-		mMoveDir = Vec2::ZERO;
-	}*/
 }
 Sprite * Player::GetSprite()
 {
@@ -114,7 +96,7 @@ Vec2 Player::GetMoveDir()
 void Player::SetMoveArea(Size area)
 {
 	mMoveArea = area;
-	mMoveArea.width -= mSpriteAnim->GetSprite()->getContentSize().width*0.5;
+	mMoveArea.width -= mSpriteAnim->GetSprite()->getContentSize().width* 0.5;
 	mMoveArea.height -= mSpriteAnim->GetSprite()->getContentSize().height;
 }
 Player::State Player::GetState()
@@ -157,12 +139,105 @@ void Player::OnRoll(float rollRadian)
 		mRollDestPos.x = mRollStartPos.x + (cos(rollRadian) * mRollDistance);
 		mRollDestPos.y = mRollStartPos.y + (sin(rollRadian) * mRollDistance);
 		//log("start[%f,%f] dest[%f,%f]", mRollStartPos.x, mRollStartPos.y,mRollDestPos.x, mRollDestPos.y);
-		auto roll = EaseSineInOut::create(
+		mRollAction = EaseSineInOut::create(
 			MoveTo::create(mRollDuration, mRollDestPos)
 		);
-		this->runAction(roll);
+		//this->runAction(mRollAction);
 	}
 	
+}
+
+void Player::OnCollisionOther(bool isCollision, Node * other, Vec2 normal)
+{
+	if (isCollision)
+	{
+		Actor * actor = (Actor *)other;
+		if (actor != nullptr)
+		{
+			Vec2 worldPos = this->getParent()->convertToWorldSpace(this->getPosition());
+			Vec2 normal = CollisionUtils::GetInst()->GetPosToRectNormal(other, worldPos);
+			switch (actor->GetActorType())
+			{
+			case ActorType::Actor_Tile:
+				//log("normal : %f,%f", normal.x, normal.y);
+				if (normal.x != 0)
+				{
+					mIsVerticalCollision = true;
+				}
+				if (normal.y != 0)
+				{
+					mIsHorizontalCollision = true;
+				}
+				break;
+			case ActorType::Actor_EnemyParts:
+				
+				break;
+			}
+			
+		}
+	}
+}
+
+void Player::updateMove(float dt)
+{
+	Vec2 pos = this->getPosition();
+	pos.x += (mMoveDir.x * mMoveSpeedPower) * dt;
+	pos.y += (mMoveDir.y * mMoveSpeedPower) * dt;
+
+
+	if (mIsVerticalCollision)
+	{
+		pos.x = mPrevPos.x;
+		mIsVerticalCollision = false;
+	}
+	if (mIsHorizontalCollision)
+	{
+		pos.y = mPrevPos.y;
+		mIsHorizontalCollision = false;
+	}
+
+
+	this->setPosition(pos);
+	mPrevPos = this->getPosition();
+}
+
+void Player::updateRoll(float dt)
+{
+
+	mRollCurTime += dt;
+	if (mRollCurTime >= mRollDuration)
+	{
+		mRollCurTime = 0;
+		mState = State::Idle;
+	}
+	else
+	{
+		Vec2 pos = EasingFunc::EaseSinInOut(mRollCurTime,mRollStartPos,mRollDestPos - mRollStartPos,mRollDuration);
+
+		if (mIsVerticalCollision)
+		{
+			pos.x = mPrevPos.x;
+			mIsVerticalCollision = false;
+			mRollCurTime = 0;
+			mState = State::Idle;
+		}
+		if (mIsHorizontalCollision)
+		{
+			pos.y = mPrevPos.y;
+			mIsHorizontalCollision = false;
+			mRollCurTime = 0;
+			mState = State::Idle;
+		}
+
+		this->setPosition(pos);
+		mPrevPos = this->getPosition();
+
+		//float start = 10;
+		//float end = 20;
+		//float delta = EasingFunc::EaseSinInOut(mRollCurTime, 10, 10, mRollDuration);
+		//log("delta %f to %f : %f", start, end, delta);
+	}
+
 }
 
 Player::~Player()
@@ -170,13 +245,3 @@ Player::~Player()
 	_eventDispatcher->removeEventListenersForTarget(this);
 }
 
-bool Player::onTouchBegan(Touch * touch, Event * unused_event)
-{
-
-	return true;
-}
-
-void Player::onTouchMoved(Touch * touch, Event * unused_event)
-{
-
-}

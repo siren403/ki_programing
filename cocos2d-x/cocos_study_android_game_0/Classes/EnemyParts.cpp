@@ -10,6 +10,9 @@ bool EnemyParts::init()
 		return false;
 	}
 
+	mType = ActorType::Actor_EnemyParts;
+
+
 	return true;
 }
 

@@ -105,20 +105,19 @@ void Enemy::DestroyParts()
 }
 
 
-void Enemy::CheckCollisionArrow(Arrow * arrow)
+void Enemy::CheckCollisionActor(Actor * actor)
 {
 	bool isCollision = false;
 	Actor * other = nullptr;
-	Rect arrowRect = utils::getCascadeBoundingBox(arrow);
+	Rect actorRect = utils::getCascadeBoundingBox(actor);
 	Rect partsRect;
 
 	if (mParts.size() > 0)
 	{
 		for (int i = 0; i < mParts.size(); i++)
 		{
-			arrowRect = utils::getCascadeBoundingBox(arrow);
 			partsRect = utils::getCascadeBoundingBox(mParts.at(i));
-			if (arrowRect.intersectsRect(partsRect))
+			if (actorRect.intersectsRect(partsRect))
 			{
 				isCollision = true;
 				other = mParts.at(i);
@@ -127,5 +126,5 @@ void Enemy::CheckCollisionArrow(Arrow * arrow)
 		}
 	}
 	
-	arrow->OnCollisionOther(isCollision, other);
+	actor->OnCollisionOther(isCollision, other);
 }

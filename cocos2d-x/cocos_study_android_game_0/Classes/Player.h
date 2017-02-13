@@ -31,7 +31,11 @@ private:
 	//move
 	float mMoveSpeedPower = 0;
 	Vec2 mMoveDir;
+	Vec2 mPrevPos;
+	bool mIsVerticalCollision = false;
+	bool mIsHorizontalCollision = false;
 	//roll
+	Action * mRollAction = nullptr;
 	float mRollDistance;
 	float mRollDuration;
 	float mRollRadian;
@@ -43,6 +47,9 @@ private:
 
 	Size mMoveArea;
 
+	void updateMove(float dt);
+	void updateRoll(float dt);
+
 	virtual ~Player();
 public:
 	CREATE_FUNC(Player);
@@ -51,9 +58,6 @@ public:
 	virtual bool init() override;
 	virtual void update(float dt) override;
 
-	//Inputs
-	bool onTouchBegan(Touch * touch, Event * unused_event);
-	void onTouchMoved(Touch * touch, Event * unused_event);
 
 	//getter,setter
 	Sprite * GetSprite();
@@ -67,6 +71,7 @@ public:
 	void Hit();
 	void OnRoll(float rollRadian);
 
+	virtual void OnCollisionOther(bool isCollision, Node * other, Vec2 normal = Vec2::ZERO) override;
 };
 
 #endif // !__CACTOR_H__

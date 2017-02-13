@@ -3,11 +3,8 @@
 #include "StopWatch.h"
 #include "Boss.h"
 #include "ActorManager.h"
-
-
-
-
-
+#include "PlayMap.h"
+#include "MapTile.h"
 
 
 Scene * ScenePlay::createScene()
@@ -77,60 +74,23 @@ bool ScenePlay::init()
 
 #pragma region Map 
 	
-	//root->playNode->mapNode
-	mMapNode = Node::create();
-	mPlayNode->addChild(mMapNode, 0);
+	mPlayMap = PlayMap::create();
+	mPlayMap->CreateTiles(0);
+	mPlayMap->setScale(2 * CC_CONTENT_SCALE_FACTOR());
+	mPlayNode->addChild(mPlayMap, 0);
 
-
-	mMapTileNames[0] = "samples/t_stone_floor.png";
-	mMapTileNames[1] = "samples/t_stone_wall_left.png";
-	mMapTileNames[2] = "samples/t_stone_wall_right.png";
-	mMapTileNames[3] = "samples/t_stone_wall_top.png";
-
-
-	float tileWidth = 18;
-
-	mMapTiles.reserve(MAP_HEIGHT);
-	for (int y = 0; y < MAP_HEIGHT; y++)
-	{
-		mMapTiles.pushBack(new SpriteVector(MAP_WIDTH));
-		for (int x = 0; x < MAP_WIDTH; x++)
-		{
-			//todo : tile Node warpping
-			auto sprTile = Sprite::create(mMapTileNames[mTileSet[y][x]]);
-			Vec2 pos;
-			pos.x = (tileWidth*0.5) + tileWidth * x;
-			pos.y = (tileWidth*0.5) + tileWidth * y;
-			sprTile->setPosition(pos);
-			mMapNode->addChild(sprTile, 0);
-
-			mMapTiles.at(y)->GetSprites().pushBack(sprTile);
-		}
-	}
-
-	mMapNode->setScale(2 * CC_CONTENT_SCALE_FACTOR());
-	//log("content size %f", mMapTiles.at(0)->GetSprites().at(0)->getContentSize().width);
-	//log("content size * scale %f", mMapTiles.at(0)->GetSprites().at(0)->getContentSize().width * mMapNode->getScale());
-	mTileWidth = mMapTiles.at(0)->GetSprites().at(0)->getContentSize().width * mMapNode->getScale();
-
-
-	Size mapContentSize = Size((tileWidth * MAP_WIDTH)*mMapNode->getScale(),
-		(tileWidth * MAP_HEIGHT)*mMapNode->getScale());
-
+	Size mapContentSize = mPlayMap->GetMapContentSize();
 #pragma endregion
 
-
 #pragma region Player
-
 
 	mPlayer = Player::create();
 	mPlayer->setPosition(mapContentSize.width*0.5, mapContentSize.height*0.2);
 	//mPlayer->setPosition(mapContentSize.width*0.0, mapContentSize.height*0.0);
 
 	mPlayer->SetIsControl(true);
-	mPlayer->SetMoveArea(mPlayNodeSize);
+	mPlayer->SetMoveArea(mapContentSize);
 	mPlayNode->addChild(mPlayer, 1);
-
 
 	mArrow = Arrow::create();
 	mArrow->InitWithPlayer(mPlayer);
@@ -138,9 +98,6 @@ bool ScenePlay::init()
 
 	ActorManager::GetInstance()->SetPlayer(mPlayer);
 
-	/*auto arrow = Sprite::create("samples/arrow.png");
-	arrow->setPosition(mPlayer->getPosition());
-	mPlayNode->addChild(arrow, 10);*/
 
 #pragma endregion
 
@@ -186,10 +143,35 @@ void ScenePlay::onExit()
 
 void ScenePlay::update(float dt)
 {
+#pragma region Arrow Collision
+
 	if (mCurrentEnemy != nullptr)
 	{
-		mCurrentEnemy->CheckCollisionArrow(mArrow);
+		mCurrentEnemy->CheckCollisionActor(mArrow);
 	}
+	mPlayMap->CheckCollisionTile(mArrow, mArrow->GetMoveDirection());
+
+#pragma endregion
+#pragma region Player Collision
+
+	mCurrentEnemy->CheckCollisionActor(mPlayer);
+	mPlayMap->CheckCollisionTile(mPlayer, mPlayer->GetMoveDir());
+
+#pragma endregion
+
+#pragma region Check Tile Search
+	auto tile = mPlayMap->GetTile(mPlayer->getPosition());
+	if (tile->GetSprite()->getColor() != Color3B::RED)
+	{
+		tile->GetSprite()->setColor(Color3B::RED);
+	}
+
+	tile = mPlayMap->GetTile(mArrow->getPosition());
+	if (tile->GetSprite()->getColor() != Color3B::GREEN)
+	{
+		tile->GetSprite()->setColor(Color3B::GREEN);
+	}
+#pragma endregion
 
 
 #pragma region Map Scroll
@@ -206,78 +188,14 @@ void ScenePlay::update(float dt)
 	origin.y = (mPlayNodeSize.height * 0.5) + mUIPadBack->getContentSize().height;
 
 	pos = origin - mPlayer->getPosition();
-	
+
 	//log("%f,%f", pos.y, mUIPadBack->getContentSize().height);
 	pos.y = MIN(pos.y, mUIPadBack->getContentSize().height);
 	mPlayNode->setPosition(pos);
 
 #pragma endregion
 
-#pragma region MapTileSearch
 
-	int x;
-	int y;
-	x = mPlayer->getPosition().x / mTileWidth;
-	y = mPlayer->getPosition().y / mTileWidth;
-	x = ClampI(x, 0, MAP_WIDTH - 1);
-	y = ClampI(y, 0, MAP_HEIGHT - 1);
-	auto tile = mMapTiles.at(y)->GetSprites().at(x);
-	if (tile->getColor() != Color3B::RED)
-	{
-		tile->setColor(Color3B::RED);
-	}
-
-	
-
-	x = mArrow->getPosition().x / mTileWidth;
-	y = mArrow->getPosition().y / mTileWidth;
-	x = ClampI(x, 0, MAP_WIDTH - 1);
-	y = ClampI(y, 0, MAP_HEIGHT - 1);
-	tile = mMapTiles.at(y)->GetSprites().at(x);
-	if (tile->getColor() != Color3B::GREEN)
-	{
-		tile->setColor(Color3B::GREEN);
-	}
-
-	if (mArrow->GetState() == Arrow::State::State_Shot)
-	{
-		Vec2 dir = mArrow->GetMoveDirection();
-		dir.x = dir.x > 0 ? 1 : dir.x < 0 ? -1 : 0;
-		dir.y = dir.y > 0 ? 1 : dir.y < 0 ? -1 : 0;
-
-		if (dir.x != 0)
-		{
-			int dx = ClampI(x + dir.x, 0, MAP_WIDTH - 1);
-			if (mTileSet[y][dx] != 0 &&
-				utils::getCascadeBoundingBox(mMapTiles.at(y)->GetSprites().at(dx))
-				.intersectsRect(utils::getCascadeBoundingBox(mArrow)))//바닥이 아니고 바닥이 아닌 스프라이트와 화살이 충돌 했는지
-			{
-				log("collision tile dx");
-				mArrow->OnCollisionOther(true , mMapTiles.at(y)->GetSprites().at(dx));
-				return;
-			}
-		}
-		if (dir.y != 0)
-		{
-			int dy = ClampI(y + dir.y, 0, MAP_HEIGHT - 1);
-			if (mTileSet[dy][x] != 0 &&
-				utils::getCascadeBoundingBox(mMapTiles.at(dy)->GetSprites().at(x))
-				.intersectsRect(utils::getCascadeBoundingBox(mArrow)))//바닥이 아니고 바닥이 아닌 스프라이트와 화살이 충돌 했는지
-			{
-				log("collision tile dy");
-				mArrow->OnCollisionOther(true, mMapTiles.at(dy)->GetSprites().at(x));
-				return;
-			}
-		}
-		/*log("current point %d,%d", x, y);
-		x += dir.x;
-		y += dir.y;
-		log("next point %d,%d", x, y);*/
-	}
-
-	//mArrow->OnCollisionOther(mTileSet[y][x] != 0, mMapTiles.at(y)->GetSprites().at(x));
-
-#pragma endregion
 }
 
 bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)

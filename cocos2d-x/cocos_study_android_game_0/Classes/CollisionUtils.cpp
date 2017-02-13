@@ -58,19 +58,19 @@ bool CollisionUtils::ContainsPointToPixel(Sprite * sprite, Image * image, Vec2 p
 	return result;
 }
 
-Vec2 CollisionUtils::GetPosToRectNormal(Node * node, Vec2 worldPos)
+Vec2 CollisionUtils::GetPosToRectNormal(Node * other, Vec2 worldPos)
 {
 	mNormals.clear();
 	Vec2 result;
 
-	auto rect = utils::getCascadeBoundingBox(node);//world
+	auto rect = utils::getCascadeBoundingBox(other);//world
 
 	mNormals.push_back(Vec2(rect.getMaxX(), rect.getMaxY()));
 	mNormals.push_back(Vec2(rect.getMinX(), rect.getMaxY()));
 	mNormals.push_back(Vec2(rect.getMinX(), rect.getMinY()));
 	mNormals.push_back(Vec2(rect.getMaxX(), rect.getMinY()));
 
-	auto center = node->getPosition();
+	auto center = other->getPosition();
 	center.x = rect.getMinX() + ((rect.getMaxX() - rect.getMinX()) * 0.5);
 	center.y = rect.getMinY() + ((rect.getMaxY() - rect.getMinY()) * 0.5);
 

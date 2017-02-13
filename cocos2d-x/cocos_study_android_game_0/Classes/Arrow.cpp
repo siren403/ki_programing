@@ -12,10 +12,11 @@ bool Arrow::init()
 	{
 		return false;
 	}
+	mType = ActorType::Actor_Arrow;
 
 	mSprite = Sprite::create("samples/arrow.png");
 	//frontBG->getTexture()->setAliasTexParameters();
-	mSprite->setScale(2*CC_CONTENT_SCALE_FACTOR());
+	mSprite->setScale(2 * CC_CONTENT_SCALE_FACTOR());
 	mSprite->getTexture()->setAliasTexParameters();
 	this->addChild(mSprite);
 
@@ -94,6 +95,7 @@ void Arrow::Shot()
 void Arrow::OnCollisionOther(bool isCollision, Node * other,Vec2 normal)
 {
 	mIsCollision = isCollision;
+	
 	if (mState == State::State_Shot)
 	{
 		if (mIsCollision && !mIsPrevCollision)

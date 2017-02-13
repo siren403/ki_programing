@@ -21,7 +21,7 @@ private:
 	vector<Vec2> mNormals;
 public:
 	bool ContainsPointToPixel(Sprite * sprite, Image * image, Vec2 pos);
-	Vec2 GetPosToRectNormal(Node * node, Vec2 worldPos);
+	Vec2 GetPosToRectNormal(Node * other, Vec2 worldPos);
 	float ConvertPositiveAtan2(float y,float x);
 	void LogRect(Rect rect);
 };

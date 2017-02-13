@@ -1,32 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="win32">
-      <UniqueIdentifier>{84a8ebd7-7cf0-47f6-b75e-d441df67da40}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="resource">
-      <UniqueIdentifier>{715254bc-d70b-4ec5-bf29-467dd3ace079}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src">
-      <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Scene">
-      <UniqueIdentifier>{500b394f-22d9-451a-98ba-b30f82fe5948}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Support">
-      <UniqueIdentifier>{d065bd66-04ce-4182-8e22-4167afa09980}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Actor">
-      <UniqueIdentifier>{56d8b3f7-203e-4ad5-aeda-552d1a166f63}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Actor\Boss">
-      <UniqueIdentifier>{c1540d0a-2d57-48b6-b0b3-f9cc7c8bbaaf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Map">
-      <UniqueIdentifier>{cc7cd48f-6e85-4c5c-a474-5e887198f7f8}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>win32</Filter>
     </ClCompile>
@@ -36,17 +10,38 @@
     <ClCompile Include="..\Classes\HelloWorldScene.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Actor.cpp">
+    <ClCompile Include="..\Classes\ActorManager.cpp">
       <Filter>src\Actor</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Player.cpp">
-      <Filter>src\Actor</Filter>
+    <ClCompile Include="..\Classes\Boss.cpp">
+      <Filter>src\Actor\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BossBody.cpp">
+      <Filter>src\Actor\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BossHand.cpp">
+      <Filter>src\Actor\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BossHead.cpp">
+      <Filter>src\Actor\Enemy\Boss</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\CollisionUtils.cpp">
       <Filter>src\Support</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Enemy.cpp">
+      <Filter>src\Actor\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\EnemyParts.cpp">
+      <Filter>src\Actor\Enemy</Filter>
+    </ClCompile>
     <ClCompile Include="..\Classes\SpriteAnimator.cpp">
       <Filter>src\Support</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\StopWatch.cpp">
+      <Filter>src\Support</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\PlayMap.cpp">
+      <Filter>src\Map</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\ScenePlay.cpp">
       <Filter>src\Scene</Filter>
@@ -54,37 +49,21 @@
     <ClCompile Include="..\Classes\SceneTitle.cpp">
       <Filter>src\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\StopWatch.cpp">
-      <Filter>src\Support</Filter>
+    <ClCompile Include="..\Classes\Player.cpp">
+      <Filter>src\Actor\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Actor.cpp">
+      <Filter>src\Actor</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Arrow.cpp">
-      <Filter>src\Actor</Filter>
+      <Filter>src\Actor\Arrow</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Enemy.cpp">
-      <Filter>src\Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\EnemyParts.cpp">
-      <Filter>src\Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Boss.cpp">
-      <Filter>src\Actor\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\BossBody.cpp">
-      <Filter>src\Actor\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\BossHand.cpp">
-      <Filter>src\Actor\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\BossHead.cpp">
-      <Filter>src\Actor\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\ActorManager.cpp">
-      <Filter>src\Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\SpriteVector.cpp">
-      <Filter>src\Support</Filter>
-    <ClCompile Include="..\Classes\PlayMap.cpp">
+    <ClCompile Include="..\Classes\EasingFunc.cpp" />
+    <ClCompile Include="..\Classes\MapTile.cpp">
       <Filter>src\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MapTileVector.cpp">
+      <Filter>src\Support</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -97,17 +76,38 @@
     <ClInclude Include="..\Classes\HelloWorldScene.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Actor.h">
+    <ClInclude Include="..\Classes\ActorManager.h">
       <Filter>src\Actor</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Player.h">
-      <Filter>src\Actor</Filter>
+    <ClInclude Include="..\Classes\Boss.h">
+      <Filter>src\Actor\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BossBody.h">
+      <Filter>src\Actor\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BossHand.h">
+      <Filter>src\Actor\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BossHead.h">
+      <Filter>src\Actor\Enemy\Boss</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\CollisionUtils.h">
       <Filter>src\Support</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\Enemy.h">
+      <Filter>src\Actor\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\EnemyParts.h">
+      <Filter>src\Actor\Enemy</Filter>
+    </ClInclude>
     <ClInclude Include="..\Classes\SpriteAnimator.h">
       <Filter>src\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\StopWatch.h">
+      <Filter>src\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PlayMap.h">
+      <Filter>src\Map</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\ScenePlay.h">
       <Filter>src\Scene</Filter>
@@ -115,45 +115,66 @@
     <ClInclude Include="..\Classes\SceneTitle.h">
       <Filter>src\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\StopWatch.h">
-      <Filter>src\Support</Filter>
+    <ClInclude Include="..\Classes\Player.h">
+      <Filter>src\Actor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Actor.h">
+      <Filter>src\Actor</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Arrow.h">
-      <Filter>src\Actor</Filter>
+      <Filter>src\Actor\Arrow</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Enemy.h">
-      <Filter>src\Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\EnemyParts.h">
-      <Filter>src\Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Boss.h">
-      <Filter>src\Actor\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\BossBody.h">
-      <Filter>src\Actor\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\BossHead.h">
-      <Filter>src\Actor\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\BossHand.h">
-      <Filter>src\Actor\Boss</Filter>
-    </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="..\Classes\ActorManager.h">
-      <Filter>src\Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\SpriteVector.h">
+    <ClInclude Include="..\Classes\EasingFunc.h">
       <Filter>src\Support</Filter>
-=======
-    <ClInclude Include="..\Classes\PlayMap.h">
+    </ClInclude>
+    <ClInclude Include="..\Classes\MapTile.h">
       <Filter>src\Map</Filter>
->>>>>>> 68237eb79252ec80b0ef29bcc1e1e9addd36bcf5
+    </ClInclude>
+    <ClInclude Include="..\Classes\MapTileVector.h">
+      <Filter>src\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\IntUtils.h">
+      <Filter>src\Support</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <Filter Include="resouce">
+      <UniqueIdentifier>{a4e1ce5c-1d45-45fe-a53b-f00850e290f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{7c9c7868-8129-4e30-9919-d04837701650}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="win32">
+      <UniqueIdentifier>{00fa930a-277f-44e2-8f56-d2fd3586c485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor">
+      <UniqueIdentifier>{a7e8a345-7862-40f5-b3e8-fffeb556b4c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Support">
+      <UniqueIdentifier>{0ff1b3bb-5485-4faf-99e4-75efa4bbbbf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor\Enemy">
+      <UniqueIdentifier>{2bbd083f-1ee2-4557-be93-318898ee3e8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor\Enemy\Boss">
+      <UniqueIdentifier>{37a6ace2-a422-46d3-8a5a-a11910f07a6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Map">
+      <UniqueIdentifier>{51986e31-e552-4ebc-b1ec-b38869e750aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Scene">
+      <UniqueIdentifier>{4b00b9a1-b83e-47f8-9feb-25bd86e85fc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor\Player">
+      <UniqueIdentifier>{54961745-6cd6-43f6-9df6-b39b21f029c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor\Arrow">
+      <UniqueIdentifier>{b29a0baa-2c61-40ef-bf3f-8c9dbc03ac46}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
     <ResourceCompile Include="game.rc">
-      <Filter>resource</Filter>
+      <Filter>resouce</Filter>
     </ResourceCompile>
   </ItemGroup>
 </Project>

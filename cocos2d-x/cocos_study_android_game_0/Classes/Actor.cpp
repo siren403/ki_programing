@@ -18,3 +18,12 @@ void Actor::SetAlive(bool tIsAlive)
 {
 	mIsAlive = tIsAlive;
 }
+
+void Actor::OnCollisionOther(bool isCollision, Node * other, Vec2 normal)
+{
+}
+
+ActorType Actor::GetActorType()
+{
+	return mType;
+}

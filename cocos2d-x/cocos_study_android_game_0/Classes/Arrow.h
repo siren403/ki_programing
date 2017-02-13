@@ -64,7 +64,7 @@ public:
 	void DisableLockOn();
 	void Shot();
 
-	void OnCollisionOther(bool isCollision, Node * other,Vec2 normal = Vec2::ZERO);
+	virtual void OnCollisionOther(bool isCollision, Node * other,Vec2 normal = Vec2::ZERO) override;
 	bool IsShooting();
 };
 

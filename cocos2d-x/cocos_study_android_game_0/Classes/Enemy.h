@@ -7,7 +7,6 @@
 
 using namespace cocos2d;
 
-class Arrow;
 
 class Enemy : public Actor
 {
@@ -27,7 +26,7 @@ public:
 	virtual bool GetPartsAlive();
 
 	void DestroyParts();
-	void CheckCollisionArrow(Arrow * arrow);
+	void CheckCollisionActor(Actor * actor);
 };
 
 #endif // !__CENEMY_H__
