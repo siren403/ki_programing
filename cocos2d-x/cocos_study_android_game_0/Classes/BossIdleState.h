@@ -1,0 +1,36 @@
+﻿//#ifndef __BOSSIDLESTATE_H__
+//#define __BOSSIDLESTATE_H__
+//
+//#include "EnemyFiniteState.h"
+//
+//class Boss;
+//class BossHand;
+//class BossHead;
+//
+//class BossIdleState : public EnemyFiniteState
+//{
+//private:
+//	BossHand * mLHand = nullptr;
+//	BossHand * mRHand = nullptr;
+//	float mLHandRadian = 0;
+//	float mRHandRadian = 0;
+//
+//	BossHead * mHead = nullptr;
+//	Action * mHeadAction = nullptr;
+//
+//	void HandIdleMotion(BossHand * hand, float & radian, float dt);
+//
+//	float mCurrentTime = 0;
+//
+//protected:
+//	virtual void OnEnter() override;
+//	virtual void OnUpdate(float dt) override;
+//	virtual void OnExit() override;
+//public:
+//	CREATE_STATE_FUNC(BossIdleState);
+//	virtual bool InitState() override;
+//	virtual ~BossIdleState();
+//
+//};
+//
+//#endif // !__BOSSIDLESTATE_H__

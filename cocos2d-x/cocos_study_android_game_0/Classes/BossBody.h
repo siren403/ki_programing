@@ -9,7 +9,6 @@ class BossBody : public EnemyParts
 public:
 	CREATE_FUNC(BossBody);
 	virtual bool init() override;
-	virtual void update(float dt) override;
 
 	virtual const Size GetPartsSize() override;
 };

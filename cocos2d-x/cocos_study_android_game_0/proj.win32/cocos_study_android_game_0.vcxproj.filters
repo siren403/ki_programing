@@ -13,18 +13,6 @@
     <ClCompile Include="..\Classes\ActorManager.cpp">
       <Filter>src\Actor</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Boss.cpp">
-      <Filter>src\Actor\Enemy\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\BossBody.cpp">
-      <Filter>src\Actor\Enemy\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\BossHand.cpp">
-      <Filter>src\Actor\Enemy\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\BossHead.cpp">
-      <Filter>src\Actor\Enemy\Boss</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\CollisionUtils.cpp">
       <Filter>src\Support</Filter>
     </ClCompile>
@@ -65,6 +53,30 @@
     <ClCompile Include="..\Classes\MapTileVector.cpp">
       <Filter>src\Support</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\EnemyFiniteState.cpp">
+      <Filter>src\Actor\Enemy\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Boss.cpp">
+      <Filter>src\Actor\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BossBody.cpp">
+      <Filter>src\Actor\Enemy\Boss\Parts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BossHand.cpp">
+      <Filter>src\Actor\Enemy\Boss\Parts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BossHead.cpp">
+      <Filter>src\Actor\Enemy\Boss\Parts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BossFiniteState.cpp">
+      <Filter>src\Actor\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BossHandAttackState.cpp">
+      <Filter>src\Actor\Enemy\Boss\FiniteStates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BossIdleState.cpp">
+      <Filter>src\Actor\Enemy\Boss\FiniteStates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -78,18 +90,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\ActorManager.h">
       <Filter>src\Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Boss.h">
-      <Filter>src\Actor\Enemy\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\BossBody.h">
-      <Filter>src\Actor\Enemy\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\BossHand.h">
-      <Filter>src\Actor\Enemy\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\BossHead.h">
-      <Filter>src\Actor\Enemy\Boss</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\CollisionUtils.h">
       <Filter>src\Support</Filter>
@@ -136,6 +136,30 @@
     <ClInclude Include="..\Classes\IntUtils.h">
       <Filter>src\Support</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\EnemyFiniteState.h">
+      <Filter>src\Actor\Enemy\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Boss.h">
+      <Filter>src\Actor\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BossBody.h">
+      <Filter>src\Actor\Enemy\Boss\Parts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BossHand.h">
+      <Filter>src\Actor\Enemy\Boss\Parts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BossHead.h">
+      <Filter>src\Actor\Enemy\Boss\Parts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BossFiniteState.h">
+      <Filter>src\Actor\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BossHandAttackState.h">
+      <Filter>src\Actor\Enemy\Boss\FiniteStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BossIdleState.h">
+      <Filter>src\Actor\Enemy\Boss\FiniteStates</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="resouce">
@@ -170,6 +194,15 @@
     </Filter>
     <Filter Include="src\Actor\Arrow">
       <UniqueIdentifier>{b29a0baa-2c61-40ef-bf3f-8c9dbc03ac46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor\Enemy\FSM">
+      <UniqueIdentifier>{fa15f9a1-bd52-4480-895a-96cd24be3663}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor\Enemy\Boss\Parts">
+      <UniqueIdentifier>{aeabcb66-81e0-4430-8ad0-c20135ab6af6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor\Enemy\Boss\FiniteStates">
+      <UniqueIdentifier>{77369721-0378-4f5b-9745-44154f7654cb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

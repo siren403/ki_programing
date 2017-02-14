@@ -12,26 +12,20 @@ public:
 		HandDir_Left = -1,
 		HandDir_Right = 1,
 	};
+private:
 	enum State
 	{
 		Idle = 0,
-		Attack = 1,
+		Attack_Shot = 1,
 	};
-private:
-	char mHandDir = 0;
-	
-	Vec2 mInitPos;
-	
 	BossHand::State mState;
-	
-	//idle
-	float mIdleRadian = 0;
 
-	//attack
+	char mHandDirection = 0;
+	Vec2 mInitPosision;
+	
+	float mCurrentTime = 0;
 	Vec2 mAttackTargetPos;
 
-
-	void UpdateIdle(float dt);
 	void UpdateAttack(float dt);
 public:
 	CREATE_FUNC(BossHand);
@@ -41,7 +35,11 @@ public:
 
 	void InitHand(HandDir dir);
 
-	void OnAttack(Vec2 localPos);
+	//get,set
+	Vec2 GetInitPosition();
+	char GetHandDirection();
+
+	void OnAttack(Vec2 pos);
 };
 
 #endif // !__BOSSHAND_H__

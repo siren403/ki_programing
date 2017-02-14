@@ -159,6 +159,7 @@ void Player::OnCollisionOther(bool isCollision, Node * other, Vec2 normal)
 			switch (actor->GetActorType())
 			{
 			case ActorType::Actor_Tile:
+			case ActorType::Actor_EnemyParts:
 				//log("normal : %f,%f", normal.x, normal.y);
 				if (normal.x != 0)
 				{
@@ -168,8 +169,6 @@ void Player::OnCollisionOther(bool isCollision, Node * other, Vec2 normal)
 				{
 					mIsHorizontalCollision = true;
 				}
-				break;
-			case ActorType::Actor_EnemyParts:
 				
 				break;
 			}

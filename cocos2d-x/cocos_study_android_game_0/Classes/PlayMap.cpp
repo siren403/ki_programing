@@ -71,7 +71,7 @@ bool PlayMap::init()
 
 #pragma endregion
 
-	log("%s", mParseMapData.at(0).tileDatas.at(3).fileName.c_str());
+	//log("%s", mParseMapData.at(0).tileDatas.at(3).fileName.c_str());
 
 	return true;
 }
@@ -95,7 +95,7 @@ MapTile * PlayMap::GetTile(Vec2 pos)
 {
 	MapTile * tile = nullptr;
 	Vec2I tileIndex = this->GetTileIndex(pos);
-	log("tileIndex %d,%d", tileIndex.x, tileIndex.y);
+	//log("tileIndex %d,%d", tileIndex.x, tileIndex.y);
 	tile = this->GetTile(tileIndex);
 	return tile;
 }

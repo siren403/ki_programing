@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "Arrow.h"
+#include "EnemyFiniteState.h"
 
 bool Enemy::init()
 {
@@ -8,82 +9,81 @@ bool Enemy::init()
 		return false;
 	}
 
-
+	this->scheduleUpdate();
 	return true;
 }
 
-void Enemy::AddParts(EnemyParts * tParts)
+void Enemy::update(float dt)
 {
-	mParts.pushBack(tParts);
-	this->addChild(tParts);
+	if (mCurrentFiniteState != nullptr)
+	{
+		mCurrentFiniteState->OnUpdate(dt);
+	}
 }
 
-//Actor -> this -> mParts
-//���ڷ� �Ѿ��� ������ �Ѿ˿�
-//�ڽ� ������ �浹���� üũ �� ���� ����
-// bool Enemy::checkCollisionBulletToParts(CBullet * tBullet)
-// {
-// 	if (mParts.size() > 0)
-// 	{
-// 		for (int i = 0; i < mParts.size(); i++)
-// 		{
-// 			if (mParts.at(i)->getIsAlive())
-// 			{
-// 				if (utils::getCascadeBoundingBox(mParts.at(i))
-// 					.intersectsCircle(
-// 						tBullet->getPosition(),
-// 						tBullet->getSprite()->getContentSize().width * 0.5
-// 					))
-// 				{
-// 					//log("collision");
-// 					mParts.at(i)->Hit();
-// 					return true;
-// 				}//isCollision?
-// 			}//isVisible?
-// 		}//loop Parts
-// 	}//Parts Count > 0
-// 	return false;
-// }
-
-
-bool Enemy::GetPartsAlive()
+void Enemy::AddState(int key, EnemyFiniteState * state)
 {
-	if (mParts.size() > 0)
+	mFiniteState.insert(EnemyFSMap::value_type(key, state));
+}
+void Enemy::ChangeState(int key)
+{
+	if (mIsScheduleUpdate == false)
 	{
-		for (int i = 0; i < mParts.size(); i++)
-		{
-			if (mParts.at(i)->IsAlive())
-			{
-				return true;
-			}
-		}
+		this->scheduleUpdate();
+		mIsScheduleUpdate = true;
+	}
+	auto state = mFiniteState.find(key);
+
+	if (mCurrentFiniteState == (*state).second)
+	{
+		log("not change state : state to equals %d",key);
+		return;
 	}
 
-	return false;
+	if (mCurrentFiniteState != nullptr)
+	{
+		mCurrentFiniteState->OnExit();
+	}
+
+	if (state != mFiniteState.end())
+	{
+		mCurrentFiniteState = (*state).second;
+		mCurrentFiniteState->OnEnter();
+	}
+
 }
 
+void Enemy::AddParts(int key, EnemyParts * tParts, int localZOrder)
+{
+	mParts.insert(key, tParts);
+	this->addChild(tParts, localZOrder);
+}
+
+EnemyParts * Enemy::GetParts(int key)
+{
+	auto parts = mParts.find(key);
+	if (parts != mParts.end())
+	{
+		return parts->second;
+	}
+	return nullptr;
+}
 
 void Enemy::SetAlive(bool tIsAlive)
 {
-	if (mParts.size() > 0)
+	for (mMapPartItor = mParts.begin(); mMapPartItor != mParts.end(); ++mMapPartItor)
 	{
-		for (int i = 0; i < mParts.size(); i++)
-		{
-			mParts.at(i)->SetAlive(tIsAlive);
-		}
+		mMapPartItor->second->SetAlive(tIsAlive);
 	}
 }
 
 bool Enemy::IsAlive()
 {
-	if (mParts.size() > 0)
+	for (mMapPartItor = mParts.begin(); mMapPartItor != mParts.end(); ++mMapPartItor)
 	{
-		for (int i = 0; i < mParts.size(); i++)
+		if (mMapPartItor->second->IsAlive())
 		{
-			if (mParts.at(i)->IsAlive())
-			{
-				return true;
-			}
+			return true;
 		}
 	}
 	return false;
@@ -112,19 +112,30 @@ void Enemy::CheckCollisionActor(Actor * actor)
 	Rect actorRect = utils::getCascadeBoundingBox(actor);
 	Rect partsRect;
 
-	if (mParts.size() > 0)
+	for (mMapPartItor = mParts.begin(); mMapPartItor != mParts.end(); ++mMapPartItor)
 	{
-		for (int i = 0; i < mParts.size(); i++)
+		partsRect = utils::getCascadeBoundingBox(mMapPartItor->second);
+		if (actorRect.intersectsRect(partsRect))
 		{
-			partsRect = utils::getCascadeBoundingBox(mParts.at(i));
-			if (actorRect.intersectsRect(partsRect))
-			{
-				isCollision = true;
-				other = mParts.at(i);
-				break;
-			}
+			isCollision = true;
+			other = mMapPartItor->second;
+			break;
 		}
 	}
 	
 	actor->OnCollisionOther(isCollision, other);
+}
+
+
+
+Enemy::~Enemy()
+{
+	EnemyFSMap::iterator itor;
+	for (itor = mFiniteState.begin(); itor != mFiniteState.end(); ++itor)
+	{
+		delete (*itor).second;
+	}
+	mFiniteState.clear();
+
+	log("enemy destroy");
 }

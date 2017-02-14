@@ -8,7 +8,6 @@ class BossHead : public EnemyParts
 public:
 	CREATE_FUNC(BossHead);
 	virtual bool init() override;
-	virtual void update(float dt) override;
 
 	virtual const Size GetPartsSize() override;
 };

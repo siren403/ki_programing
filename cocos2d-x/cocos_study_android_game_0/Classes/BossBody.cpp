@@ -13,10 +13,6 @@ bool BossBody::init()
 	return true;
 }
 
-void BossBody::update(float dt)
-{
-
-}
 
 const Size BossBody::GetPartsSize()
 {
