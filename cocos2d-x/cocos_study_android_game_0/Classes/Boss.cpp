@@ -1,10 +1,5 @@
 #include "Boss.h"
-#include "BossBody.h"
-#include "BossHead.h"
-#include "BossHand.h"
-
-//#include "BossIdleState.h"
-//#include "BossHandAttackState.h"
+#include "BossParts.h"
 #include "BossFiniteState.h"
 
 #include "ActorManager.h"
@@ -37,11 +32,8 @@ bool Boss::init()
 	this->setScale(1.5 * CC_CONTENT_SCALE_FACTOR());
 
 
-	//Finite State Test
-
 	this->AddState(State::State_Idle, BossIdleState::Create(this));
-	//this->AddState(State::State_HandAttack, new BossHandAttackState(this));
-
+	this->AddState(State::State_HandAttack, BossHandAttackState::Create(this));
 
 	this->ChangeState(State::State_Idle);
 

@@ -54,11 +54,11 @@ void Player::update(float dt)
 			updateMove(dt);
 			break;
 		}
-		Vec2 pos = this->getPosition();
+		/*Vec2 pos = this->getPosition();
 		pos.clamp(Vec2(mSpriteAnim->GetSprite()->getContentSize().width*0.5f, 
 			mSpriteAnim->GetSprite()->getContentSize().width*0.5f), mMoveArea);
 
-		this->setPosition(pos);
+		this->setPosition(pos);*/
 	}
 }
 Sprite * Player::GetSprite()

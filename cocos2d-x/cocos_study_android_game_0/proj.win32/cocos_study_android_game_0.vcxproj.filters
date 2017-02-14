@@ -46,7 +46,6 @@
     <ClCompile Include="..\Classes\Arrow.cpp">
       <Filter>src\Actor\Arrow</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\EasingFunc.cpp" />
     <ClCompile Include="..\Classes\MapTile.cpp">
       <Filter>src\Map</Filter>
     </ClCompile>
@@ -59,23 +58,20 @@
     <ClCompile Include="..\Classes\Boss.cpp">
       <Filter>src\Actor\Enemy\Boss</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\BossBody.cpp">
-      <Filter>src\Actor\Enemy\Boss\Parts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\BossHand.cpp">
-      <Filter>src\Actor\Enemy\Boss\Parts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\BossHead.cpp">
-      <Filter>src\Actor\Enemy\Boss\Parts</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\BossFiniteState.cpp">
       <Filter>src\Actor\Enemy\Boss</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\BossHandAttackState.cpp">
-      <Filter>src\Actor\Enemy\Boss\FiniteStates</Filter>
+    <ClCompile Include="..\Classes\BossParts.cpp">
+      <Filter>src\Actor\Enemy\Boss</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\BossIdleState.cpp">
-      <Filter>src\Actor\Enemy\Boss\FiniteStates</Filter>
+    <ClCompile Include="..\Classes\DataManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\EasingFunc.cpp">
+      <Filter>src\Support</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\IntUtils.cpp">
+      <Filter>src\Support</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,23 +138,14 @@
     <ClInclude Include="..\Classes\Boss.h">
       <Filter>src\Actor\Enemy\Boss</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\BossBody.h">
-      <Filter>src\Actor\Enemy\Boss\Parts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\BossHand.h">
-      <Filter>src\Actor\Enemy\Boss\Parts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\BossHead.h">
-      <Filter>src\Actor\Enemy\Boss\Parts</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\BossFiniteState.h">
       <Filter>src\Actor\Enemy\Boss</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\BossHandAttackState.h">
-      <Filter>src\Actor\Enemy\Boss\FiniteStates</Filter>
+    <ClInclude Include="..\Classes\BossParts.h">
+      <Filter>src\Actor\Enemy\Boss</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\BossIdleState.h">
-      <Filter>src\Actor\Enemy\Boss\FiniteStates</Filter>
+    <ClInclude Include="..\Classes\DataManager.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -197,12 +184,6 @@
     </Filter>
     <Filter Include="src\Actor\Enemy\FSM">
       <UniqueIdentifier>{fa15f9a1-bd52-4480-895a-96cd24be3663}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Actor\Enemy\Boss\Parts">
-      <UniqueIdentifier>{aeabcb66-81e0-4430-8ad0-c20135ab6af6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Actor\Enemy\Boss\FiniteStates">
-      <UniqueIdentifier>{77369721-0378-4f5b-9745-44154f7654cb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

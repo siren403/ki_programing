@@ -4,7 +4,6 @@
 #pragma execution_character_set("utf-8")
 
 #include "cocos2d.h"
-#include "Player.h"
 #include "Arrow.h"
 #include <map>
 
@@ -18,6 +17,7 @@ class StopWatch;
 class Enemy;
 class MapTileVector;
 class PlayMap;
+class Player;
 
 enum TouchState
 {
@@ -35,6 +35,8 @@ private:
 	Node * mUINode = nullptr;//RenderNode에 속하는 UI부분 노드 ex) 컨트롤러,...
 	Node * mPlayNode = nullptr;//UI노드와 같은 레벨의 플레이 부분 노드, ex) 맵,플레이어,적,...
 	Node * mMapNode = nullptr;//PlayNode 하위의 타일맵 노드
+
+	Size mPlayNodeSize;
 
 	//player
 	Player * mPlayer = nullptr;
@@ -55,12 +57,13 @@ private:
 	//Map
 	PlayMap * mPlayMap;
 
-
-	Size mPlayNodeSize;
-
+	//Enemy
 	Enemy * mCurrentEnemy = nullptr;
 
-	int ClampI(int value, int min, int max);
+	//GameState
+	int mCurrentRoomIndex = 0;
+
+	void RoomSetting();
 public:
 	static Scene * createScene();
 	CREATE_FUNC(ScenePlay);

@@ -1,5 +1,45 @@
-#include "BossHand.h"
+#include "BossParts.h"
 #include "EasingFunc.h"
+
+bool BossHead::init()
+{
+	if (!EnemyParts::init())
+	{
+		return false;
+	}
+
+	auto sprite = this->SetSprite(Sprite::create("samples/boss_1_head.png"), 1);
+	sprite->getTexture()->setAliasTexParameters();
+
+	return true;
+}
+const Size BossHead::GetPartsSize()
+{
+	return this->GetSprite()->getContentSize();
+}
+
+
+
+
+bool BossBody::init()
+{
+	if (!EnemyParts::init())
+	{
+		return false;
+	}
+
+	auto sprite = this->SetSprite(Sprite::create("samples/boss_1_body.png"), 1);
+	sprite->getTexture()->setAliasTexParameters();
+
+	return true;
+}
+const Size BossBody::GetPartsSize()
+{
+	return GetSprite()->getContentSize();
+}
+
+
+
 
 bool BossHand::init()
 {
@@ -16,15 +56,11 @@ bool BossHand::init()
 	this->scheduleUpdate();
 	return true;
 }
-
-
-
 void BossHand::InitHand(HandDir dir)
 {
 	mHandDirection = dir;
 	GetSprite()->setFlipX(mHandDirection == HandDir::HandDir_Left ? false : true);
 }
-
 Vec2 BossHand::GetInitPosition()
 {
 	return mInitPosision;
@@ -67,14 +103,8 @@ void BossHand::UpdateAttack(float dt)
 	//complete
 	//mState = State::Idle;
 }
-
-
-
-
 void BossHand::onEnter()
 {
 	EnemyParts::onEnter();
 	mInitPosision = this->getPosition();
 }
-
-

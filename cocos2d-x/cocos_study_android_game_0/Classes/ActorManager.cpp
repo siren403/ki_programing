@@ -1,13 +1,8 @@
 #include "ActorManager.h"
+#include "Player.h"
+#include "Boss.h"
 
 ActorManager * ActorManager::mInstance = nullptr;
-
-ActorManager::ActorManager()
-{
-}
-ActorManager::~ActorManager()
-{
-}
 
 ActorManager * ActorManager::GetInstance()
 {
@@ -18,12 +13,36 @@ ActorManager * ActorManager::GetInstance()
 	return mInstance;
 }
 
-void ActorManager::SetPlayer(Player * player)
+ActorManager::ActorManager()
 {
-	mPlayer = player;
+	mEnemyCreateFunctions.insert(pair<int, EnemyCreateFunc>(1, []() 
+	{
+		return Boss::create();
+	}));
 }
 
 Player * ActorManager::GetPlayer()
 {
+	if (mPlayer == nullptr)
+	{
+		mPlayer = Player::create();
+		mPlayer->retain();
+	}
 	return mPlayer;
+}
+
+Enemy * ActorManager::GetEnemy(int key)
+{
+	auto func = mEnemyCreateFunctions.find(key);
+
+	if (func != mEnemyCreateFunctions.end())
+	{
+		return func->second();
+	}
+	return nullptr;
+}
+
+ActorManager::~ActorManager()
+{
+	CC_SAFE_RELEASE_NULL(mPlayer);
 }

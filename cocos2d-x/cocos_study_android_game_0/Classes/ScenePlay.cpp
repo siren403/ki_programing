@@ -1,11 +1,15 @@
 #include "ScenePlay.h"
+
+#include "Player.h"
 #include "CollisionUtils.h"
 #include "StopWatch.h"
 #include "Boss.h"
 #include "ActorManager.h"
 #include "PlayMap.h"
 #include "MapTile.h"
+#include "DataManager.h"
 
+#define ZORDER_ENEMY 5
 
 Scene * ScenePlay::createScene()
 {
@@ -72,43 +76,39 @@ bool ScenePlay::init()
 
 	mRenderNode->addChild(mPlayNode, 0);
 
-#pragma region Map 
 	
+
+	
+
+
+	
+	
+#pragma region Create
 	mPlayMap = PlayMap::create();
-	mPlayMap->CreateTiles(0);
-	mPlayMap->setScale(2 * CC_CONTENT_SCALE_FACTOR());
 	mPlayNode->addChild(mPlayMap, 0);
 
-	Size mapContentSize = mPlayMap->GetMapContentSize();
-#pragma endregion
-
-#pragma region Player
-
-	mPlayer = Player::create();
-	mPlayer->setPosition(mapContentSize.width*0.5, mapContentSize.height*0.2);
-	//mPlayer->setPosition(mapContentSize.width*0.0, mapContentSize.height*0.0);
-
-	mPlayer->SetIsControl(true);
-	mPlayer->SetMoveArea(mapContentSize);
+	mPlayer = ActorManager::GetInstance()->GetPlayer();
 	mPlayNode->addChild(mPlayer, 1);
 
 	mArrow = Arrow::create();
 	mArrow->InitWithPlayer(mPlayer);
 	mPlayNode->addChild(mArrow, mPlayer->getLocalZOrder() + 1);
 
-	ActorManager::GetInstance()->SetPlayer(mPlayer);
-
 
 #pragma endregion
-
-#pragma region Enemy
-
-	mCurrentEnemy = Boss::create();
-	mCurrentEnemy->setPosition(mapContentSize.width * 0.5, mapContentSize.height * 0.55);
-	mPlayNode->addChild(mCurrentEnemy, 5);
-
-#pragma endregion
-
+	
+	RoomSetting();
+	auto tSeq = Sequence::create(
+		DelayTime::create(2),
+		CallFunc::create([this]()
+	{
+		mCurrentRoomIndex = 1;
+		RoomSetting();
+		mPlayer->SetIsControl(true);
+	}),
+		nullptr
+		);
+	this->runAction(tSeq);
 
 	//auto Spr = Sprite::create("CloseNormal.png");
 	//Spr->setScale(0.5);
@@ -119,6 +119,38 @@ bool ScenePlay::init()
 	this->scheduleUpdate();
 	return true;
 }
+
+
+void ScenePlay::RoomSetting()
+{
+	mPlayMap->CreateTiles(mCurrentRoomIndex);
+	//todo : 타일 리소스 크기 변경 : x2
+	mPlayMap->setScale(2 * CC_CONTENT_SCALE_FACTOR());
+
+	auto stageData = DataManager::GetInstance()->GetStageData(mCurrentRoomIndex);
+	if (stageData != nullptr)
+	{
+		if (mCurrentEnemy != nullptr)
+		{
+			mPlayNode->removeChild(mCurrentEnemy);
+		}
+		mCurrentEnemy = ActorManager::GetInstance()->GetEnemy(stageData->enemy.id);
+		Vec2 pos;
+		pos.x = mPlayMap->GetMapContentSize().width * stageData->enemy.position.x;
+		pos.y = mPlayMap->GetMapContentSize().height * stageData->enemy.position.y;
+		mCurrentEnemy->setPosition(pos);
+		mPlayNode->addChild(mCurrentEnemy, ZORDER_ENEMY);
+	}
+
+	mPlayer->setPosition(mPlayMap->GetMapContentSize().width*0.5, mPlayMap->GetMapContentSize().height*0.05);
+	mPlayer->SetIsControl(false);
+	
+	mArrow->LockOn(Vec2(0, 1));
+	//mPlayer->SetMoveArea(mapContentSize);
+
+	
+}
+
 
 void ScenePlay::onEnter()
 {
@@ -154,7 +186,10 @@ void ScenePlay::update(float dt)
 #pragma endregion
 #pragma region Player Collision
 
-	mCurrentEnemy->CheckCollisionActor(mPlayer);
+	if (mCurrentEnemy != nullptr)
+	{
+		mCurrentEnemy->CheckCollisionActor(mPlayer);
+	}
 	mPlayMap->CheckCollisionTile(mPlayer, mPlayer->GetMoveDir());
 
 #pragma endregion
@@ -200,6 +235,11 @@ void ScenePlay::update(float dt)
 
 bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)
 {
+	if (mPlayer->GetIsControl() == false)
+	{
+		return false;
+	}
+
 	bool isTouchMoved = false;
 	auto touchPos = mUINode->convertToNodeSpace(touch->getLocation());
 	if (mUIPadBack->getBoundingBox().containsPoint(touchPos))
@@ -313,7 +353,3 @@ void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 
 }
 
-int ScenePlay::ClampI(int value, int min, int max)
-{
-	return value < min ? min : value>max ? max : value;
-}

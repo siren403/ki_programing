@@ -2,9 +2,16 @@
 #define __ACTORMANAGER_H__
 
 #include "cocos2d.h"
+#include <map>
+#include <functional>
+
+using namespace std;
 
 class Actor;
 class Player;
+class Enemy;
+
+typedef function<Enemy*()> EnemyCreateFunc;
 
 class ActorManager
 {
@@ -15,13 +22,14 @@ private:
 public:
 	static ActorManager * GetInstance();
 
-
 private:
 	Player * mPlayer = nullptr;
-public:
-	void SetPlayer(Player * player);
-	Player * GetPlayer();
+	Enemy * mEnemy = nullptr;
 
+	map<int,EnemyCreateFunc> mEnemyCreateFunctions;
+public:
+	Player * GetPlayer();
+	Enemy * GetEnemy(int key);
 };
 
 #endif // !__ACTORMANAGER_H__

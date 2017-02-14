@@ -1,9 +1,25 @@
-#ifndef __BOSSHAND_H__
-#define __BOSSHAND_H__
+#pragma once
 
 #include "EnemyParts.h"
 
+class BossHead : public EnemyParts
+{
+public:
+	CREATE_FUNC(BossHead);
+	virtual bool init() override;
 
+	virtual const Size GetPartsSize() override;
+};
+
+class BossBody : public EnemyParts
+{
+public:
+	CREATE_FUNC(BossBody);
+	virtual bool init() override;
+
+	virtual const Size GetPartsSize() override;
+};
+ 
 class BossHand : public EnemyParts
 {
 public:
@@ -22,7 +38,7 @@ private:
 
 	char mHandDirection = 0;
 	Vec2 mInitPosision;
-	
+
 	float mCurrentTime = 0;
 	Vec2 mAttackTargetPos;
 
@@ -41,5 +57,3 @@ public:
 
 	void OnAttack(Vec2 pos);
 };
-
-#endif // !__BOSSHAND_H__

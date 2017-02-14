@@ -34,9 +34,9 @@ void Enemy::ChangeState(int key)
 	}
 	auto state = mFiniteState.find(key);
 
-	if (mCurrentFiniteState == (*state).second)
+	if (state != mFiniteState.end() && mCurrentFiniteState == (*state).second)
 	{
-		log("not change state : state to equals %d",key);
+		log("not change state : state to equals %d", key);
 		return;
 	}
 

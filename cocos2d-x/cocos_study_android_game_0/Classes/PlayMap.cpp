@@ -1,11 +1,6 @@
 #include "PlayMap.h"
-#include "json\document.h"
-#include "json\reader.h"
 #include "Actor.h"
 #include "MapTile.h"
-#include <algorithm>
-
-using namespace rapidjson;
 
 bool PlayMap::init()
 {
@@ -14,64 +9,7 @@ bool PlayMap::init()
 		return false;
 	}
 	
-#pragma region Load Json Data
-
-
-	string tJsonData = FileUtils::getInstance()->
-		getStringFromFile("data/playmap.json");
-	log("read file data : %s", tJsonData.c_str());
-
-	Document doc;
-
-	if (doc.Parse<0>(tJsonData.c_str()).HasParseError())
-	{
-		log("parse error : %s", doc.GetParseError());
-		return true;
-	}
-
-	rapidjson::Value & docMaps = doc["maps"];
-	for (int mapIndex = 0; mapIndex < docMaps.Size(); mapIndex++)
-	{
-		rapidjson::Value & docMapData = docMaps[mapIndex];
-		MapData curMapData;
-
-		//tileDatas
-		rapidjson::Value & docTileDatas = docMapData["tileDatas"];
-		for (int i = 0; i < docTileDatas.Size(); i++)
-		{
-			int key = docTileDatas[i]["key"].GetInt();
-			
-			rapidjson::Value & docTileData = docTileDatas[i]["data"];
-			TileData curTileData;
-			curTileData.fileName = docTileData["fileName"].GetString();
-			curTileData.isCollision = docTileData["isCollision"].GetBool();
-			
-			curMapData.tileDatas.insert(pair<int, TileData>(key, curTileData));
-		}
-
-		//tilePlace
-		rapidjson::Value & docTilePlacement = docMapData["tilePlacement"];
-		curMapData.tilePlacement.reserve(docTilePlacement.Size());
-		for (int y = 0; y < docTilePlacement.Size(); y++)
-		{
-			vector<int> cols;
-			cols.reserve(docTilePlacement[y].Size());
-			for (int x = 0; x < docTilePlacement[y].Size(); x++)
-			{
-				cols.push_back(docTilePlacement[y][x].GetInt());
-			}
-			curMapData.tilePlacement.push_back(cols);
-		}
-		reverse(curMapData.tilePlacement.begin(), curMapData.tilePlacement.end());
-
-		mParseMapData.push_back(curMapData);
-	}
-
-	doc.RemoveAllMembers();
-
-#pragma endregion
-
-	//log("%s", mParseMapData.at(0).tileDatas.at(3).fileName.c_str());
+	mCurrentMapData = DataManager::GetInstance()->GetMapData(mCurrentMapIndex);
 
 	return true;
 }
@@ -102,8 +40,8 @@ MapTile * PlayMap::GetTile(Vec2 pos)
 
 TileData const PlayMap::GetTileData(Vec2I tileIndex)
 {
-	auto mapData = mParseMapData[mCurrentMapIndex];
-	return mapData.tileDatas.at(mapData.tilePlacement[tileIndex.y][tileIndex.x]);
+	//auto mapData = mParseMapData[mCurrentMapIndex];
+	return mCurrentMapData->tileDatas.at(mCurrentMapData->tilePlacement[tileIndex.y][tileIndex.x]);
 }
 
 MapTile * PlayMap::GetTile(Vec2 pos, Vec2I & outTileIndex)
@@ -129,15 +67,15 @@ Vec2I PlayMap::GetTileIndex(Vec2 pos)
 
 	tileIndx.x = pos.x / this->GetTileWidth();
 	tileIndx.y = pos.y / this->GetTileWidth();
-	tileIndx.x = ClampI(tileIndx.x, 0, mCurrentMapWidth - 1);
-	tileIndx.y = ClampI(tileIndx.y, 0, mCurrentMapHeight - 1);
+	tileIndx.x = IntUtils::ClampI(tileIndx.x, 0, mCurrentMapWidth - 1);
+	tileIndx.y = IntUtils::ClampI(tileIndx.y, 0, mCurrentMapHeight - 1);
 
 	return tileIndx;
 }
 
 int PlayMap::GetTilePlacementData(Vec2I tileIndex)
 {
-	return mParseMapData[mCurrentMapIndex].tilePlacement[tileIndex.y][tileIndex.x];
+	return mCurrentMapData->tilePlacement[tileIndex.y][tileIndex.x];
 }
 
 void PlayMap::CreateTiles(int mapIndex)
@@ -145,13 +83,18 @@ void PlayMap::CreateTiles(int mapIndex)
 	mCurrentMapIndex = mapIndex;
 	RemoveTiles();
 
-	auto curMapData = mParseMapData.at(mCurrentMapIndex);
-
-	mCurrentTiles.reserve(curMapData.tilePlacement.size());
-	for (int y = 0; y < curMapData.tilePlacement.size(); y++)
+	mCurrentMapData = DataManager::GetInstance()->GetMapData(mapIndex);
+	if (mCurrentMapData == nullptr)
 	{
-		MapTileVector * cols = new MapTileVector(curMapData.tilePlacement.at(y).size());
-		for (int x = 0; x < curMapData.tilePlacement.at(y).size(); x++)
+		return;
+	}
+	//auto curMapData = mParseMapData.at(mCurrentMapIndex);
+
+	mCurrentTiles.reserve(mCurrentMapData->tilePlacement.size());
+	for (int y = 0; y < mCurrentMapData->tilePlacement.size(); y++)
+	{
+		MapTileVector * cols = new MapTileVector(mCurrentMapData->tilePlacement.at(y).size());
+		for (int x = 0; x < mCurrentMapData->tilePlacement.at(y).size(); x++)
 		{
 			//auto mapTile = Sprite::create(curMapData.tileDatas[curMapData.tilePlacement.at(y).at(x)].fileName);
 			auto mapTile = MapTile::create();
@@ -173,8 +116,8 @@ void PlayMap::CreateTiles(int mapIndex)
 		mCurrentTiles.pushBack(cols);
 	}
 	
-	mCurrentMapWidth = curMapData.tilePlacement.at(0).size();
-	mCurrentMapHeight = curMapData.tilePlacement.size();
+	mCurrentMapWidth = mCurrentMapData->tilePlacement.at(0).size();
+	mCurrentMapHeight = mCurrentMapData->tilePlacement.size();
 }
 
 
@@ -204,11 +147,11 @@ void PlayMap::CheckCollisionTile(Actor * actor, Vec2 dir)
 
 	if (dir.x != 0)
 	{
-		Vec2I deltaTileIndex = Vec2I(ClampI(tileIndex.x + dir.x, 0, mCurrentMapWidth - 1), tileIndex.y);
+		Vec2I deltaTileIndex = Vec2I(IntUtils::ClampI(tileIndex.x + dir.x, 0, mCurrentMapWidth - 1), tileIndex.y);
 		MapTile * tile = this->GetTile(deltaTileIndex);
-		int tileType = mParseMapData[mCurrentMapIndex].tilePlacement[deltaTileIndex.y][deltaTileIndex.x];
+		int tileType = mCurrentMapData->tilePlacement[deltaTileIndex.y][deltaTileIndex.x];
 
-		if (mParseMapData[mCurrentMapIndex].tileDatas.at(tileType).isCollision &&
+		if (mCurrentMapData->tileDatas.at(tileType).isCollision &&
 			utils::getCascadeBoundingBox(tile).intersectsRect(utils::getCascadeBoundingBox(actor)))
 		{
 			//	log("collision tile dx");
@@ -222,11 +165,11 @@ void PlayMap::CheckCollisionTile(Actor * actor, Vec2 dir)
 
 	if (dir.y != 0)
 	{
-		Vec2I deltaTileIndex = Vec2I(tileIndex.x, ClampI(tileIndex.y + dir.y, 0, mCurrentMapHeight - 1));
-		int tileType = mParseMapData[mCurrentMapIndex].tilePlacement[deltaTileIndex.y][deltaTileIndex.x];
+		Vec2I deltaTileIndex = Vec2I(tileIndex.x, IntUtils::ClampI(tileIndex.y + dir.y, 0, mCurrentMapHeight - 1));
+		int tileType = mCurrentMapData->tilePlacement[deltaTileIndex.y][deltaTileIndex.x];
 
 		MapTile * tile = this->GetTile(deltaTileIndex);
-		if (mParseMapData[mCurrentMapIndex].tileDatas.at(tileType).isCollision &&
+		if (mCurrentMapData->tileDatas.at(tileType).isCollision &&
 			utils::getCascadeBoundingBox(tile).intersectsRect(utils::getCascadeBoundingBox(actor)))
 		{
 			actor->OnCollisionOther(true, tile);
@@ -239,7 +182,3 @@ void PlayMap::CheckCollisionTile(Actor * actor, Vec2 dir)
 }
 
 
-int PlayMap::ClampI(int value, int min, int max)
-{
-	return value < min ? min : value>max ? max : value;
-}

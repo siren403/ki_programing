@@ -4,40 +4,37 @@
 #include "cocos2d.h"
 #include "MapTileVector.h"
 #include "IntUtils.h"
-
-#include <map>
-#include <vector>
+#include "DataManager.h"
 
 using namespace cocos2d;
-using namespace std;
 
 class Actor;
 
-struct TileData
-{
-	string fileName;
-	bool isCollision;
-};
-
-struct MapData
-{
-	map<int, TileData> tileDatas;
-	vector<vector<int>> tilePlacement;
-};
+//struct TileData
+//{
+//	string fileName;
+//	bool isCollision;
+//};
+//
+//struct MapData
+//{
+//	map<int, TileData> tileDatas;
+//	vector<vector<int>> tilePlacement;
+//};
 
 class PlayMap : public Node
 {
 private:
 
-	vector<MapData> mParseMapData;
+	//vector<MapData> mParseMapData;
 	int mCurrentMapIndex = 0;
+	MapData * mCurrentMapData = nullptr;
 
 	int mTileWidth = 0;
 	int mCurrentMapWidth = 0;
 	int mCurrentMapHeight = 0;
 	Vector<MapTileVector *> mCurrentTiles;
 
-	int ClampI(int value, int min, int max);
 public:
 	CREATE_FUNC(PlayMap);
 	virtual bool init() override;

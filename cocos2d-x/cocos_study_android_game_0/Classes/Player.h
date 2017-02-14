@@ -7,9 +7,11 @@
 using namespace cocos2d;
 
 class SpriteAnimator;
+class ActorManager;
 
 class Player : public Actor
 {
+	friend ActorManager;
 public:
 	enum State
 	{
@@ -50,10 +52,9 @@ private:
 	void updateMove(float dt);
 	void updateRoll(float dt);
 
+	CREATE_FUNC(Player);
 	virtual ~Player();
 public:
-	CREATE_FUNC(Player);
-
 	//라이프사이클 오버라이드
 	virtual bool init() override;
 	virtual void update(float dt) override;

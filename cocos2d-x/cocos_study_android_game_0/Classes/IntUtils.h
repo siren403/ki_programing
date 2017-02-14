@@ -21,7 +21,9 @@ struct Vec2I
 
 class IntUtils
 {
-
+public:
+	static int ClampI(int value, int min, int max);
+	
 };
 
 #endif // !__INTUTILS_H__
