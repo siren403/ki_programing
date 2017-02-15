@@ -60,8 +60,8 @@ bool ScenePlay::init()
 	mUIPadFrontImage->autorelease();
 	mUIPadFrontImage->retain();
 
-
 	mPadMaxDistance = 3;
+
 #pragma endregion
 
 
@@ -81,8 +81,10 @@ bool ScenePlay::init()
 	mPlayNodeSize = Size(visibleSize.width, visibleSize.height - uiPadBackSize.height);
 	mPlayNode = Node::create();
 	mPlayNode->setPosition(Vec2(0, uiPadBackSize.height));
-
 	mRenderNode->addChild(mPlayNode, 0);
+
+	mPlayNodeOffsetScalar = 300;
+	mPlayNodeOffsetDirection = Vec2::ZERO;
 
 #pragma region Create
 	mPlayMap = PlayMap::create();
@@ -170,7 +172,7 @@ void ScenePlay::RoomSetting()
 	//mPlayer->setPosition();
 	Vec2 initPos;
 	initPos.x = mPlayMap->GetMapContentSize().width * 0.5;
-	initPos.y = mPlayMap->GetMapContentSize().height * 0.05;
+	initPos.y = mPlayMap->GetMapContentSize().height * 0.1;
 	mPlayer->InitPosition(initPos);
 
 
@@ -178,30 +180,8 @@ void ScenePlay::RoomSetting()
 
 	mArrow->LockOn(Vec2(0, 1), true);
 
-	CalculatePlayNodePosition();
+	CalculatePlayNodePosition(1);
 	
-}
-void ScenePlay::CalculatePlayNodePosition()
-{
-	Vec2 pos = mPlayer->getPosition();
-	//log("%f,%f", pos.x, pos.y);
-
-	pos.x = mPlayNodeSize.width * 0.5;
-	pos.y = (mPlayNodeSize.height * 0.5) + mUIPadBack->getContentSize().height;
-	//log("%f,%f", pos.x, pos.y);
-
-	Vec2 origin;
-	origin.x = mPlayNodeSize.width * 0.5;
-	origin.y = (mPlayNodeSize.height * 0.5) + mUIPadBack->getContentSize().height;
-
-	pos = origin - mPlayer->getPosition();
-
-	//log("%f,%f", pos.y, mUIPadBack->getContentSize().height);
-	pos.y = MIN(pos.y, mUIPadBack->getContentSize().height);
-
-	//pos = ccpLerp(mPlayNode->getPosition(), pos, 0.0001);
-
-	mPlayNode->setPosition(pos);
 }
 
 
@@ -266,10 +246,46 @@ void ScenePlay::update(float dt)
 #pragma endregion
 
 	//Map Scroll
-	CalculatePlayNodePosition();
+	CalculatePlayNodePosition(dt * 2);
+
+#pragma region mArrow State Check
+
+	if (mArrow->GetState() == Arrow::State::State_Shot)
+	{
+		mUIPadBack->setColor(Color3B::GRAY);
+	}
+	else
+	{
+		mUIPadBack->setColor(Color3B::WHITE);
+	}
+#pragma endregion
 
 
 }
+
+void ScenePlay::CalculatePlayNodePosition(float dt)
+{
+	Vec2 pos;// = mPlayer->getPosition();
+			 //log("%f,%f", pos.x, pos.y);
+
+			 /*pos.x = mPlayNodeSize.width * 0.5;
+			 pos.y = (mPlayNodeSize.height * 0.5) + mUIPadBack->getContentSize().height;*/
+			 //log("%f,%f", pos.x, pos.y);
+
+	Vec2 origin;
+	origin.x = mPlayNodeSize.width * 0.5;
+	origin.y = (mPlayNodeSize.height * 0.5) + mUIPadBack->getContentSize().height;
+
+	pos = (origin - mPlayer->getPosition()) + Vec2(-mPlayNodeOffsetDirection.x * mPlayNodeOffsetScalar, -mPlayNodeOffsetDirection.y * mPlayNodeOffsetScalar);
+
+	//log("%f,%f", pos.y, mUIPadBack->getContentSize().height);
+	pos.y = MIN(pos.y, mUIPadBack->getContentSize().height);
+
+	pos = ccpLerp(mPlayNode->getPosition(), pos, dt);
+
+	mPlayNode->setPosition(pos);
+}
+
 
 bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)
 {
@@ -293,12 +309,14 @@ bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)
 		}
 		else if(mArrow->GetState() != Arrow::State::State_Drop)//attack
 		{
-			mTouchBeganPos = touch->getLocation();
-			mTouchState = TouchState::Shot;
-
-			Vec2 dir = mTouchBeganPos - convertToWorldSpace(mUIPadFront->getPosition());
-			mArrow->LockOn(dir.getNormalized());
-			isTouchMoved = true;
+			if (mArrow->GetState() != Arrow::State::State_Shot)
+			{
+				mTouchBeganPos = touch->getLocation();
+				mTouchState = TouchState::Shot;
+				Vec2 dir = mTouchBeganPos - convertToWorldSpace(mUIPadFront->getPosition());
+				mArrow->LockOn(dir.getNormalized());
+				isTouchMoved = true;
+			}
 		}
 		else//ArrowDrop...
 		{
@@ -341,6 +359,7 @@ void ScenePlay::onTouchMoved(Touch * touch, Event * unused_event)
 		//mArrow->LockOn(atan2(dir.y, dir.x));
 		mArrow->LockOn(dir.getNormalized());
 
+		mPlayNodeOffsetDirection = dir.getNormalized();
 		break;
 	}
 }
@@ -353,6 +372,7 @@ void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 	{
 	case TouchState::Shot:
 		mArrow->Shot();
+		mPlayNodeOffsetDirection = Vec2::ZERO;
 		break;
 	case TouchState::Move:
 		//if (mUIPadBack->getBoundingBox().containsPoint(touchPos))

@@ -37,6 +37,8 @@ private:
 	Node * mMapNode = nullptr;//PlayNode 하위의 타일맵 노드
 
 	Size mPlayNodeSize;
+	Vec2 mPlayNodeOffsetDirection;
+	float mPlayNodeOffsetScalar = 0;
 
 	//player
 	Player * mPlayer = nullptr;
@@ -67,9 +69,10 @@ private:
 	//Screen
 	Sprite * mFadeSprite = nullptr;
 
+
 	void RoomSequence(int roomIndex);
 	void RoomSetting();
-	void CalculatePlayNodePosition();
+	void CalculatePlayNodePosition(float dt);
 public:
 	static Scene * createScene();
 	CREATE_FUNC(ScenePlay);
