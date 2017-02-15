@@ -10,18 +10,6 @@ using namespace cocos2d;
 
 class Actor;
 
-//struct TileData
-//{
-//	string fileName;
-//	bool isCollision;
-//};
-//
-//struct MapData
-//{
-//	map<int, TileData> tileDatas;
-//	vector<vector<int>> tilePlacement;
-//};
-
 class PlayMap : public Node
 {
 private:
@@ -42,12 +30,12 @@ public:
 	float GetTileWidth();
 	Size GetMapContentSize();
 	MapTile * GetTile(Vec2 pos);
+	MapTile * GetTile(Vec2I tileIndex);
 	TileData const GetTileData(Vec2I tileIndex);
 
 	//temp
 	int GetTilePlacementData(Vec2I tileIndex);
 	MapTile * GetTile(Vec2 pos, Vec2I & outTileIndex);
-	MapTile * GetTile(Vec2I tileIndex);
 	Vec2I GetTileIndex(Vec2 pos);
 
 

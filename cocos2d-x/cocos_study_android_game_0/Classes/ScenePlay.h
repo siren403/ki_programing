@@ -62,8 +62,14 @@ private:
 
 	//GameState
 	int mCurrentRoomIndex = 0;
+	bool mIsPlaying = false;
 
+	//Screen
+	Sprite * mFadeSprite = nullptr;
+
+	void RoomSequence(int roomIndex);
 	void RoomSetting();
+	void CalculatePlayNodePosition();
 public:
 	static Scene * createScene();
 	CREATE_FUNC(ScenePlay);

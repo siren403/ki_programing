@@ -73,6 +73,8 @@ public:
 	void OnRoll(float rollRadian);
 
 	virtual void OnCollisionOther(bool isCollision, Node * other, Vec2 normal = Vec2::ZERO) override;
+
+	void InitPosition(Vec2 pos);
 };
 
 #endif // !__CACTOR_H__

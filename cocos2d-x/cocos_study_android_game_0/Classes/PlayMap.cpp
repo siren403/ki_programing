@@ -37,6 +37,12 @@ MapTile * PlayMap::GetTile(Vec2 pos)
 	tile = this->GetTile(tileIndex);
 	return tile;
 }
+MapTile * PlayMap::GetTile(Vec2I tileIndex)
+{
+	return mCurrentTiles.at(tileIndex.y)->At(tileIndex.x);
+}
+
+
 
 TileData const PlayMap::GetTileData(Vec2I tileIndex)
 {
@@ -56,10 +62,7 @@ MapTile * PlayMap::GetTile(Vec2 pos, Vec2I & outTileIndex)
 
 }
 
-MapTile * PlayMap::GetTile(Vec2I tileIndex)
-{
-	return mCurrentTiles.at(tileIndex.y)->At(tileIndex.x);
-}
+
 
 Vec2I PlayMap::GetTileIndex(Vec2 pos)
 {
@@ -140,22 +143,41 @@ void PlayMap::RemoveTiles()
 void PlayMap::CheckCollisionTile(Actor * actor, Vec2 dir)
 {
 	Vec2I tileIndex = this->GetTileIndex(actor->getPosition());
+	Vec2I intDir;
 
-	dir.x = dir.x > 0 ? 1 : dir.x < 0 ? -1 : 0;
-	dir.y = dir.y > 0 ? 1 : dir.y < 0 ? -1 : 0;
+	intDir.x = dir.x > 0 ? 1 : dir.x < 0 ? -1 : 0;
+	intDir.y = dir.y > 0 ? 1 : dir.y < 0 ? -1 : 0;
 
+	MapTile * tempTile; 
+	int tileType;
 
-	if (dir.x != 0)
+	tempTile = this->GetTile(tileIndex);
+	tileType = mCurrentMapData->tilePlacement[tileIndex.y][tileIndex.x];
+	
+
+	if (mCurrentMapData->tileDatas.at(tileType).isCollision &&
+		utils::getCascadeBoundingBox(tempTile).intersectsRect(utils::getCascadeBoundingBox(actor)))
 	{
-		Vec2I deltaTileIndex = Vec2I(IntUtils::ClampI(tileIndex.x + dir.x, 0, mCurrentMapWidth - 1), tileIndex.y);
-		MapTile * tile = this->GetTile(deltaTileIndex);
+		actor->OnCollisionOther(true, nullptr, Vec2(dir.x*-1, dir.y*-1));
+		return;
+	}
+	
+	
+	Vec2I deltaTileIndex;
+
+	if (intDir.x != 0)
+	{
+		deltaTileIndex = Vec2I(IntUtils::ClampI(tileIndex.x + intDir.x, 0, mCurrentMapWidth - 1), tileIndex.y);
+		tempTile = this->GetTile(deltaTileIndex);
 		int tileType = mCurrentMapData->tilePlacement[deltaTileIndex.y][deltaTileIndex.x];
 
+		tempTile->setColor(Color3B::BLACK);
+
 		if (mCurrentMapData->tileDatas.at(tileType).isCollision &&
-			utils::getCascadeBoundingBox(tile).intersectsRect(utils::getCascadeBoundingBox(actor)))
+			utils::getCascadeBoundingBox(tempTile).intersectsRect(utils::getCascadeBoundingBox(actor)))
 		{
 			//	log("collision tile dx");
-			actor->OnCollisionOther(true, tile);
+			actor->OnCollisionOther(true, tempTile);
 		}
 	}
 	else
@@ -163,16 +185,16 @@ void PlayMap::CheckCollisionTile(Actor * actor, Vec2 dir)
 		actor->OnCollisionOther(false, nullptr);
 	}
 
-	if (dir.y != 0)
+	if (intDir.y != 0)
 	{
-		Vec2I deltaTileIndex = Vec2I(tileIndex.x, IntUtils::ClampI(tileIndex.y + dir.y, 0, mCurrentMapHeight - 1));
+		deltaTileIndex = Vec2I(tileIndex.x, IntUtils::ClampI(tileIndex.y + intDir.y, 0, mCurrentMapHeight - 1));
+		tempTile = this->GetTile(deltaTileIndex);
 		int tileType = mCurrentMapData->tilePlacement[deltaTileIndex.y][deltaTileIndex.x];
 
-		MapTile * tile = this->GetTile(deltaTileIndex);
 		if (mCurrentMapData->tileDatas.at(tileType).isCollision &&
-			utils::getCascadeBoundingBox(tile).intersectsRect(utils::getCascadeBoundingBox(actor)))
+			utils::getCascadeBoundingBox(tempTile).intersectsRect(utils::getCascadeBoundingBox(actor)))
 		{
-			actor->OnCollisionOther(true, tile);
+			actor->OnCollisionOther(true, tempTile);
 		}
 	}
 	else

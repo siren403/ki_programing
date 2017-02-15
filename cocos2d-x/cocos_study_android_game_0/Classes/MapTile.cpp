@@ -15,7 +15,8 @@ bool MapTile::init()
 void MapTile::InitWithTileData(PlayMap * playMap, Vec2I tileIndex)
 {
 	mpPlayMap = playMap;
-	auto tileData = mpPlayMap->GetTileData(tileIndex);
+	mTileIndex = tileIndex;
+	auto tileData = mpPlayMap->GetTileData(mTileIndex);
 	mTileSprite = Sprite::create(tileData.fileName);
 	this->addChild(mTileSprite, 0);
 }
@@ -23,4 +24,9 @@ void MapTile::InitWithTileData(PlayMap * playMap, Vec2I tileIndex)
 Sprite * MapTile::GetSprite()
 {
 	return mTileSprite;
+}
+
+bool MapTile::IsCollisionTile()
+{
+	return mpPlayMap->GetTileData(mTileIndex).isCollision;
 }

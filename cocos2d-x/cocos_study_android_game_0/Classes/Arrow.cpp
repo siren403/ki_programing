@@ -20,7 +20,8 @@ bool Arrow::init()
 	mSprite->getTexture()->setAliasTexParameters();
 	this->addChild(mSprite);
 
-	mState = State::State_Idle;
+	//mState = State::State_Idle;
+	SetState(State::State_Idle);
 	mMaxSpeedPower = 1300;
 	mDecelRatio = 0.05;
 
@@ -34,16 +35,16 @@ void Arrow::update(float dt)
 	{
 	case State::State_Idle:
 	case State::State_LockOn:
-		updateLock(dt);
+		UpdateLock(dt);
 		break;
 	case State::State_Shot:
-		updateShot(dt);
+		UpdateShot(dt);
 		break;
 	case State::State_Drop:
-		updateDrop(dt);
+		UpdateDrop(dt);
 		break;
 	}
-
+	//log(mIsCollision ? "isColl true" : "is Coll false");
 }
 
 Arrow::State Arrow::GetState()
@@ -62,19 +63,30 @@ void Arrow::InitWithPlayer(Player * player)
 }
 
 
-void Arrow::LockOn(Vec2 dir)
+void Arrow::LockOn(Vec2 dir, bool isIgnoreState)
 {
-	if (mState == State::State_Idle || mState == State::State_LockOn)
+	if (isIgnoreState == false)
 	{
+		if (mState == State::State_Idle || mState == State::State_LockOn)
+		{
+			mMoveDirection = dir;
+		}
+	}
+	else
+	{
+		//mState = State::State_LockOn;
+		SetState(State::State_LockOn);
 		mMoveDirection = dir;
 	}
+
 }
 
 void Arrow::DisableLockOn()
 {
 	if (mState == State::State_LockOn)
 	{
-		mState = State::State_Idle;
+		//mState = State::State_Idle;
+		SetState(State::State_Idle);
 	}
 	if (mState == State::State_Drop)
 	{
@@ -87,18 +99,20 @@ void Arrow::Shot()
 {
 	if (mState == State::State_Idle || mState == State::State_LockOn)
 	{
-		mState = State::State_Shot;
+		//mState = State::State_Shot;
+		SetState(State::State_Shot);
 		mCurrentSpeedPower = mMaxSpeedPower;
 	}
 }
 
 void Arrow::OnCollisionOther(bool isCollision, Node * other,Vec2 normal)
 {
-	mIsCollision = isCollision;
-	
+
 	if (mState == State::State_Shot)
 	{
-		if (mIsCollision && !mIsPrevCollision)
+		mIsCollision = isCollision;
+
+		if (mIsCollision/* && !mIsPrevCollision*/)
 		{
 			if (other != nullptr)
 			{
@@ -109,18 +123,20 @@ void Arrow::OnCollisionOther(bool isCollision, Node * other,Vec2 normal)
 				Vec2 reflectDir;
 				reflectDir = mMoveDirection + ((normal * 2)*ccpDot(-mMoveDirection, normal));
 				mMoveDirection = reflectDir;
-
-				float radian = atan2(mMoveDirection.y, mMoveDirection.x);
-				this->setRotation(-CC_RADIANS_TO_DEGREES((PI * 0.5) + radian));
-				mCurrentSpeedPower *= 0.3;
 			}
 			else//normal direct
 			{
-
+				mMoveDirection = normal;
 			}
+
+			float radian = atan2(mMoveDirection.y, mMoveDirection.x);
+			this->setRotation(-CC_RADIANS_TO_DEGREES((PI * 0.5) + radian));
+			mCurrentSpeedPower *= 0.3;
 		}
+		//mIsPrevCollision = mIsCollision;
+
 	}
-	mIsPrevCollision = mIsCollision;
+
 }
 
 
@@ -134,7 +150,7 @@ bool Arrow::IsShooting()
 	return mState == State::State_Shot;
 }
 
-void Arrow::updateLock(float dt)
+void Arrow::UpdateLock(float dt)
 {
 	Vec2 arrowPos;
 
@@ -146,7 +162,7 @@ void Arrow::updateLock(float dt)
 	this->setPosition(arrowPos);
 }
 
-void Arrow::updateShot(float dt)
+void Arrow::UpdateShot(float dt)
 {
 	/*static float time = 0;
 	time += dt;
@@ -169,16 +185,16 @@ void Arrow::updateShot(float dt)
 
 	if (mCurrentSpeedPower <= EPSILON)
 	{
-		mState = State::State_Drop;
+		SetState(State::State_Drop);
 		mCurrentSpeedPower = mMaxSpeedPower * 0.35;
 	}
 }
 
-void Arrow::updateDrop(float dt)
+void Arrow::UpdateDrop(float dt)
 {
 
 #if AUTO_RETURN
-#pragma region �ڵ�ȸ��
+#pragma region 자동회수
 
 	//if (mPlayer->GetState() == Player::State::Move)
 	//{
@@ -214,7 +230,8 @@ void Arrow::updateDrop(float dt)
 
 		if (dist.getLength() < 30)
 		{
-			mState = State_Idle;
+			//mState = State_Idle;
+			SetState(State::State_Idle);
 		}
 		//log("%f", dist.getLength());
 	}
@@ -226,7 +243,7 @@ void Arrow::updateDrop(float dt)
 #pragma endregion
 
 #else // !AUTO_RETURN
-#pragma region ����ȸ��
+#pragma region 수동회수
 	if (mIsReturnArrow)
 	{
 		Vec2 dist;
@@ -242,7 +259,8 @@ void Arrow::updateDrop(float dt)
 
 		if (dist.getLength() < 30)
 		{
-			mState = State_Idle;
+			//mState = State_Idle;
+			SetState(State::State_Idle);
 		}
 		//log("%f", dist.getLength());
 
@@ -255,4 +273,11 @@ void Arrow::updateDrop(float dt)
 #pragma endregion
 #endif // END AUTO_RETURN
 
+}
+
+void Arrow::SetState(Arrow::State state)
+{
+	mState = state;
+	//mIsPrevCollision = false;
+	//mIsCollision = false;
 }

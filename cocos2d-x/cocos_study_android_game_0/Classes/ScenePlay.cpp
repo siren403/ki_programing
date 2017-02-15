@@ -64,6 +64,14 @@ bool ScenePlay::init()
 	mPadMaxDistance = 3;
 #pragma endregion
 
+
+	mFadeSprite = Sprite::create("white4x4.jpg");
+	mFadeSprite->setTextureRect(Rect(0, 0, visibleSize.width, visibleSize.height));
+	mFadeSprite->setAnchorPoint(Vec2(0, 0));
+	mFadeSprite->setColor(Color3B::BLACK);
+	this->addChild(mFadeSprite, 10);
+
+
 	mTouchSlideTime = 0.25;
 	mTouchStopWatch = StopWatch::create();
 	this->addChild(mTouchStopWatch);
@@ -76,13 +84,6 @@ bool ScenePlay::init()
 
 	mRenderNode->addChild(mPlayNode, 0);
 
-	
-
-	
-
-
-	
-	
 #pragma region Create
 	mPlayMap = PlayMap::create();
 	mPlayNode->addChild(mPlayMap, 0);
@@ -93,22 +94,19 @@ bool ScenePlay::init()
 	mArrow = Arrow::create();
 	mArrow->InitWithPlayer(mPlayer);
 	mPlayNode->addChild(mArrow, mPlayer->getLocalZOrder() + 1);
-
-
 #pragma endregion
 	
-	RoomSetting();
-	auto tSeq = Sequence::create(
-		DelayTime::create(2),
-		CallFunc::create([this]()
+	RoomSequence(0);
+
+	/*auto tSeq = Sequence::create(
+		DelayTime::create(10),
+		CallFunc::create([this]() 
 	{
-		mCurrentRoomIndex = 1;
-		RoomSetting();
-		mPlayer->SetIsControl(true);
+		RoomSequence(mCurrentRoomIndex + 1);
 	}),
 		nullptr
-		);
-	this->runAction(tSeq);
+	);
+	this->runAction(tSeq);*/
 
 	//auto Spr = Sprite::create("CloseNormal.png");
 	//Spr->setScale(0.5);
@@ -121,11 +119,38 @@ bool ScenePlay::init()
 }
 
 
+void ScenePlay::RoomSequence(int roomIndex)
+{
+	mCurrentRoomIndex = roomIndex;
+	mIsPlaying = false;
+	mPlayer->SetIsControl(false);
+
+	auto tSeq = Sequence::create(
+		FadeIn::create(1),
+		CallFunc::create([this]() 
+	{
+		RoomSetting();
+
+
+	}),
+		DelayTime::create(0.1),
+		FadeOut::create(1),
+		CallFunc::create([this]() 
+	{
+		mPlayer->SetIsControl(true);
+		mIsPlaying = true;
+	}),
+		nullptr
+	);
+	mFadeSprite->runAction(tSeq);
+}
+
 void ScenePlay::RoomSetting()
 {
+
 	mPlayMap->CreateTiles(mCurrentRoomIndex);
 	//todo : 타일 리소스 크기 변경 : x2
-	mPlayMap->setScale(2 * CC_CONTENT_SCALE_FACTOR());
+	//mPlayMap->setScale(2 * CC_CONTENT_SCALE_FACTOR());
 
 	auto stageData = DataManager::GetInstance()->GetStageData(mCurrentRoomIndex);
 	if (stageData != nullptr)
@@ -142,13 +167,41 @@ void ScenePlay::RoomSetting()
 		mPlayNode->addChild(mCurrentEnemy, ZORDER_ENEMY);
 	}
 
-	mPlayer->setPosition(mPlayMap->GetMapContentSize().width*0.5, mPlayMap->GetMapContentSize().height*0.05);
-	mPlayer->SetIsControl(false);
-	
-	mArrow->LockOn(Vec2(0, 1));
+	//mPlayer->setPosition();
+	Vec2 initPos;
+	initPos.x = mPlayMap->GetMapContentSize().width * 0.5;
+	initPos.y = mPlayMap->GetMapContentSize().height * 0.05;
+	mPlayer->InitPosition(initPos);
+
+
 	//mPlayer->SetMoveArea(mapContentSize);
 
+	mArrow->LockOn(Vec2(0, 1), true);
+
+	CalculatePlayNodePosition();
 	
+}
+void ScenePlay::CalculatePlayNodePosition()
+{
+	Vec2 pos = mPlayer->getPosition();
+	//log("%f,%f", pos.x, pos.y);
+
+	pos.x = mPlayNodeSize.width * 0.5;
+	pos.y = (mPlayNodeSize.height * 0.5) + mUIPadBack->getContentSize().height;
+	//log("%f,%f", pos.x, pos.y);
+
+	Vec2 origin;
+	origin.x = mPlayNodeSize.width * 0.5;
+	origin.y = (mPlayNodeSize.height * 0.5) + mUIPadBack->getContentSize().height;
+
+	pos = origin - mPlayer->getPosition();
+
+	//log("%f,%f", pos.y, mUIPadBack->getContentSize().height);
+	pos.y = MIN(pos.y, mUIPadBack->getContentSize().height);
+
+	//pos = ccpLerp(mPlayNode->getPosition(), pos, 0.0001);
+
+	mPlayNode->setPosition(pos);
 }
 
 
@@ -175,6 +228,10 @@ void ScenePlay::onExit()
 
 void ScenePlay::update(float dt)
 {
+	if (mIsPlaying == false)
+	{
+		return;
+	}
 #pragma region Arrow Collision
 
 	if (mCurrentEnemy != nullptr)
@@ -204,31 +261,12 @@ void ScenePlay::update(float dt)
 	tile = mPlayMap->GetTile(mArrow->getPosition());
 	if (tile->GetSprite()->getColor() != Color3B::GREEN)
 	{
-		tile->GetSprite()->setColor(Color3B::GREEN);
+		//tile->GetSprite()->setColor(Color3B::GREEN);
 	}
 #pragma endregion
 
-
-#pragma region Map Scroll
-
-	Vec2 pos = mPlayer->getPosition();
-	//log("%f,%f", pos.x, pos.y);
-
-	pos.x = mPlayNodeSize.width * 0.5;
-	pos.y = (mPlayNodeSize.height * 0.5) + mUIPadBack->getContentSize().height;
-	//log("%f,%f", pos.x, pos.y);
-
-	Vec2 origin;
-	origin.x = mPlayNodeSize.width * 0.5;
-	origin.y = (mPlayNodeSize.height * 0.5) + mUIPadBack->getContentSize().height;
-
-	pos = origin - mPlayer->getPosition();
-
-	//log("%f,%f", pos.y, mUIPadBack->getContentSize().height);
-	pos.y = MIN(pos.y, mUIPadBack->getContentSize().height);
-	mPlayNode->setPosition(pos);
-
-#pragma endregion
+	//Map Scroll
+	CalculatePlayNodePosition();
 
 
 }
@@ -317,16 +355,16 @@ void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 		mArrow->Shot();
 		break;
 	case TouchState::Move:
-		if (mUIPadBack->getBoundingBox().containsPoint(touchPos))
+		//if (mUIPadBack->getBoundingBox().containsPoint(touchPos))
+		//{
+		if (!(mUIPadFront->getBoundingBox().containsPoint(touchPos) &&
+			CollisionUtils::GetInst()->ContainsPointToPixel(mUIPadFront, mUIPadFrontImage, touchPos)))//move
 		{
-			if (!(mUIPadFront->getBoundingBox().containsPoint(touchPos) &&
-				CollisionUtils::GetInst()->ContainsPointToPixel(mUIPadFront, mUIPadFrontImage, touchPos)))//move
-			{
-				Vec2 dir = touch->getLocation() - mTouchBeganPos;
-				float endedRadian = atan2(dir.y, dir.x);
-				mPlayer->OnRoll(endedRadian);
-			}
+			Vec2 dir = touch->getLocation() - mTouchBeganPos;
+			float endedRadian = atan2(dir.y, dir.x);
+			mPlayer->OnRoll(endedRadian);
 		}
+		//}
 		mArrow->DisableLockOn();
 		break;
 	case TouchState::Collect:

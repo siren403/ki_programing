@@ -185,6 +185,9 @@
     <Filter Include="src\Actor\Enemy\FSM">
       <UniqueIdentifier>{fa15f9a1-bd52-4480-895a-96cd24be3663}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Actor\Objects">
+      <UniqueIdentifier>{53b5a68b-4725-47a9-a300-06f0ee9fe563}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

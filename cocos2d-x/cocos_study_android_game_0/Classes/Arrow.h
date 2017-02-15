@@ -37,16 +37,17 @@ private:
 	float mDecelRatio = 0;
 
 	//충돌
-	bool mIsPrevCollision = false;
+	//bool mIsPrevCollision = false;
 	bool mIsCollision = false;
 
 	bool mIsReturnArrow = false;
 
 	//각 상태 별 업데이트
-	void updateLock(float dt);
-	void updateShot(float dt);
-	void updateDrop(float dt);
+	void UpdateLock(float dt);
+	void UpdateShot(float dt);
+	void UpdateDrop(float dt);
 
+	void SetState(Arrow::State state);
 public:
 	CREATE_FUNC(Arrow);
 
@@ -60,7 +61,7 @@ public:
 
 
 	void InitWithPlayer(Player * player);
-	void LockOn(Vec2 dir);
+	void LockOn(Vec2 dir, bool isIgnoreState = false);
 	void DisableLockOn();
 	void Shot();
 

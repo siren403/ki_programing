@@ -177,6 +177,16 @@ void Player::OnCollisionOther(bool isCollision, Node * other, Vec2 normal)
 	}
 }
 
+void Player::InitPosition(Vec2 pos)
+{
+	this->setPosition(pos);
+
+	mMoveDir = Vec2::ZERO;
+	mPrevPos = this->getPosition();
+	mIsVerticalCollision = false;
+	mIsHorizontalCollision = false;
+}
+
 void Player::updateMove(float dt)
 {
 	Vec2 pos = this->getPosition();
