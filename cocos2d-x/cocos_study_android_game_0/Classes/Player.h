@@ -37,7 +37,6 @@ private:
 	bool mIsVerticalCollision = false;
 	bool mIsHorizontalCollision = false;
 	//roll
-	Action * mRollAction = nullptr;
 	float mRollDistance;
 	float mRollDuration;
 	float mRollRadian;

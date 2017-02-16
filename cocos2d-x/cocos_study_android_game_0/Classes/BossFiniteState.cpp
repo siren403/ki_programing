@@ -7,6 +7,10 @@
 #include "Player.h"
 
 #define PI 3.14159
+#define EPSILON 0.001
+
+#pragma region Idle
+
 
 bool BossIdleState::InitState()
 {
@@ -17,66 +21,46 @@ bool BossIdleState::InitState()
 
 	auto boss = this->GetEntity<Boss>();
 
-	mLHand = (BossHand *)boss->GetParts(Boss::Parts::Parts_LHand);
-	mRHand = (BossHand *)boss->GetParts(Boss::Parts::Parts_RHand);
-	mHead = (BossHead *)boss->GetParts(Boss::Parts::Parts_Head);
-
-	float headDuration = 1.5;
-	auto tIdleSeq = Sequence::create(
-		MoveBy::create(headDuration * 0.5, Vec2(0, 5)),
-		MoveBy::create(headDuration * 0.5, Vec2(0, -5)),
-		nullptr
-	);
-	auto tRepeatIdle = RepeatForever::create(tIdleSeq);
-	mHeadAction = mHead->runAction(tRepeatIdle);
-
 	return true;
 }
 
 void BossIdleState::OnEnter()
 {
+	
 }
 
 void BossIdleState::OnUpdate(float dt)
 {
-	HandIdleMotion(mLHand, mLHandRadian, dt);
-	HandIdleMotion(mRHand, mRHandRadian, dt);
-
-	mCurrentTime += dt;
-	if (mCurrentTime >= 1)
+	if (mIsActive)
 	{
-		mCurrentTime = 0;
-		this->GetEntity<Boss>()->ChangeState(Boss::State::State_HandAttack);
+		mCurrentTime += dt;
+		if (mCurrentTime >= 1.5)
+		{
+			mCurrentTime = 0;
+			this->GetEntity<Boss>()->ChangeState(Boss::State::State_HandAttack);
+		}
 	}
-}
-void BossIdleState::HandIdleMotion(BossHand * hand, float & radian, float dt)
-{
-	Vec2 pos;
-
-	pos = hand->GetInitPosition();
-	radian += (PI * dt) * -1;
-	if (radian <= PI * -2)
-	{
-		radian = 0;
-	}
-	pos.x += (cos(radian) * 10) * hand->GetHandDirection();
-	pos.y += sin(radian) * 10;
-	hand->setPosition(pos);
 }
 
 void BossIdleState::OnExit()
 {
-	mHead->stopAction(mHeadAction);
+	mCurrentTime = 0;
 }
 
 BossIdleState::~BossIdleState()
 {
 }
 
+void BossIdleState::SetActive(bool isActive)
+{
+	mIsActive = isActive;
+}
+
+#pragma endregion
 
 
 
-
+#pragma region HandAttack
 
 bool BossHandAttackState::InitState()
 {
@@ -90,32 +74,54 @@ bool BossHandAttackState::InitState()
 	mLHand = (BossHand *)boss->GetParts(Boss::Parts::Parts_LHand);
 	mRHand = (BossHand *)boss->GetParts(Boss::Parts::Parts_RHand);
 
-	mAttackDelay = 1.5;
-	mCurrentTime = mAttackDelay;
+	mCurrentTime = 0;
 
 	return true;
 }
+
 void BossHandAttackState::OnEnter()
 {
-	auto player = ActorManager::GetInstance()->GetPlayer();
-	Vec2 targetPos = player->getParent()->convertToWorldSpace(player->getPosition());
-	targetPos = mEntity->convertToNodeSpace(targetPos);
-	mLHand->OnAttack(targetPos);
+	HandAttacKLockOn(mLHand);
 }
 
 void BossHandAttackState::OnUpdate(float dt)
 {
-	if (mCurrentTime >= mAttackDelay)
+	mCurrentTime += dt;
+
+	if (mIsSecondAttack == false)
 	{
-		mAttackDelay = 0;
-		//log("Attack");
+		if (mCurrentTime >= 2)
+		{
+			HandAttacKLockOn(mRHand);
+			mIsSecondAttack = true;
+			mCurrentTime = 0;
+		}
 	}
+	else
+	{
+		if (mCurrentTime >= 2)
+		{
+			this->GetEntity<Boss>()->ChangeState(Boss::State::State_Idle);
+		}
+	}
+}
+void BossHandAttackState::HandAttacKLockOn(BossHand * hand)
+{
+	auto player = ActorManager::GetInstance()->GetPlayer();
+	Vec2 targetPos = player->getParent()->convertToWorldSpace(player->getPosition());
+	targetPos = mEntity->convertToNodeSpace(targetPos);
+	hand->OnAttack(targetPos);
 }
 
 void BossHandAttackState::OnExit()
 {
+	mIsSecondAttack = false;
+	mCurrentTime = 0;
 }
 
 BossHandAttackState::~BossHandAttackState()
 {
+
 }
+
+#pragma endregion

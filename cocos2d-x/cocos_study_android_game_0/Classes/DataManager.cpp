@@ -57,6 +57,7 @@ DataManager::DataManager()
 	}
 
 	rapidjson::Value & docMaps = doc["maps"];
+	log("map count %d", docMaps.Size());
 	for (int mapIndex = 0; mapIndex < docMaps.Size(); mapIndex++)
 	{
 		rapidjson::Value & docMapData = docMaps[mapIndex];

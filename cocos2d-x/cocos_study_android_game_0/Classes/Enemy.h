@@ -23,28 +23,33 @@ private:
 protected:
 	EnemyPartsMap mParts;
 	EnemyPartsMap::iterator mMapPartItor;
+	EnemyParts * mLifeParts = nullptr;
+
 
 	//FiniteState
 	EnemyFiniteState * mCurrentFiniteState = nullptr;
 	void AddState(int key, EnemyFiniteState * state);
 	void ChangeState(int key);
+	EnemyFiniteState * GetState(int state);
 public:
 	CREATE_FUNC(Enemy);
 	virtual bool init() override;
 	virtual void update(float dt) override;
+
+	virtual void OnActivate(bool isActive);
 
 	//getter, setter
 	virtual void SetAlive(bool tIsAlive) override;
 	virtual bool IsAlive() override;
 	
 	//EnemyParts
-	void AddParts(int key, EnemyParts * tParts,int localZOrder = 0);
+	void AddParts(int key, EnemyParts * tParts,bool isLifeParts = false, int localZOrder = 0);
 	EnemyParts * GetParts(int key);
 	void DestroyParts();
 	void CheckCollisionActor(Actor * actor);
-
 
 	virtual ~Enemy();
 };
 
 #endif // !__CENEMY_H__
+

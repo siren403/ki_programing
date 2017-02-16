@@ -121,69 +121,82 @@ bool ScenePlay::init()
 }
 
 
-void ScenePlay::RoomSequence(int roomIndex)
+void ScenePlay::RoomSequence(int roomIndex, bool isReset)
 {
 	mCurrentRoomIndex = roomIndex;
 	mIsPlaying = false;
 	mPlayer->SetIsControl(false);
+	mPlayer->SetAlive(true);
+
+	auto mapData = DataManager::GetInstance()->GetMapData(roomIndex);
+	if (mapData == nullptr)
+	{
+		log("nothing map");
+		Director::getInstance()->end();
+		return;
+	}
 
 	auto tSeq = Sequence::create(
 		FadeIn::create(1),
-		CallFunc::create([this]() 
+		CallFunc::create([this, isReset]()
 	{
-		RoomSetting();
+		auto stageData = DataManager::GetInstance()->GetStageData(mCurrentRoomIndex);
+
+		if (stageData != nullptr)
+		{
+			if (isReset == false)
+			{
+				mPlayMap->CreateTiles(mCurrentRoomIndex);
+
+				if (mCurrentEnemy != nullptr)
+				{
+					mPlayNode->removeChild(mCurrentEnemy);
+					mCurrentEnemy = nullptr;
+				}
+				mCurrentEnemy = ActorManager::GetInstance()->GetEnemy(stageData->enemy.id);
+				mPlayNode->addChild(mCurrentEnemy, ZORDER_ENEMY);
+			}
+
+			Vec2 pos;
+			pos.x = mPlayMap->GetMapContentSize().width * stageData->enemy.position.x;
+			pos.y = mPlayMap->GetMapContentSize().height * stageData->enemy.position.y;
+			mCurrentEnemy->setPosition(pos);
+			mCurrentEnemy->OnActivate(false);
+		}
+		else
+		{
+			mPlayMap->CreateTiles(mCurrentRoomIndex);
+			if (mCurrentEnemy != nullptr)
+			{
+				mPlayNode->removeChild(mCurrentEnemy);
+				mCurrentEnemy = nullptr;
+			}
+		}
 
 
+		Vec2 initPos;
+		initPos.x = mPlayMap->GetMapContentSize().width * 0.5;
+		initPos.y = mPlayMap->GetMapContentSize().height * 0.1;
+		mPlayer->InitPosition(initPos);
+
+		//mPlayer->SetMoveArea(mapContentSize);
+
+		mArrow->LockOn(Vec2(0, 1), true);
+
+		CalculatePlayNodePosition(1);
 	}),
 		DelayTime::create(0.1),
 		FadeOut::create(1),
-		CallFunc::create([this]() 
+		CallFunc::create([this]()
 	{
 		mPlayer->SetIsControl(true);
+		mCurrentEnemy->OnActivate(true);
 		mIsPlaying = true;
 	}),
 		nullptr
-	);
+		);
 	mFadeSprite->runAction(tSeq);
 }
-
-void ScenePlay::RoomSetting()
-{
-
-	mPlayMap->CreateTiles(mCurrentRoomIndex);
-	//todo : 타일 리소스 크기 변경 : x2
-	//mPlayMap->setScale(2 * CC_CONTENT_SCALE_FACTOR());
-
-	auto stageData = DataManager::GetInstance()->GetStageData(mCurrentRoomIndex);
-	if (stageData != nullptr)
-	{
-		if (mCurrentEnemy != nullptr)
-		{
-			mPlayNode->removeChild(mCurrentEnemy);
-		}
-		mCurrentEnemy = ActorManager::GetInstance()->GetEnemy(stageData->enemy.id);
-		Vec2 pos;
-		pos.x = mPlayMap->GetMapContentSize().width * stageData->enemy.position.x;
-		pos.y = mPlayMap->GetMapContentSize().height * stageData->enemy.position.y;
-		mCurrentEnemy->setPosition(pos);
-		mPlayNode->addChild(mCurrentEnemy, ZORDER_ENEMY);
-	}
-
-	//mPlayer->setPosition();
-	Vec2 initPos;
-	initPos.x = mPlayMap->GetMapContentSize().width * 0.5;
-	initPos.y = mPlayMap->GetMapContentSize().height * 0.1;
-	mPlayer->InitPosition(initPos);
-
-
-	//mPlayer->SetMoveArea(mapContentSize);
-
-	mArrow->LockOn(Vec2(0, 1), true);
-
-	CalculatePlayNodePosition(1);
-	
-}
-
 
 void ScenePlay::onEnter()
 {
@@ -212,21 +225,11 @@ void ScenePlay::update(float dt)
 	{
 		return;
 	}
-#pragma region Arrow Collision
+	CalculatePlayNodePosition(dt * 2);
 
-	if (mCurrentEnemy != nullptr)
-	{
-		mCurrentEnemy->CheckCollisionActor(mArrow);
-	}
+#pragma region Tile Collision
+
 	mPlayMap->CheckCollisionTile(mArrow, mArrow->GetMoveDirection());
-
-#pragma endregion
-#pragma region Player Collision
-
-	if (mCurrentEnemy != nullptr)
-	{
-		mCurrentEnemy->CheckCollisionActor(mPlayer);
-	}
 	mPlayMap->CheckCollisionTile(mPlayer, mPlayer->GetMoveDir());
 
 #pragma endregion
@@ -235,7 +238,7 @@ void ScenePlay::update(float dt)
 	auto tile = mPlayMap->GetTile(mPlayer->getPosition());
 	if (tile->GetSprite()->getColor() != Color3B::RED)
 	{
-		tile->GetSprite()->setColor(Color3B::RED);
+		//tile->GetSprite()->setColor(Color3B::RED);
 	}
 
 	tile = mPlayMap->GetTile(mArrow->getPosition());
@@ -246,7 +249,6 @@ void ScenePlay::update(float dt)
 #pragma endregion
 
 	//Map Scroll
-	CalculatePlayNodePosition(dt * 2);
 
 #pragma region mArrow State Check
 
@@ -260,7 +262,71 @@ void ScenePlay::update(float dt)
 	}
 #pragma endregion
 
+#pragma region Enemy Collision
 
+	if (mCurrentEnemy != nullptr)
+	{
+		mCurrentEnemy->CheckCollisionActor(mArrow);
+		mCurrentEnemy->CheckCollisionActor(mPlayer);
+		if (mCurrentEnemy->IsAlive() == false)
+		{
+			log("clear");
+			RoomClearSequence();
+			return;
+		}
+	}
+#pragma endregion
+	if (mPlayer->IsAlive() == false)
+	{
+		log("gameover");
+		GameOverSequence();
+		return;
+	}
+
+	mArrow->OnCollisionOther(false, nullptr);
+}
+
+void ScenePlay::GameOverSequence()
+{
+	mIsPlaying = false;
+	mPlayer->SetIsControl(false);
+	mCurrentEnemy->OnActivate(false);
+
+	auto gameOverSeq = Sequence::create(
+		DelayTime::create(0.3),
+		CallFunc::create([this]()
+	{
+		this->RoomSequence(mCurrentRoomIndex, true);
+	}),		
+		nullptr
+	);
+	mPlayNode->runAction(gameOverSeq);
+}
+
+void ScenePlay::RoomClearSequence()
+{
+	//mPlayer->SetIsControl(false);
+	mIsPlaying = false;
+	mCurrentEnemy->OnActivate(false);
+
+	auto gameOverSeq = Sequence::create(
+		CallFunc::create([]()
+	{
+		Director::getInstance()->getScheduler()->setTimeScale(0.2);
+	}),
+		DelayTime::create(0.3),
+		CallFunc::create([]()
+	{
+		Director::getInstance()->getScheduler()->setTimeScale(1);
+	}),
+		CallFunc::create([this]()
+	{
+		this->RoomSequence(mCurrentRoomIndex + 1);
+	}),
+		nullptr
+		);
+
+	mPlayNode->runAction(gameOverSeq);
 }
 
 void ScenePlay::CalculatePlayNodePosition(float dt)
@@ -285,6 +351,8 @@ void ScenePlay::CalculatePlayNodePosition(float dt)
 
 	mPlayNode->setPosition(pos);
 }
+
+
 
 
 bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)

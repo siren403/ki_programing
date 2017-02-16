@@ -138,17 +138,17 @@ void Player::OnRoll(float rollRadian)
 		mRollStartPos = this->getPosition();
 		mRollDestPos.x = mRollStartPos.x + (cos(rollRadian) * mRollDistance);
 		mRollDestPos.y = mRollStartPos.y + (sin(rollRadian) * mRollDistance);
-		//log("start[%f,%f] dest[%f,%f]", mRollStartPos.x, mRollStartPos.y,mRollDestPos.x, mRollDestPos.y);
-		mRollAction = EaseSineInOut::create(
-			MoveTo::create(mRollDuration, mRollDestPos)
-		);
-		//this->runAction(mRollAction);
 	}
 	
 }
 
 void Player::OnCollisionOther(bool isCollision, Node * other, Vec2 normal)
 {
+	if (mIsAlive == false)
+	{
+		return;
+	}
+
 	if (isCollision)
 	{
 		Actor * actor = (Actor *)other;
@@ -159,7 +159,6 @@ void Player::OnCollisionOther(bool isCollision, Node * other, Vec2 normal)
 			switch (actor->GetActorType())
 			{
 			case ActorType::Actor_Tile:
-			case ActorType::Actor_EnemyParts:
 				//log("normal : %f,%f", normal.x, normal.y);
 				if (normal.x != 0)
 				{
@@ -169,6 +168,11 @@ void Player::OnCollisionOther(bool isCollision, Node * other, Vec2 normal)
 				{
 					mIsHorizontalCollision = true;
 				}
+				break;
+			case ActorType::Actor_EnemyParts:
+				
+				log("dead");
+				mIsAlive = false;
 				
 				break;
 			}
@@ -182,9 +186,12 @@ void Player::InitPosition(Vec2 pos)
 	this->setPosition(pos);
 
 	mMoveDir = Vec2::ZERO;
-	mPrevPos = this->getPosition();
+	mPrevPos = pos;
 	mIsVerticalCollision = false;
 	mIsHorizontalCollision = false;
+	mRollCurTime = 0;
+	mRollDestPos = pos;
+	mState = State::Idle;
 }
 
 void Player::updateMove(float dt)

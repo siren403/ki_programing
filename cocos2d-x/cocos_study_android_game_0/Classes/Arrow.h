@@ -37,7 +37,7 @@ private:
 	float mDecelRatio = 0;
 
 	//충돌
-	//bool mIsPrevCollision = false;
+	bool mIsPrevCollision = false;
 	bool mIsCollision = false;
 
 	bool mIsReturnArrow = false;

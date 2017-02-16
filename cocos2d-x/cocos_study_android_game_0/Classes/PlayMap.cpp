@@ -83,6 +83,7 @@ int PlayMap::GetTilePlacementData(Vec2I tileIndex)
 
 void PlayMap::CreateTiles(int mapIndex)
 {
+
 	mCurrentMapIndex = mapIndex;
 	RemoveTiles();
 
@@ -101,12 +102,16 @@ void PlayMap::CreateTiles(int mapIndex)
 		{
 			//auto mapTile = Sprite::create(curMapData.tileDatas[curMapData.tilePlacement.at(y).at(x)].fileName);
 			auto mapTile = MapTile::create();
+			if (mapTile == nullptr)
+			{
+				log("mapTile Create Fail");
+			}
 			mapTile->InitWithTileData(this, Vec2I(x, y));
 
-			if (mTileWidth == 0)
-			{
+			//if (mTileWidth == 0)
+			//{
 				mTileWidth = mapTile->GetSprite()->getContentSize().width * this->getScale();
-			}
+			//}
 
 			Vec2 pos;
 			pos.x = (mTileWidth * 0.5) + mTileWidth * x;

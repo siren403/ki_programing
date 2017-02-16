@@ -7,21 +7,14 @@ class Boss;
 class BossHand;
 class BossHead;
 
+#pragma region Idle
+
 class BossIdleState : public EnemyFiniteState
 {
 private:
-	BossHand * mLHand = nullptr;
-	BossHand * mRHand = nullptr;
-	float mLHandRadian = 0;
-	float mRHandRadian = 0;
-
-	BossHead * mHead = nullptr;
-	Action * mHeadAction = nullptr;
-
-	void HandIdleMotion(BossHand * hand, float & radian, float dt);
 
 	float mCurrentTime = 0;
-
+	bool mIsActive = false;
 protected:
 	virtual void OnEnter() override;
 	virtual void OnUpdate(float dt) override;
@@ -31,8 +24,12 @@ public:
 	virtual bool InitState() override;
 	virtual ~BossIdleState();
 
-};
 
+	void SetActive(bool isActive);
+};
+#pragma endregion
+
+#pragma region HandAttack
 
 class BossHandAttackState : public EnemyFiniteState
 {
@@ -40,8 +37,10 @@ private:
 	BossHand * mLHand = nullptr;
 	BossHand * mRHand = nullptr;
 
-	float mAttackDelay = 0;
 	float mCurrentTime = 0;
+	bool mIsSecondAttack = false;
+
+	void HandAttacKLockOn(BossHand * hand);
 protected:
 	virtual void OnEnter() override;
 	virtual void OnUpdate(float dt) override;
@@ -51,5 +50,8 @@ public:
 	virtual bool InitState() override;
 	virtual ~BossHandAttackState();
 };
+#pragma endregion
+
+
 
 #endif // !__BOSSFINITESTATE_H__

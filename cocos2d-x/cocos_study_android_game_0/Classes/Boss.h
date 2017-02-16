@@ -30,6 +30,8 @@ private:
 public:
 	CREATE_FUNC(Boss);
 	virtual bool init() override;
+
+	virtual void OnActivate(bool isActive) override;
 };
 
 #endif // !__BOSS_H__

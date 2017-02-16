@@ -3,7 +3,7 @@
 #include "CollisionUtils.h"
 
 #define PI 3.14159
-#define EPSILON 1
+#define EPSILON 10
 #define AUTO_RETURN false
 
 bool Arrow::init()
@@ -112,7 +112,7 @@ void Arrow::OnCollisionOther(bool isCollision, Node * other,Vec2 normal)
 	{
 		mIsCollision = isCollision;
 
-		if (mIsCollision/* && !mIsPrevCollision*/)
+		if (mIsCollision && !mIsPrevCollision)
 		{
 			if (other != nullptr)
 			{
@@ -133,8 +133,11 @@ void Arrow::OnCollisionOther(bool isCollision, Node * other,Vec2 normal)
 			this->setRotation(-CC_RADIANS_TO_DEGREES((PI * 0.5) + radian));
 			mCurrentSpeedPower *= 0.3;
 		}
-		//mIsPrevCollision = mIsCollision;
-
+		mIsPrevCollision = mIsCollision;
+	}
+	else
+	{
+		mIsPrevCollision = false;
 	}
 
 }

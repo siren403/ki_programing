@@ -21,6 +21,11 @@ void Enemy::update(float dt)
 	}
 }
 
+void Enemy::OnActivate(bool isActive)
+{
+
+}
+
 void Enemy::AddState(int key, EnemyFiniteState * state)
 {
 	mFiniteState.insert(EnemyFSMap::value_type(key, state));
@@ -52,11 +57,29 @@ void Enemy::ChangeState(int key)
 	}
 
 }
+EnemyFiniteState * Enemy::GetState(int state)
+{
+	EnemyFSMap::iterator itor = mFiniteState.find(state);
 
-void Enemy::AddParts(int key, EnemyParts * tParts, int localZOrder)
+	if (itor != mFiniteState.end())
+	{
+		return itor->second;
+	}
+
+	log("[%d] state is nullptr");
+
+	return nullptr;
+}
+
+
+void Enemy::AddParts(int key, EnemyParts * tParts, bool isLifeParts, int localZOrder)
 {
 	mParts.insert(key, tParts);
 	this->addChild(tParts, localZOrder);
+	if (isLifeParts)
+	{
+		mLifeParts = tParts;
+	}
 }
 
 EnemyParts * Enemy::GetParts(int key)
@@ -71,20 +94,24 @@ EnemyParts * Enemy::GetParts(int key)
 
 void Enemy::SetAlive(bool tIsAlive)
 {
-	for (mMapPartItor = mParts.begin(); mMapPartItor != mParts.end(); ++mMapPartItor)
+	/*for (mMapPartItor = mParts.begin(); mMapPartItor != mParts.end(); ++mMapPartItor)
 	{
 		mMapPartItor->second->SetAlive(tIsAlive);
-	}
+	}*/
 }
 
 bool Enemy::IsAlive()
 {
-	for (mMapPartItor = mParts.begin(); mMapPartItor != mParts.end(); ++mMapPartItor)
+	/*for (mMapPartItor = mParts.begin(); mMapPartItor != mParts.end(); ++mMapPartItor)
 	{
 		if (mMapPartItor->second->IsAlive())
 		{
 			return true;
 		}
+	}*/
+	if (mLifeParts != nullptr)
+	{
+		return mLifeParts->IsAlive();
 	}
 	return false;
 }
@@ -119,6 +146,13 @@ void Enemy::CheckCollisionActor(Actor * actor)
 		{
 			isCollision = true;
 			other = mMapPartItor->second;
+
+			if (actor->GetActorType() == ActorType::Actor_Arrow
+				&& ((Arrow*)actor)->GetState() == Arrow::State::State_Shot
+				&& mLifeParts == mMapPartItor->second)
+			{
+				mLifeParts->SetAlive(false);
+			}
 			break;
 		}
 	}

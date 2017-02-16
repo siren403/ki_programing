@@ -69,10 +69,11 @@ private:
 	//Screen
 	Sprite * mFadeSprite = nullptr;
 
-
-	void RoomSequence(int roomIndex);
-	void RoomSetting();
+	void RoomSequence(int roomIndex, bool isReset = false);
 	void CalculatePlayNodePosition(float dt);
+
+	void GameOverSequence();
+	void RoomClearSequence();
 public:
 	static Scene * createScene();
 	CREATE_FUNC(ScenePlay);
