@@ -4,14 +4,10 @@
 #include "cocos2d.h"
 #include "Enemy.h"
 
-class BossIdleState;
-class BossHandAttackState;
 
 class Boss : public Enemy
 {
-	friend BossIdleState;
-	friend BossHandAttackState;
-private:
+public:
 	enum State
 	{
 		State_None = 0,

@@ -13,7 +13,6 @@ using namespace std;
 #define MAP_WIDTH 30
 #define MAP_HEIGHT 25
 
-class StopWatch;
 class Enemy;
 class MapTileVector;
 class PlayMap;
@@ -53,8 +52,6 @@ private:
 	float mPadMaxDistance;
 	Vec2 mTouchBeganPos;
 	TouchState mTouchState = TouchState::None;
-	StopWatch * mTouchStopWatch = nullptr;
-	float mTouchSlideTime;
 
 	//Map
 	PlayMap * mPlayMap;

@@ -86,6 +86,10 @@ void EnemyParts::SetAlive(bool tIsAlive)
 
 const Size EnemyParts::GetPartsSize()
 {
-	log("override EnemyParts::GetPartsSize()!!");
+	//log("override EnemyParts::GetPartsSize()!!");
+	if (mSprite != nullptr)
+	{
+		return mSprite->getContentSize();
+	}
 	return Size::ZERO;
 }

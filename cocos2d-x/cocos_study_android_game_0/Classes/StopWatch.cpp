@@ -10,17 +10,31 @@ bool StopWatch::init()
 	mCurrentTime = 0;
 	mState = StopWatch::State::Stop;
 
-	this->scheduleUpdate();
 	return true;
 }
 
 void StopWatch::update(float dt)
 {
-	if (mState == StopWatch::State::Play)
+	this->OnUpdate(dt);
+}
+
+void StopWatch::SetAutoUpdate(bool isUpdate)
+{
+	if (isUpdate)
 	{
-		mCurrentTime += dt;
+		this->scheduleUpdate();
+	}
+	else
+	{
+		this->unscheduleUpdate();
 	}
 }
+
+float StopWatch::GetAccTime()
+{
+	return mCurrentTime;
+}
+
 
 void StopWatch::OnStart()
 {
@@ -28,11 +42,15 @@ void StopWatch::OnStart()
 	{
 		mCurrentTime = 0;
 	}
-	/*else if (mState == StopWatch::State::Pause)
-	{
-
-	}*/
 	mState = StopWatch::State::Play;
+}
+
+void StopWatch::OnUpdate(float dt)
+{
+	if (mState == StopWatch::State::Play)
+	{
+		mCurrentTime += dt;
+	}
 }
 
 float StopWatch::OnStop()

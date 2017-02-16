@@ -131,7 +131,7 @@ void Arrow::OnCollisionOther(bool isCollision, Node * other,Vec2 normal)
 
 			float radian = atan2(mMoveDirection.y, mMoveDirection.x);
 			this->setRotation(-CC_RADIANS_TO_DEGREES((PI * 0.5) + radian));
-			mCurrentSpeedPower *= 0.3;
+			mCurrentSpeedPower *= 0.6;
 		}
 		mIsPrevCollision = mIsCollision;
 	}

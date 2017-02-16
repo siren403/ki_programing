@@ -1,6 +1,7 @@
 #include "ActorManager.h"
 #include "Player.h"
 #include "Boss.h"
+#include "Juggler.h"
 
 ActorManager * ActorManager::mInstance = nullptr;
 
@@ -18,6 +19,10 @@ ActorManager::ActorManager()
 	mEnemyCreateFunctions.insert(pair<int, EnemyCreateFunc>(1, []() 
 	{
 		return Boss::create();
+	}));
+	mEnemyCreateFunctions.insert(pair<int, EnemyCreateFunc>(2, []()
+	{
+		return Juggler::create();
 	}));
 }
 

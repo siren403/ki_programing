@@ -2,7 +2,6 @@
 
 #include "Player.h"
 #include "CollisionUtils.h"
-#include "StopWatch.h"
 #include "Boss.h"
 #include "ActorManager.h"
 #include "PlayMap.h"
@@ -71,10 +70,6 @@ bool ScenePlay::init()
 	mFadeSprite->setColor(Color3B::BLACK);
 	this->addChild(mFadeSprite, 10);
 
-
-	mTouchSlideTime = 0.25;
-	mTouchStopWatch = StopWatch::create();
-	this->addChild(mTouchStopWatch);
 
 
 	//root->playNode
@@ -190,7 +185,10 @@ void ScenePlay::RoomSequence(int roomIndex, bool isReset)
 		CallFunc::create([this]()
 	{
 		mPlayer->SetIsControl(true);
-		mCurrentEnemy->OnActivate(true);
+		if (mCurrentEnemy != nullptr)
+		{
+			mCurrentEnemy->OnActivate(true);
+		}
 		mIsPlaying = true;
 	}),
 		nullptr
@@ -372,7 +370,6 @@ bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)
 			//mTouchBeganPos = touch->getLocation();
 			mTouchBeganPos = convertToWorldSpace(mUIPadFront->getPosition());
 			mTouchState = TouchState::Move;
-			mTouchStopWatch->OnStart();
 			isTouchMoved = true;
 		}
 		else if(mArrow->GetState() != Arrow::State::State_Drop)//attack
@@ -460,19 +457,6 @@ void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 		break;
 	}
 
-
-	/*float touchTime = mTouchStopWatch->OnStop();
-
-	if (touchTime > mTouchSlideTime)
-	{
-		mPlayer->SetMoveDir(Vec2::ZERO);
-	}
-	else
-	{
-		Vec2 pos = touch->getLocation() - mTouchBeganPos;
-		float endedRadian = atan2(pos.y, pos.x);
-		mPlayer->OnRoll(endedRadian);
-	}*/
 
 	mTouchState = TouchState::None;
 	mPlayer->SetMoveDir(Vec2::ZERO);

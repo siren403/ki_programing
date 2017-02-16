@@ -7,13 +7,14 @@ bool EnemyFiniteState::InitState()
 }
 
 
-//EnemyFiniteState::EnemyFiniteState(Enemy * entity) : mEntity(entity)
-//{
-//}
-
 EnemyFiniteState::~EnemyFiniteState()
 {
 
+}
+
+void EnemyFiniteState::SetActive(bool isActive)
+{
+	mIsActive = isActive;
 }
 
 

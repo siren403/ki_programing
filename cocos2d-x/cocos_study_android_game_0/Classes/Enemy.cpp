@@ -92,19 +92,24 @@ EnemyParts * Enemy::GetParts(int key)
 	return nullptr;
 }
 
+EnemyPartsMap * Enemy::GetPartsMap()
+{
+	return &mParts;
+}
+
 void Enemy::SetAlive(bool tIsAlive)
 {
-	/*for (mMapPartItor = mParts.begin(); mMapPartItor != mParts.end(); ++mMapPartItor)
+	/*for (mPartMapItor = mParts.begin(); mPartMapItor != mParts.end(); ++mPartMapItor)
 	{
-		mMapPartItor->second->SetAlive(tIsAlive);
+		mPartMapItor->second->SetAlive(tIsAlive);
 	}*/
 }
 
 bool Enemy::IsAlive()
 {
-	/*for (mMapPartItor = mParts.begin(); mMapPartItor != mParts.end(); ++mMapPartItor)
+	/*for (mPartMapItor = mParts.begin(); mPartMapItor != mParts.end(); ++mPartMapItor)
 	{
-		if (mMapPartItor->second->IsAlive())
+		if (mPartMapItor->second->IsAlive())
 		{
 			return true;
 		}
@@ -139,17 +144,17 @@ void Enemy::CheckCollisionActor(Actor * actor)
 	Rect actorRect = utils::getCascadeBoundingBox(actor);
 	Rect partsRect;
 
-	for (mMapPartItor = mParts.begin(); mMapPartItor != mParts.end(); ++mMapPartItor)
+	for (mPartMapItor = mParts.begin(); mPartMapItor != mParts.end(); ++mPartMapItor)
 	{
-		partsRect = utils::getCascadeBoundingBox(mMapPartItor->second);
+		partsRect = utils::getCascadeBoundingBox(mPartMapItor->second);
 		if (actorRect.intersectsRect(partsRect))
 		{
 			isCollision = true;
-			other = mMapPartItor->second;
+			other = mPartMapItor->second;
 
 			if (actor->GetActorType() == ActorType::Actor_Arrow
 				&& ((Arrow*)actor)->GetState() == Arrow::State::State_Shot
-				&& mLifeParts == mMapPartItor->second)
+				&& mLifeParts == mPartMapItor->second)
 			{
 				mLifeParts->SetAlive(false);
 			}

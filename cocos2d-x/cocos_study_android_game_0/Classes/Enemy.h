@@ -22,20 +22,21 @@ private:
 
 protected:
 	EnemyPartsMap mParts;
-	EnemyPartsMap::iterator mMapPartItor;
+	EnemyPartsMap::iterator mPartMapItor;
 	EnemyParts * mLifeParts = nullptr;
 
 
 	//FiniteState
 	EnemyFiniteState * mCurrentFiniteState = nullptr;
 	void AddState(int key, EnemyFiniteState * state);
-	void ChangeState(int key);
-	EnemyFiniteState * GetState(int state);
+	
 public:
 	CREATE_FUNC(Enemy);
 	virtual bool init() override;
 	virtual void update(float dt) override;
 
+	//Enemy의 활성화 상태에 따른 개별 처리 시 사용
+	//ex) false전달 시 Idle상태에서 상태 전이 x 
 	virtual void OnActivate(bool isActive);
 
 	//getter, setter
@@ -45,8 +46,13 @@ public:
 	//EnemyParts
 	void AddParts(int key, EnemyParts * tParts,bool isLifeParts = false, int localZOrder = 0);
 	EnemyParts * GetParts(int key);
+	EnemyPartsMap * GetPartsMap();
 	void DestroyParts();
 	void CheckCollisionActor(Actor * actor);
+
+	//State
+	void ChangeState(int key);
+	EnemyFiniteState * GetState(int state);
 
 	virtual ~Enemy();
 };

@@ -52,9 +52,6 @@
     <ClCompile Include="..\Classes\MapTileVector.cpp">
       <Filter>src\Support</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\EnemyFiniteState.cpp">
-      <Filter>src\Actor\Enemy\FSM</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\Boss.cpp">
       <Filter>src\Actor\Enemy\Boss</Filter>
     </ClCompile>
@@ -72,6 +69,18 @@
     </ClCompile>
     <ClCompile Include="..\Classes\IntUtils.cpp">
       <Filter>src\Support</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\EnemyFiniteState.cpp">
+      <Filter>src\Actor\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Juggler.cpp">
+      <Filter>src\Actor\Enemy\Juggler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\JugglerParts.cpp">
+      <Filter>src\Actor\Enemy\Juggler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\JugglerFiniteState.cpp">
+      <Filter>src\Actor\Enemy\Juggler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -132,9 +141,6 @@
     <ClInclude Include="..\Classes\IntUtils.h">
       <Filter>src\Support</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\EnemyFiniteState.h">
-      <Filter>src\Actor\Enemy\FSM</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\Boss.h">
       <Filter>src\Actor\Enemy\Boss</Filter>
     </ClInclude>
@@ -146,6 +152,18 @@
     </ClInclude>
     <ClInclude Include="..\Classes\DataManager.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\EnemyFiniteState.h">
+      <Filter>src\Actor\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Juggler.h">
+      <Filter>src\Actor\Enemy\Juggler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\JugglerParts.h">
+      <Filter>src\Actor\Enemy\Juggler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\JugglerFiniteState.h">
+      <Filter>src\Actor\Enemy\Juggler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -182,11 +200,11 @@
     <Filter Include="src\Actor\Arrow">
       <UniqueIdentifier>{b29a0baa-2c61-40ef-bf3f-8c9dbc03ac46}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Actor\Enemy\FSM">
-      <UniqueIdentifier>{fa15f9a1-bd52-4480-895a-96cd24be3663}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\Actor\Objects">
       <UniqueIdentifier>{53b5a68b-4725-47a9-a300-06f0ee9fe563}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor\Enemy\Juggler">
+      <UniqueIdentifier>{006667ec-5d59-4dbe-b5b2-e60ef61f1ace}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

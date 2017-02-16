@@ -159,6 +159,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\EnemyParts.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\IntUtils.cpp" />
+    <ClCompile Include="..\Classes\Juggler.cpp" />
+    <ClCompile Include="..\Classes\JugglerFiniteState.cpp" />
+    <ClCompile Include="..\Classes\JugglerParts.cpp" />
     <ClCompile Include="..\Classes\MapTile.cpp" />
     <ClCompile Include="..\Classes\Player.cpp" />
     <ClCompile Include="..\Classes\PlayMap.cpp" />
@@ -185,6 +188,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\EnemyParts.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\IntUtils.h" />
+    <ClInclude Include="..\Classes\Juggler.h" />
+    <ClInclude Include="..\Classes\JugglerFiniteState.h" />
+    <ClInclude Include="..\Classes\JugglerParts.h" />
     <ClInclude Include="..\Classes\MapTile.h" />
     <ClInclude Include="..\Classes\PlayMap.h" />
     <ClInclude Include="..\Classes\Player.h" />

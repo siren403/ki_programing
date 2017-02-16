@@ -2,9 +2,6 @@
 #include "BossParts.h"
 #include "BossFiniteState.h"
 
-#include "ActorManager.h"
-#include "Player.h"
-
 bool Boss::init()
 {
 	if (!Enemy::init())

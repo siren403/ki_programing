@@ -11,21 +11,15 @@ class BossHead;
 
 class BossIdleState : public EnemyFiniteState
 {
-private:
-
-	float mCurrentTime = 0;
-	bool mIsActive = false;
-protected:
-	virtual void OnEnter() override;
-	virtual void OnUpdate(float dt) override;
-	virtual void OnExit() override;
 public:
 	CREATE_STATE_FUNC(BossIdleState);
 	virtual bool InitState() override;
 	virtual ~BossIdleState();
 
-
-	void SetActive(bool isActive);
+protected:
+	virtual void OnEnter() override;
+	virtual void OnUpdate(float dt) override;
+	virtual void OnExit() override;
 };
 #pragma endregion
 
@@ -37,7 +31,6 @@ private:
 	BossHand * mLHand = nullptr;
 	BossHand * mRHand = nullptr;
 
-	float mCurrentTime = 0;
 	bool mIsSecondAttack = false;
 
 	void HandAttacKLockOn(BossHand * hand);

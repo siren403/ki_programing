@@ -51,10 +51,6 @@ BossIdleState::~BossIdleState()
 {
 }
 
-void BossIdleState::SetActive(bool isActive)
-{
-	mIsActive = isActive;
-}
 
 #pragma endregion
 
