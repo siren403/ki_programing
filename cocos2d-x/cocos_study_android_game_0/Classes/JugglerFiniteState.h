@@ -6,10 +6,14 @@
 
 using namespace cocos2d;
 
+class StopWatch;
+
 #pragma region Idle
 
 class JugglerIdleState : public EnemyFiniteState
 {
+private:
+	StopWatch * mStopWatch = nullptr;
 public:
 	CREATE_STATE_FUNC(JugglerIdleState);
 	virtual bool InitState() override;

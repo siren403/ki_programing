@@ -12,7 +12,7 @@ bool Juggler::init()
 		return false;
 	}
 	mCircleCount = 12;
-	mCircleRadius = 90;
+	mCircleRadius = 300;
 	mCirclePivot = (PI * 2) * 0.75;
 
 	auto lifeParts = JugglerCircle::create();
@@ -36,13 +36,13 @@ bool Juggler::init()
 	this->AddState(State::State_Idle, JugglerIdleState::Create(this));
 	this->ChangeState(State::State_Idle);
 
-
 	return true;
 }
 
+
 void Juggler::OnActivate(bool isActive)
 {
-
+	this->GetState(State::State_Idle)->SetActive(isActive);
 }
 
 int Juggler::GetCircleCount()

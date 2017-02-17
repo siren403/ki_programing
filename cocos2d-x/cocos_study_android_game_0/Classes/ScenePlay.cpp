@@ -9,6 +9,7 @@
 #include "DataManager.h"
 
 #define ZORDER_ENEMY 5
+#define IS_IMMOTAL_PLAYER true
 
 Scene * ScenePlay::createScene()
 {
@@ -265,7 +266,10 @@ void ScenePlay::update(float dt)
 	if (mCurrentEnemy != nullptr)
 	{
 		mCurrentEnemy->CheckCollisionActor(mArrow);
-		mCurrentEnemy->CheckCollisionActor(mPlayer);
+		if (IS_IMMOTAL_PLAYER == false)
+		{
+			mCurrentEnemy->CheckCollisionActor(mPlayer);
+		}
 		if (mCurrentEnemy->IsAlive() == false)
 		{
 			log("clear");
@@ -436,7 +440,10 @@ void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 	switch (mTouchState)
 	{
 	case TouchState::Shot:
-		mArrow->Shot();
+		if (mTouchBeganPos.distance(touchPos) > 5)
+		{
+			mArrow->Shot();
+		}
 		mPlayNodeOffsetDirection = Vec2::ZERO;
 		break;
 	case TouchState::Move:

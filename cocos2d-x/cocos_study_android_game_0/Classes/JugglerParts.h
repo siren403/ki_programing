@@ -28,21 +28,32 @@ public:
 	{
 		State_None = 0,
 		State_Idle = 1,
+		State_Attack = 2,
 	};
 private:
 	JugglerCircle::State mState;
 	CircleRotateData mRotateData;
-	StopWatch * mStopWatch = nullptr;
+	StopWatch * mIdleWatch = nullptr;
+	StopWatch * mAttackWatch = nullptr;
+	
+	Vec2 mIdlePosition;
+
+	//attack
+	float mAttackDuration = 0;
+	Vec2 mAttackStartPos;
+	Vec2 mAttackTargetPos;
 
 	void UpdateIdle(float dt);
+	void UpdateAttack(float dt);
 public:
 	CREATE_FUNC(JugglerCircle);
 	virtual bool init() override;
-
 	virtual void update(float dt) override;
 
 	void SetState(JugglerCircle::State state);
 	void SetRotateData(CircleRotateData data);
+
+	void OnAttack(Vec2 targetPos, float duration);
 };
 
 #pragma endregion

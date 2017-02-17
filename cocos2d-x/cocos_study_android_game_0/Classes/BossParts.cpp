@@ -78,7 +78,7 @@ void BossHand::InitHand(HandDir dir)
 }
 Vec2 BossHand::GetInitPosition()
 {
-	return mInitPosition;
+	return mIdlePosition;
 }
 
 char BossHand::GetHandDirection()
@@ -113,7 +113,7 @@ void BossHand::UpdateIdle(float dt)
 {
 	Vec2 pos;
 
-	pos = mInitPosition;
+	pos = mIdlePosition;
 	mIdleRadian += (PI * dt) * -1;
 	if (mIdleRadian <= PI * -2)
 	{
@@ -128,13 +128,13 @@ void BossHand::UpdateAttack(float dt)
 	mCurrentTime += dt;
 
 	Vec2 pos;
-	pos = EasingFunc::EaseSinInOut(sin(PI * mCurrentTime) *mAttackDuration, mInitPosition, mAttackTargetPos - mInitPosition, mAttackDuration);
+	pos = EasingFunc::EaseSinInOut(sin(PI * mCurrentTime) *mAttackDuration, mIdlePosition, mAttackTargetPos - mIdlePosition, mAttackDuration);
 	this->setPosition(pos);
 
 	if (mCurrentTime >= 1)
 	{
 		mCurrentTime = 0;
-		this->setPosition(mInitPosition);
+		this->setPosition(mIdlePosition);
 		mState = State::Idle;
 	}
 
@@ -142,7 +142,7 @@ void BossHand::UpdateAttack(float dt)
 void BossHand::onEnter()
 {
 	EnemyParts::onEnter();
-	mInitPosition = this->getPosition();
+	mIdlePosition = this->getPosition();
 }
 
 #pragma endregion

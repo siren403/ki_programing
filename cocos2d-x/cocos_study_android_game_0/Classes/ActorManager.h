@@ -5,6 +5,7 @@
 #include <map>
 #include <functional>
 
+using namespace cocos2d;
 using namespace std;
 
 class Actor;
@@ -30,6 +31,8 @@ private:
 public:
 	Player * GetPlayer();
 	Enemy * GetEnemy(int key);
+
+	Vec2 ConvertPlayerToEntity(Node * entity);
 };
 
 #endif // !__ACTORMANAGER_H__

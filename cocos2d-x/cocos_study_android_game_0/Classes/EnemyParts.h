@@ -6,6 +6,8 @@
 
 using namespace cocos2d;
 
+class Enemy;
+
 class EnemyParts : public Actor
 {
 private:
@@ -14,7 +16,6 @@ private:
 	float mHitDelay = 0;
 	float mCurrentHitDelay = 0;
 protected:
-
 	//get,set
 	Sprite * SetSprite(Sprite * sprite,int localZOrder = 0);
 public:
@@ -27,6 +28,7 @@ public:
 	virtual const Size GetPartsSize();
 	void SetHP(int tHP);
 	Sprite * GetSprite();
+
 
 	void Hit();
 };

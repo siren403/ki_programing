@@ -48,7 +48,7 @@ private:
 	BossHand::State mState;
 
 	char mHandDirection = 0;
-	Vec2 mInitPosition;
+	Vec2 mIdlePosition;
 
 	float mCurrentTime = 0;
 

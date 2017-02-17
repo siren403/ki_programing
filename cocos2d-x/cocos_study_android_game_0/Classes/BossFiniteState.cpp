@@ -103,10 +103,13 @@ void BossHandAttackState::OnUpdate(float dt)
 }
 void BossHandAttackState::HandAttacKLockOn(BossHand * hand)
 {
-	auto player = ActorManager::GetInstance()->GetPlayer();
-	Vec2 targetPos = player->getParent()->convertToWorldSpace(player->getPosition());
-	targetPos = mEntity->convertToNodeSpace(targetPos);
-	hand->OnAttack(targetPos);
+	//auto player = ActorManager::GetInstance()->GetPlayer();
+	//Vec2 targetPos = player->getParent()->convertToWorldSpace(player->getPosition());
+	//targetPos = mEntity->convertToNodeSpace(targetPos);
+	//Vec2 pos = ActorManager::GetInstance()->ConvertPlayerToEntity(mEntity);
+
+	Vec2 pos = ActorManager::GetInstance()->GetPlayer()->getPosition();
+	hand->OnAttack(pos);
 }
 
 void BossHandAttackState::OnExit()
