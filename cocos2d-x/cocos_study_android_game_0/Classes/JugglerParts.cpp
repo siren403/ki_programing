@@ -48,7 +48,7 @@ void JugglerCircle::update(float dt)
 	case State::State_Idle:
 		UpdateIdle(dt);
 		break;
-	case State::State_Attack:
+	case State::State_SeqAttack:
 		UpdateAttack(dt);
 		break;
 	}
@@ -69,12 +69,13 @@ void JugglerCircle::UpdateAttack(float dt)
 	if (mAttackWatch->GetAccTime() >= mAttackDuration)
 	{
 		mAttackWatch->OnReset();
-		mState = State::State_Idle;
+		SetState(mPrevState);
 	}
 }
 
 void JugglerCircle::SetState(JugglerCircle::State state)
 {
+	mPrevState = mState;
 	mState = state;
 }
 
@@ -89,7 +90,7 @@ void JugglerCircle::OnAttack(Vec2 targetPos, float duration)
 	mAttackStartPos = this->getPosition();
 	mAttackTargetPos = targetPos;
 	mAttackDuration = duration == 0 ? 1 : duration;
-	mState = State::State_Attack;
+	SetState(State::State_SeqAttack);
 }
 
 

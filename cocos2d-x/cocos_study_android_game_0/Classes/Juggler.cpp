@@ -34,6 +34,7 @@ bool Juggler::init()
 	}
 
 	this->AddState(State::State_Idle, JugglerIdleState::Create(this));
+	this->AddState(State::State_SeqAttack, JugglerSeqAttackState::Create(this));
 	this->ChangeState(State::State_Idle);
 
 	return true;

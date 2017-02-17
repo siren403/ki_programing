@@ -23,10 +23,28 @@ protected:
 	virtual void OnEnter() override;
 	virtual void OnUpdate(float dt) override;
 	virtual void OnExit() override;
-
 };
 
 #pragma endregion
+
+#pragma region SequenceAttack
+
+class JugglerSeqAttackState : public EnemyFiniteState
+{
+public:
+	CREATE_STATE_FUNC(JugglerSeqAttackState);
+	virtual bool InitState() override;
+	virtual ~JugglerSeqAttackState();
+protected:
+	virtual void OnEnter() override;
+	virtual void OnUpdate(float dt) override;
+	virtual void OnExit() override;
+private:
+	int mCurrentAttackIndex = 0;
+	StopWatch * mStopWatch = nullptr;
+};
+#pragma endregion
+
 
 
 #endif // !__JUGGLERFINITESTATE_H__

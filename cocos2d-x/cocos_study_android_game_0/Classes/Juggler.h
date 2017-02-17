@@ -10,6 +10,7 @@ public:
 	{
 		State_None = 0,
 		State_Idle = 1,
+		State_SeqAttack = 2,
 	};
 private:
 	int mCircleCount = 0;

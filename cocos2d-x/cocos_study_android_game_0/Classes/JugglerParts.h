@@ -28,9 +28,10 @@ public:
 	{
 		State_None = 0,
 		State_Idle = 1,
-		State_Attack = 2,
+		State_SeqAttack = 2,
 	};
 private:
+	JugglerCircle::State mPrevState;
 	JugglerCircle::State mState;
 	CircleRotateData mRotateData;
 	StopWatch * mIdleWatch = nullptr;
