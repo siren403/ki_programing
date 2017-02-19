@@ -8,6 +8,15 @@ using namespace cocos2d;
 class EasingFunc
 {
 public:
+	//Linear
+	static float EaseLinear(float curTime, float startValue, float changeValue, float duration);
+
+
+	//Quartic
+	static float EaseQuarticIn(float curTime, float startValue, float changeValue, float duration);
+
+
+
 	static float EaseSinInOut(float curTime, float startValue, float changeValue, float duration);
 	static Vec2 EaseSinInOut(float curTime, Vec2 startValue, Vec2 changeValue, float duration);
 

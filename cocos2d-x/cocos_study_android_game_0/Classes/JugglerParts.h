@@ -34,6 +34,11 @@ private:
 	JugglerCircle::State mPrevState;
 	JugglerCircle::State mState;
 	CircleRotateData mRotateData;
+	//idle 상태시 회전속도값의 대한 비율
+	float mRotateSpeedRatio = 1;
+	//idle 상태시 회전반지름의 대한 비율
+	float mCircleRadiusRatio = 1;
+
 	StopWatch * mIdleWatch = nullptr;
 	StopWatch * mAttackWatch = nullptr;
 	
@@ -51,8 +56,15 @@ public:
 	virtual bool init() override;
 	virtual void update(float dt) override;
 
+	//get,set
 	void SetState(JugglerCircle::State state);
+	JugglerCircle::State GetState();
 	void SetRotateData(CircleRotateData data);
+	void SetRotateSpeedRatio(float ratio);
+	float GetRotateSpeedRatio();
+	void SetCircleRadiusRatio(float ratio);
+	float GetCircleRadiusRatio();
+
 
 	void OnAttack(Vec2 targetPos, float duration);
 };

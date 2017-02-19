@@ -22,7 +22,7 @@ bool Player::init()
 	this->addChild(mSpriteAnim);
 
 	mHP = 30;
-	mMoveSpeedPower = 180;
+	mMoveSpeedPower = 200;
 	mMoveDir = Vec2::ZERO;
 	mState = State::Idle;
 

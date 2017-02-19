@@ -62,6 +62,7 @@ private:
 	//GameState
 	int mCurrentRoomIndex = 0;
 	bool mIsPlaying = false;
+	Node * mCameraTarget = nullptr;
 
 	//Screen
 	Sprite * mFadeSprite = nullptr;

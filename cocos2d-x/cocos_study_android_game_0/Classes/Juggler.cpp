@@ -12,7 +12,7 @@ bool Juggler::init()
 		return false;
 	}
 	mCircleCount = 12;
-	mCircleRadius = 300;
+	mCircleRadius = 100;
 	mCirclePivot = (PI * 2) * 0.75;
 
 	auto lifeParts = JugglerCircle::create();
@@ -21,6 +21,7 @@ bool Juggler::init()
 	this->AddParts(LIFEPARTS_KEY, lifeParts, true);
 
 	JugglerCircle * circle = nullptr;
+
 	//Vec2 pos;
 	for (int i = 0; i < mCircleCount; i++)
 	{
@@ -33,8 +34,11 @@ bool Juggler::init()
 		}
 	}
 
+	this->AddState(State::State_None, JugglerNoneState::Create(this));
 	this->AddState(State::State_Idle, JugglerIdleState::Create(this));
 	this->AddState(State::State_SeqAttack, JugglerSeqAttackState::Create(this));
+	this->AddState(State::State_RushAttack, JugglerRushAttackState::Create(this));
+
 	this->ChangeState(State::State_Idle);
 
 	return true;

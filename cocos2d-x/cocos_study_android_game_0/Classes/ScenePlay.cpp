@@ -79,7 +79,7 @@ bool ScenePlay::init()
 	mPlayNode->setPosition(Vec2(0, uiPadBackSize.height));
 	mRenderNode->addChild(mPlayNode, 0);
 
-	mPlayNodeOffsetScalar = 300;
+	mPlayNodeOffsetScalar = 240;
 	mPlayNodeOffsetDirection = Vec2::ZERO;
 
 #pragma region Create
@@ -224,6 +224,7 @@ void ScenePlay::update(float dt)
 	{
 		return;
 	}
+	//Map Scroll
 	CalculatePlayNodePosition(dt * 2);
 
 #pragma region Tile Collision
@@ -247,7 +248,6 @@ void ScenePlay::update(float dt)
 	}
 #pragma endregion
 
-	//Map Scroll
 
 #pragma region mArrow State Check
 
@@ -266,7 +266,7 @@ void ScenePlay::update(float dt)
 	if (mCurrentEnemy != nullptr)
 	{
 		mCurrentEnemy->CheckCollisionActor(mArrow);
-		if (IS_IMMOTAL_PLAYER == false)
+		if (IS_IMMOTAL_PLAYER == false && mPlayer->GetState() != Player::State::Roll)
 		{
 			mCurrentEnemy->CheckCollisionActor(mPlayer);
 		}
@@ -333,18 +333,30 @@ void ScenePlay::RoomClearSequence()
 
 void ScenePlay::CalculatePlayNodePosition(float dt)
 {
-	Vec2 pos;// = mPlayer->getPosition();
-			 //log("%f,%f", pos.x, pos.y);
+	Vec2 targetPos;
 
-			 /*pos.x = mPlayNodeSize.width * 0.5;
-			 pos.y = (mPlayNodeSize.height * 0.5) + mUIPadBack->getContentSize().height;*/
-			 //log("%f,%f", pos.x, pos.y);
+	if (mCameraTarget == nullptr)
+	{
+		targetPos = mPlayer->getPosition();
+	}
+	else
+	{
+		targetPos = mCameraTarget->getPosition();
+	}
+
+	if (mCurrentEnemy != nullptr)
+	{
+		Vec2 dist = mCurrentEnemy->getPosition() - targetPos;
+		targetPos += Vec2(dist.x *0.3, dist.y*0.3);
+	}
+
+	Vec2 pos;
 
 	Vec2 origin;
-	origin.x = mPlayNodeSize.width * 0.5;
+	origin.x = (mPlayNodeSize.width * 0.5);
 	origin.y = (mPlayNodeSize.height * 0.5) + mUIPadBack->getContentSize().height;
 
-	pos = (origin - mPlayer->getPosition()) + Vec2(-mPlayNodeOffsetDirection.x * mPlayNodeOffsetScalar, -mPlayNodeOffsetDirection.y * mPlayNodeOffsetScalar);
+	pos = (origin - targetPos) + Vec2(-mPlayNodeOffsetDirection.x * mPlayNodeOffsetScalar, -mPlayNodeOffsetDirection.y * mPlayNodeOffsetScalar);
 
 	//log("%f,%f", pos.y, mUIPadBack->getContentSize().height);
 	pos.y = MIN(pos.y, mUIPadBack->getContentSize().height);

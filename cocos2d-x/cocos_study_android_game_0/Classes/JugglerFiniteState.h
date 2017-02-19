@@ -8,6 +8,23 @@ using namespace cocos2d;
 
 class StopWatch;
 
+#pragma region None
+
+class JugglerNoneState : public EnemyFiniteState
+{
+public:
+	CREATE_STATE_FUNC(JugglerNoneState);
+	virtual bool InitState() override;
+	virtual ~JugglerNoneState();
+protected:
+	virtual void OnEnter() override;
+	virtual void OnUpdate(float dt) override;
+	virtual void OnExit() override;
+};
+
+#pragma endregion
+
+
 #pragma region Idle
 
 class JugglerIdleState : public EnemyFiniteState
@@ -45,6 +62,32 @@ private:
 };
 #pragma endregion
 
+#pragma region RushAttack
+
+class JugglerRushAttackState : public EnemyFiniteState
+{
+public:
+	CREATE_STATE_FUNC(JugglerRushAttackState);
+	virtual bool InitState() override;
+	virtual ~JugglerRushAttackState();
+protected:
+	virtual void OnEnter() override;
+	virtual void OnUpdate(float dt) override;
+	virtual void OnExit() override;
+private:
+	StopWatch * mStopWatch = nullptr;
+	Vec2 mRushDirection;
+	bool mIsCharging = false;
+	float mChargingDuration = 0;
+	float mChargingRotationRatio = 0;
+	float mChargingRadius = 0;
+
+	float mRushDuration = 0;
+	float mRushRadius = 0;
+	bool mIsRushReturn = false;
+};
+
+#pragma endregion
 
 
 #endif // !__JUGGLERFINITESTATE_H__

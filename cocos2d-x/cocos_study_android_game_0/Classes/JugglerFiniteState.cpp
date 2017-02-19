@@ -4,6 +4,40 @@
 #include "StopWatch.h"
 #include "ActorManager.h"
 #include "Player.h"
+#include "EasingFunc.h"
+
+#define PI 3.14159
+
+#pragma region None
+
+bool JugglerNoneState::InitState()
+{
+	if (!EnemyFiniteState::InitState())
+	{
+		return false;
+	}
+
+	return true;
+}
+
+JugglerNoneState::~JugglerNoneState()
+{
+}
+
+void JugglerNoneState::OnEnter()
+{
+}
+
+void JugglerNoneState::OnUpdate(float dt)
+{
+}
+
+void JugglerNoneState::OnExit()
+{
+}
+
+#pragma endregion
+
 
 #pragma region Idle
 
@@ -48,11 +82,11 @@ void JugglerIdleState::OnUpdate(float dt)
 
 		if (mStopWatch->GetAccTime() > 4)
 		{
-			this->GetEntity<Juggler>()->ChangeState(Juggler::State::State_SeqAttack);
+			//NextState
+			//this->GetEntity<Juggler>()->ChangeState(Juggler::State::State_SeqAttack);
+			this->GetEntity<Juggler>()->ChangeState(Juggler::State::State_RushAttack);
 			mStopWatch->OnReset();
 		}
-
-
 	}
 }
 
@@ -97,39 +131,137 @@ void JugglerSeqAttackState::OnEnter()
 void JugglerSeqAttackState::OnUpdate(float dt)
 {
 	mStopWatch->OnUpdate(dt);
-	if (mCurrentAttackIndex < this->GetEntity<Juggler>()->GetCircleCount())
+	int circleCount = this->GetEntity<Juggler>()->GetCircleCount();
+	float attackDuration = 3;
+	if (mCurrentAttackIndex <  circleCount)
 	{
 		if (mStopWatch->GetAccTime() >= 0.8)
 		{
 			auto circle = (JugglerCircle*)this->GetEntity<Juggler>()->GetParts(mCurrentAttackIndex);
 			Vec2 targetPos = ActorManager::GetInstance()->ConvertPlayerToEntity(mEntity);
-			circle->OnAttack(targetPos, 1.8);
+			circle->OnAttack(targetPos, attackDuration);
 			mCurrentAttackIndex++;
-			if (mCurrentAttackIndex >= this->GetEntity<Juggler>()->GetCircleCount())
-			{
-				mCurrentAttackIndex = 0;
-				this->GetEntity<Juggler>()->ChangeState(Juggler::State::State_Idle);
-			}
-
+			
 			mStopWatch->OnReset();
 		}
 	}
-	/*if (isShot == false)
+	else
 	{
-	if (mStopWatch->GetAccTime() > 2)
-	{
-	Vec2 targetPos = ActorManager::GetInstance()->ConvertPlayerToEntity(mEntity);
-
-	auto circles = this->GetEntity<Juggler>();
-	((JugglerCircle*)circles->GetPartsMap()->at(0))->OnAttack(targetPos, 4);
-
-	isShot = true;
-	mStopWatch->OnReset();
+		auto circle = (JugglerCircle*)this->GetEntity<Juggler>()->GetParts(mCurrentAttackIndex - 1);
+		if (circle->GetState() == JugglerCircle::State::State_None)
+		{
+			mCurrentAttackIndex = 0;
+			this->GetEntity<Juggler>()->ChangeState(Juggler::State::State_Idle);
+			mStopWatch->OnReset();
+		}
 	}
-	}*/
 }
 
 void JugglerSeqAttackState::OnExit()
 {
 }
 #pragma endregion
+
+#pragma region RushAttack
+
+bool JugglerRushAttackState::InitState()
+{
+	if (!EnemyFiniteState::InitState())
+	{
+		return false;
+	}
+
+	mStopWatch = StopWatch::create();
+	mStopWatch->retain();
+	mStopWatch->OnStart();
+
+	mChargingDuration = 3;
+	mChargingRotationRatio = 6;
+	mChargingRadius = 0.5;
+
+	mRushDuration = 3;
+	mRushRadius = 4;
+	return true;
+}
+
+JugglerRushAttackState::~JugglerRushAttackState()
+{
+	CC_SAFE_RELEASE_NULL(mStopWatch);
+}
+
+void JugglerRushAttackState::OnEnter()
+{
+	for (int i = 0; i < this->GetEntity<Juggler>()->GetCircleCount(); i++)
+	{
+		auto circle = (JugglerCircle*)this->GetEntity<Juggler>()->GetParts(i);
+		circle->SetState(JugglerCircle::State::State_Idle);
+	}
+}
+
+void JugglerRushAttackState::OnUpdate(float dt)
+{
+	mStopWatch->OnUpdate(dt);
+	if (mIsCharging == false)
+	{
+		for (int i = 0; i < this->GetEntity<Juggler>()->GetCircleCount(); i++)
+		{
+			auto circle = (JugglerCircle*)this->GetEntity<Juggler>()->GetParts(i);
+			float ratio = EasingFunc::EaseLinear(
+				mStopWatch->GetAccTime(), 1, mChargingRotationRatio - 1, mChargingDuration);
+			circle->SetRotateSpeedRatio(ratio);
+
+			ratio = EasingFunc::EaseLinear(
+				mStopWatch->GetAccTime(), 1, mChargingRadius - 1, mChargingDuration);
+			circle->SetCircleRadiusRatio(ratio);
+		}
+		if (mStopWatch->GetAccTime() >= mChargingDuration)
+		{
+			mIsCharging = true;
+			mStopWatch->OnReset();
+		}
+	}
+	else
+	{
+		for (int i = 0; i < this->GetEntity<Juggler>()->GetCircleCount(); i++)
+		{
+			auto circle = (JugglerCircle*)this->GetEntity<Juggler>()->GetParts(i);
+			float ratio;
+
+			if (mIsRushReturn == false)
+			{
+				ratio = EasingFunc::EaseLinear(
+					mStopWatch->GetAccTime(), mChargingRadius, mRushRadius - mChargingRadius, mRushDuration / 2);
+				circle->SetCircleRadiusRatio(ratio);
+				if (mStopWatch->GetAccTime() >= mRushDuration / 2)
+				{
+					mIsRushReturn = true;
+					mStopWatch->OnReset();
+				}
+			}
+			else
+			{
+				ratio = EasingFunc::EaseLinear(
+					mStopWatch->GetAccTime(), mChargingRotationRatio, 1 - mChargingRotationRatio, mRushDuration / 2);
+				circle->SetRotateSpeedRatio(ratio);
+
+				ratio = EasingFunc::EaseLinear(
+					mStopWatch->GetAccTime(), mRushRadius, 1 - mRushRadius, mRushDuration / 2);
+				circle->SetCircleRadiusRatio(ratio);
+			}
+		}
+		if (mStopWatch->GetAccTime() >= mRushDuration / 2)
+		{
+			mIsRushReturn = false;
+			mIsCharging = false;
+			mStopWatch->OnReset();
+			//mEntity->ChangeState(Juggler::State::State_None);
+		}
+	}
+}
+
+void JugglerRushAttackState::OnExit()
+{
+}
+
+#pragma endregion
+
