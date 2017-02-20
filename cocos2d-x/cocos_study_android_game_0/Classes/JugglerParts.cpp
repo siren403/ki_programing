@@ -14,9 +14,11 @@ bool JugglerCircle::init()
 		return false;
 	}
 
-	auto sprite = this->SetSprite(Sprite::create("enemy/circle.png"));
-	sprite->getTexture()->setAliasTexParameters();
+	auto sprite = this->SetSprite(Sprite::create("enemy/whitemask.png"));
+	//sprite->getTexture()->setAliasTexParameters();
 	
+
+
 	mIdleWatch = StopWatch::create();
 	mIdleWatch->OnStart();
 	this->addChild(mIdleWatch);

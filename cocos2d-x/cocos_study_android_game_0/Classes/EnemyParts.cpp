@@ -75,6 +75,7 @@ Sprite *  EnemyParts::SetSprite(Sprite * sprite, int localZOrder)
 		this->removeChild(mSprite);
 	}
 	mSprite = sprite;
+	mSprite->getTexture()->setAliasTexParameters();
 	this->addChild(mSprite, localZOrder);
 
 	return mSprite;

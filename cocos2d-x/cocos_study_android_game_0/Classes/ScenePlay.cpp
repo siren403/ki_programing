@@ -452,15 +452,13 @@ void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 	switch (mTouchState)
 	{
 	case TouchState::Shot:
-		if (mTouchBeganPos.distance(touchPos) > 5)
+		if (mTouchBeganPos.distance(touchPos) > 100)
 		{
 			mArrow->Shot();
 		}
 		mPlayNodeOffsetDirection = Vec2::ZERO;
 		break;
 	case TouchState::Move:
-		//if (mUIPadBack->getBoundingBox().containsPoint(touchPos))
-		//{
 		if (!(mUIPadFront->getBoundingBox().containsPoint(touchPos) &&
 			CollisionUtils::GetInst()->ContainsPointToPixel(mUIPadFront, mUIPadFrontImage, touchPos)))//move
 		{
@@ -468,7 +466,6 @@ void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 			float endedRadian = atan2(dir.y, dir.x);
 			mPlayer->OnRoll(endedRadian);
 		}
-		//}
 		mArrow->DisableLockOn();
 		break;
 	case TouchState::Collect:

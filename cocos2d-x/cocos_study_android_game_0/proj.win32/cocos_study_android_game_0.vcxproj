@@ -157,6 +157,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Enemy.cpp" />
     <ClCompile Include="..\Classes\EnemyFiniteState.cpp" />
     <ClCompile Include="..\Classes\EnemyParts.cpp" />
+    <ClCompile Include="..\Classes\Faker.cpp" />
+    <ClCompile Include="..\Classes\FakerFiniteState.cpp" />
+    <ClCompile Include="..\Classes\FakerParts.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\IntUtils.cpp" />
     <ClCompile Include="..\Classes\Juggler.cpp" />
@@ -186,6 +189,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Enemy.h" />
     <ClInclude Include="..\Classes\EnemyFiniteState.h" />
     <ClInclude Include="..\Classes\EnemyParts.h" />
+    <ClInclude Include="..\Classes\Faker.h" />
+    <ClInclude Include="..\Classes\FakerFiniteState.h" />
+    <ClInclude Include="..\Classes\FakerParts.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\IntUtils.h" />
     <ClInclude Include="..\Classes\Juggler.h" />

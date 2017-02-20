@@ -3,14 +3,14 @@
         {
             "key":0,
             "enemy":{
-                "id":2,
+                "id":3,
                 "position":{"x":0.5,"y":0.55}
             }
         },
         {
             "key":1,
             "enemy":{
-                "id":1,
+                "id":2,
                 "position":{"x":0.5,"y":0.55}
             }
         }
