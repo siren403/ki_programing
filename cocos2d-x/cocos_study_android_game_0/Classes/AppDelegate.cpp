@@ -2,7 +2,7 @@
 #include "HelloWorldScene.h"
 #include "SceneTitle.h"
 #include "ScenePlay.h"
-
+#include "SceneShaderTest.h"
 
 USING_NS_CC;
 
@@ -82,7 +82,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // create a scene. it's an autorelease object
 	//auto scene = HelloWorld::createScene();
 	//auto scene = SceneTitle::createScene();
-	auto scene = ScenePlay::createScene();
+	//auto scene = ScenePlay::createScene();
+	auto scene = SceneShaderTest::createScene();
 
 
     // run

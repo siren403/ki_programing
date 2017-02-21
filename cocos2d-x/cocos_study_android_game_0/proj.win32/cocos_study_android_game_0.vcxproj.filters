@@ -91,6 +91,9 @@
     <ClCompile Include="..\Classes\FakerParts.cpp">
       <Filter>src\Actor\Enemy\Faker</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\SceneShaderTest.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -182,6 +185,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\FakerParts.h">
       <Filter>src\Actor\Enemy\Faker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SceneShaderTest.h">
+      <Filter>src\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -169,6 +169,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Player.cpp" />
     <ClCompile Include="..\Classes\PlayMap.cpp" />
     <ClCompile Include="..\Classes\ScenePlay.cpp" />
+    <ClCompile Include="..\Classes\SceneShaderTest.cpp" />
     <ClCompile Include="..\Classes\SceneTitle.cpp" />
     <ClCompile Include="..\Classes\SpriteAnimator.cpp" />
     <ClCompile Include="..\Classes\MapTileVector.cpp" />
@@ -201,6 +202,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\PlayMap.h" />
     <ClInclude Include="..\Classes\Player.h" />
     <ClInclude Include="..\Classes\ScenePlay.h" />
+    <ClInclude Include="..\Classes\SceneShaderTest.h" />
     <ClInclude Include="..\Classes\SceneTitle.h" />
     <ClInclude Include="..\Classes\SpriteAnimator.h" />
     <ClInclude Include="..\Classes\MapTileVector.h" />
