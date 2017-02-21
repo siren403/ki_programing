@@ -20,6 +20,7 @@ private:
 	EnemyFSMap mFiniteState;
 	bool mIsScheduleUpdate = false;
 
+	bool mIsFollow = false;
 protected:
 	EnemyPartsMap mParts;
 	EnemyPartsMap::iterator mPartMapItor;
@@ -43,6 +44,9 @@ public:
 	virtual void SetAlive(bool tIsAlive) override;
 	virtual bool IsAlive() override;
 	
+	void SetCameraFollow(bool isFollow);
+	bool IsCameraFollow();
+
 	//EnemyParts
 	void AddParts(int key, EnemyParts * tParts,bool isLifeParts = false, int localZOrder = 0);
 	EnemyParts * GetParts(int key);
@@ -53,6 +57,8 @@ public:
 	//State
 	void ChangeState(int key);
 	EnemyFiniteState * GetState(int state);
+
+
 
 	virtual ~Enemy();
 };

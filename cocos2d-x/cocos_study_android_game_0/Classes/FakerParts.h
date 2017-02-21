@@ -7,16 +7,55 @@ class StopWatch;
 
 class FakerSheep : public EnemyParts
 {
+public:
+	enum FaceType
+	{
+		Face_None = 0,
+		Face_1 = 1,
+		Face_2 = 2,
+		Face_3 = 3,
+		Face_4 = 4,
+		Face_5 = 5,
+	};
+	enum State
+	{
+		State_None = 0,
+		State_Idle = 1,
+		State_DirMove = 2,
+		State_Hide = 3,
+	};
 private:
 	Sprite * mFaceSprite = nullptr;
 	StopWatch * mStopWatch = nullptr;
-	int mFaceIndex = 0;
+	
+	FakerSheep::FaceType mFaceType;
+	FakerSheep::State mState;
+
+	//Move
+	Vec2 mMoveDirection;
+	float mMoveSpeedPower;
+	Vec2 mOriginPosition;
+	float mJumpHeight = 0;
+	//Hide
+	float mHideDuration = 0;
+
+	void UpdateIdle(float dt);
+	void UpdateMove(float dt);
+	void UpdateHide(float dt);
 public:
 	CREATE_FUNC(FakerSheep);
 	virtual bool init() override;
 	virtual void update(float dt) override;
 
+	void SetState(FakerSheep::State state);
+	void SetFace(FaceType type);
+	void SetMoveDirection(Vec2 dir);
+	void SetMoveDirection(float angle);
+	void SetMoveSpeedPower(float speedPower);
+	void SetOriginPosition(Vec2 pos);
+	float GetHideDuration();
 
+	void OnHidePosition();
 };
 
 

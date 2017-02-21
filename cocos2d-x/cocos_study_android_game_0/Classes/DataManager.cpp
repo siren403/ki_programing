@@ -121,6 +121,7 @@ DataManager::DataManager()
 		Vec2 pos = Vec2(docEnemyData["position"]["x"].GetFloat(),
 			docEnemyData["position"]["y"].GetFloat());
 		curEnemyData.position = pos;
+		curEnemyData.cameraFollow = docEnemyData["cameraFollow"].GetBool();
 
 		curStageData.enemy = curEnemyData;
 		

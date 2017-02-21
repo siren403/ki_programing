@@ -3,13 +3,18 @@
 
 #include "Enemy.h"
 
+#define LIFEPARTS_KEY -1
+
 class Faker : public Enemy
 {
 public:
 	enum State
 	{
-		None = 0,
-		Idle = 1,
+		State_None = 0,
+		State_Idle = 1,
+		State_ShowLife = 2,
+		State_AllHide = 3,
+		State_AllSideShow = 4,
 	};
 private:
 	Faker::State mState;

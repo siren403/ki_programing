@@ -121,6 +121,16 @@ bool Enemy::IsAlive()
 	return false;
 }
 
+void Enemy::SetCameraFollow(bool isFollow)
+{
+	mIsFollow = isFollow;
+}
+
+bool Enemy::IsCameraFollow()
+{
+	return mIsFollow;
+}
+
 void Enemy::DestroyParts()
 {
 	//mDestroyPartsCount++;

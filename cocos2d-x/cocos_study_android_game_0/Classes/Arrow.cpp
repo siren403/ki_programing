@@ -22,7 +22,7 @@ bool Arrow::init()
 
 	//mState = State::State_Idle;
 	SetState(State::State_Idle);
-	mMaxSpeedPower = 1300;
+	mMaxSpeedPower = 1700;
 	mDecelRatio = 0.05;
 
 	this->scheduleUpdate();

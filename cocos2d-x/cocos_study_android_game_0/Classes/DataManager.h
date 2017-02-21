@@ -30,6 +30,7 @@ struct EnemyData
 {
 	int id;
 	Vec2 position;
+	bool cameraFollow;
 };
 
 struct StageData

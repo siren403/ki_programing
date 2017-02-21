@@ -150,6 +150,7 @@ void ScenePlay::RoomSequence(int roomIndex, bool isReset)
 					mCurrentEnemy = nullptr;
 				}
 				mCurrentEnemy = ActorManager::GetInstance()->GetEnemy(stageData->enemy.id);
+				mCurrentEnemy->SetCameraFollow(stageData->enemy.cameraFollow);
 				mPlayNode->addChild(mCurrentEnemy, ZORDER_ENEMY);
 			}
 
@@ -344,7 +345,7 @@ void ScenePlay::CalculatePlayNodePosition(float dt)
 		targetPos = mCameraTarget->getPosition();
 	}
 
-	if (mCurrentEnemy != nullptr)
+	if (mCurrentEnemy != nullptr&& mCurrentEnemy->IsCameraFollow())
 	{
 		Vec2 dist = mCurrentEnemy->getPosition() - targetPos;
 		targetPos += Vec2(dist.x *0.3, dist.y*0.3);
