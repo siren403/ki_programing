@@ -2,6 +2,16 @@
 #include "FakerParts.h"
 #include "Faker.h"
 #include "StopWatch.h"
+#include "DataManager.h"
+
+#define ALLSIDE_MAX_HEIGHT_RATIO 0.8
+#define ALLSIDE_MIN_HEIGHT_RATIO 0.2
+#define ALLSIDE_LEFT_MIN -0.3
+#define ALLSIDE_LEFT_MAX -0.2
+#define ALLSIDE_RIGHT_MIN 1.2
+#define ALLSIDE_RIGHT_MAX 1.3
+#define ALLSIDE_SPEED_MIN 200
+#define ALLSIDE_SPEED_MAX 400
 
 #pragma region Idle
 
@@ -49,7 +59,6 @@ void FakerIdleState::OnExit()
 }
 #pragma endregion
 
-
 #pragma region ShowLife
 
 bool FakerShowLifeState::InitState()
@@ -79,7 +88,7 @@ void FakerShowLifeState::OnEnter()
 	lifeParts->SetOriginPosition(pos);
 	lifeParts->SetMoveDirection(130);
 	//lifeParts->SetMoveDirection(180);
-	lifeParts->SetMoveSpeedPower(200);
+	lifeParts->SetMoveSpeed(200);
 
 	lifeParts->SetState(FakerSheep::State::State_DirMove);
 }
@@ -138,7 +147,14 @@ void FakerAllHide::OnUpdate(float dt)
 
 	if (mStopWatch->GetAccTime() > mSheepHideDuration)
 	{
-		this->mEntity->ChangeState(Faker::State::State_AllSideShow);
+		if (random(0, 1) >= 0.5)
+		{
+			this->mEntity->ChangeState(Faker::State::State_AllSideShow);
+		}
+		else
+		{
+			this->mEntity->ChangeState(Faker::State::State_ShowLife);
+		}
 	}
 }
 
@@ -197,21 +213,28 @@ void FakerAllSideShow::OnEnter()
 			rights.pushBack((FakerSheep*)itor->second);
 		}
 	}
-
+	
+	auto mapSize = DataManager::GetInstance()->GetMapSize();
 	Vec2 pos;
 	for (int i = 0; i < lefts.size(); i++)
 	{
-		pos.x = 700;
-		pos.y = 100;
-		pos.y += 90 * i;
+		pos.x = random(mapSize.width * ALLSIDE_LEFT_MIN, mapSize.width * ALLSIDE_LEFT_MAX);
+		pos.y = random(mapSize.height * ALLSIDE_MIN_HEIGHT_RATIO, mapSize.height * ALLSIDE_MAX_HEIGHT_RATIO);
+		
 		lefts.at(i)->SetOriginPosition(pos);
+		lefts.at(i)->SetMoveDirection(0);
+		lefts.at(i)->SetMoveSpeed(random(ALLSIDE_SPEED_MIN, ALLSIDE_SPEED_MAX));
+		lefts.at(i)->SetState(FakerSheep::State::State_DirMove);
 	}
 	for (int i = 0; i < rights.size(); i++)
 	{
-		pos.x = 800;
-		pos.y = 100;
-		pos.y += 90 * i;
+		pos.x = random(mapSize.width * ALLSIDE_RIGHT_MIN, mapSize.width * ALLSIDE_RIGHT_MAX);
+		pos.y = random(mapSize.height * ALLSIDE_MIN_HEIGHT_RATIO, mapSize.height * ALLSIDE_MAX_HEIGHT_RATIO);
+
 		rights.at(i)->SetOriginPosition(pos);
+		rights.at(i)->SetMoveDirection(180);
+		rights.at(i)->SetMoveSpeed(random(ALLSIDE_SPEED_MIN, ALLSIDE_SPEED_MAX));
+		rights.at(i)->SetState(FakerSheep::State::State_DirMove);
 	}
 
 	lefts.clear();
@@ -221,6 +244,13 @@ void FakerAllSideShow::OnEnter()
 void FakerAllSideShow::OnUpdate(float dt)
 {
 	mStopWatch->OnUpdate(dt);
+	if (mStopWatch->GetAccTime() > 8)
+	{
+		mEntity->ChangeState(Faker::State::State_AllHide);
+	}
+	//Vec2 pos = mEntity->GetPartsMap()->begin()->second->getPosition();
+	//float alpha = ((FakerSheep*)mEntity->GetPartsMap()->begin()->second)->GetSprite()->getOpacity();
+	//log("begin pos : %f,%f [%f]", pos.x, pos.y, alpha);
 }
 
 void FakerAllSideShow::OnExit()

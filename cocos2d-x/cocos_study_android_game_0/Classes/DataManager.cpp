@@ -38,6 +38,16 @@ StageData * DataManager::GetStageData(int key)
 	return nullptr;
 }
 
+void DataManager::SetMapSize(Size size)
+{
+	mCurrentMapSize = size;
+}
+
+Size DataManager::GetMapSize()
+{
+	return mCurrentMapSize;
+}
+
 
 DataManager::DataManager()
 {
@@ -71,7 +81,7 @@ DataManager::DataManager()
 
 			rapidjson::Value & docTileData = docTileDatas[i]["data"];
 			TileData curTileData;
-			curTileData.fileName = docTileData["fileName"].GetString();
+			curTileData.tileName = docTileData["tileName"].GetString();
 			curTileData.isCollision = docTileData["isCollision"].GetBool();
 
 			curMapData.tileDatas.insert(pair<int, TileData>(key, curTileData));

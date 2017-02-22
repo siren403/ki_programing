@@ -11,8 +11,11 @@ using namespace std;
 class Actor;
 class Player;
 class Enemy;
+class MapTile;
 
 typedef function<Enemy*()> EnemyCreateFunc;
+typedef function<MapTile*()> MapTileCreateFunc;
+
 
 class ActorManager
 {
@@ -27,10 +30,12 @@ private:
 	Player * mPlayer = nullptr;
 	Enemy * mEnemy = nullptr;
 
-	map<int,EnemyCreateFunc> mEnemyCreateFunctions;
+	map<int, EnemyCreateFunc> mEnemyCreateFunctions;
+	map<string, MapTileCreateFunc> mMapTileCreateFunctions;
 public:
 	Player * GetPlayer();
 	Enemy * GetEnemy(int key);
+	MapTile * CreateTile(string key);
 
 	Vec2 ConvertPlayerToEntity(Node * entity);
 };

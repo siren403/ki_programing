@@ -22,7 +22,7 @@ bool Player::init()
 	this->addChild(mSpriteAnim);
 
 	mHP = 30;
-	mMoveSpeedPower = 200;
+	mMoveSpeed = 200;
 	mMoveDir = Vec2::ZERO;
 	mState = State::Idle;
 
@@ -197,8 +197,8 @@ void Player::InitPosition(Vec2 pos)
 void Player::updateMove(float dt)
 {
 	Vec2 pos = this->getPosition();
-	pos.x += (mMoveDir.x * mMoveSpeedPower) * dt;
-	pos.y += (mMoveDir.y * mMoveSpeedPower) * dt;
+	pos.x += (mMoveDir.x * mMoveSpeed) * dt;
+	pos.y += (mMoveDir.y * mMoveSpeed) * dt;
 
 
 	if (mIsVerticalCollision)

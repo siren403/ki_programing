@@ -29,6 +29,7 @@ public:
 	float GetCircleRadius();
 	float GetCirclePivot();
 
+
 };
 
 #endif // !__JUGGLER_H__

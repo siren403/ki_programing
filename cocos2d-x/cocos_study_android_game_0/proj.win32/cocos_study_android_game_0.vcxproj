@@ -174,6 +174,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\SpriteAnimator.cpp" />
     <ClCompile Include="..\Classes\MapTileVector.cpp" />
     <ClCompile Include="..\Classes\StopWatch.cpp" />
+    <ClCompile Include="..\Classes\TileBlackFloor.cpp" />
+    <ClCompile Include="..\Classes\TileNormalBlock.cpp" />
+    <ClCompile Include="..\Classes\TileWhiteFloor.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -207,6 +210,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\SpriteAnimator.h" />
     <ClInclude Include="..\Classes\MapTileVector.h" />
     <ClInclude Include="..\Classes\StopWatch.h" />
+    <ClInclude Include="..\Classes\TileBlackFloor.h" />
+    <ClInclude Include="..\Classes\TileNormalBlock.h" />
+    <ClInclude Include="..\Classes\TileWhiteFloor.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,7 @@
 #define __JUGGLERFINITESTATE_H__
 
 #include "EnemyFiniteState.h"
+#include "EasingFunc.h"
 #include "cocos2d.h"
 
 using namespace cocos2d;
@@ -23,7 +24,6 @@ protected:
 };
 
 #pragma endregion
-
 
 #pragma region Idle
 
@@ -78,13 +78,16 @@ private:
 	StopWatch * mStopWatch = nullptr;
 	Vec2 mRushDirection;
 	bool mIsCharging = false;
-	float mChargingDuration = 0;
-	float mChargingRotationRatio = 0;
-	float mChargingRadius = 0;
+	float mChargeDuration = 0;
+	float mChargeRotationRatio = 0;
+	float mChargeRadius = 0;
 
 	float mRushDuration = 0;
 	float mRushRadius = 0;
 	bool mIsRushReturn = false;
+
+	EasingData mEaseChargeRotateData;
+	EasingData mEaseOutRadiusData;
 };
 
 #pragma endregion

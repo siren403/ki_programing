@@ -4,6 +4,7 @@
 
 #define FAKER_SHEEP_MAX_COUNT 10
 
+
 bool Faker::init()
 {
 	if (!Enemy::init())
@@ -41,7 +42,6 @@ bool Faker::init()
 		this->AddParts(i, fakeParts);
 	}
 
-
 	this->AddState(Faker::State::State_Idle, FakerIdleState::Create(this));
 	this->AddState(Faker::State::State_ShowLife, FakerShowLifeState::Create(this));
 	this->AddState(Faker::State::State_AllHide, FakerAllHide::Create(this));
@@ -52,6 +52,7 @@ bool Faker::init()
 
 	return true;
 }
+
 
 void Faker::OnActivate(bool isActive)
 {

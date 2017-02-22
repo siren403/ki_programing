@@ -67,6 +67,7 @@ public:
 
 
 	void OnAttack(Vec2 targetPos, float duration);
+	void Reposition();
 };
 
 #pragma endregion

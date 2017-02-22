@@ -1,6 +1,7 @@
 #include "PlayMap.h"
 #include "Actor.h"
 #include "MapTile.h"
+#include "ActorManager.h"
 
 bool PlayMap::init()
 {
@@ -92,7 +93,6 @@ void PlayMap::CreateTiles(int mapIndex)
 	{
 		return;
 	}
-	//auto curMapData = mParseMapData.at(mCurrentMapIndex);
 
 	mCurrentTiles.reserve(mCurrentMapData->tilePlacement.size());
 	for (int y = 0; y < mCurrentMapData->tilePlacement.size(); y++)
@@ -100,18 +100,14 @@ void PlayMap::CreateTiles(int mapIndex)
 		MapTileVector * cols = new MapTileVector(mCurrentMapData->tilePlacement.at(y).size());
 		for (int x = 0; x < mCurrentMapData->tilePlacement.at(y).size(); x++)
 		{
-			//auto mapTile = Sprite::create(curMapData.tileDatas[curMapData.tilePlacement.at(y).at(x)].fileName);
-			auto mapTile = MapTile::create();
+			auto mapTile = ActorManager::GetInstance()->CreateTile(GetTileData(Vec2I(x, y)).tileName);
 			if (mapTile == nullptr)
 			{
 				log("mapTile Create Fail");
 			}
 			mapTile->InitWithTileData(this, Vec2I(x, y));
 
-			//if (mTileWidth == 0)
-			//{
-				mTileWidth = mapTile->GetSprite()->getContentSize().width * this->getScale();
-			//}
+			mTileWidth = mapTile->GetSprite()->getContentSize().width;
 
 			Vec2 pos;
 			pos.x = (mTileWidth * 0.5) + mTileWidth * x;

@@ -12,7 +12,7 @@ using namespace cocos2d;
 
 struct TileData
 {
-	string fileName;
+	string tileName;
 	bool isCollision;
 };
 
@@ -53,7 +53,11 @@ public:
 private:
 	vector<MapData> mPlayMapData;
 	map<int, StageData> mStageData;
+	Size mCurrentMapSize;
 public:
 	MapData * GetMapData(int index);
 	StageData * GetStageData(int key);
+
+	void SetMapSize(Size size);
+	Size GetMapSize();
 };

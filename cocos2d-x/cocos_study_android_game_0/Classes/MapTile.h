@@ -10,19 +10,20 @@ class PlayMap;
 
 class MapTile : public Actor
 {
-private:
-	PlayMap * mpPlayMap = nullptr;
-	Sprite * mTileSprite = nullptr;
-	Vec2I mTileIndex;
 
 public:
 	CREATE_FUNC(MapTile);
 	virtual bool init() override;
 
-	void InitWithTileData(PlayMap * playMap,Vec2I tileIndex);
+	virtual void SetHighlight(bool isHighlight);
 
+	void InitWithTileData(PlayMap * playMap,Vec2I tileIndex);
 	Sprite * GetSprite();
 	bool IsCollisionTile();
+protected:
+	PlayMap * mpPlayMap = nullptr;
+	Sprite * mTileSprite = nullptr;
+	Vec2I mTileIndex;
 
 };
 

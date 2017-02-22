@@ -17,7 +17,7 @@ bool Juggler::init()
 
 	auto lifeParts = JugglerCircle::create();
 	lifeParts->SetState(JugglerCircle::State::State_None);
-	lifeParts->GetSprite()->setColor(Color3B::RED);
+	//lifeParts->GetSprite()->setColor(Color3B::RED);
 	this->AddParts(LIFEPARTS_KEY, lifeParts, true);
 
 	JugglerCircle * circle = nullptr;
@@ -30,7 +30,7 @@ bool Juggler::init()
 		this->AddParts(i, circle);
 		if (i == 0)
 		{
-			circle->GetSprite()->setColor(Color3B::GREEN);
+			//circle->GetSprite()->setColor(Color3B::GREEN);
 		}
 	}
 
@@ -39,15 +39,25 @@ bool Juggler::init()
 	this->AddState(State::State_SeqAttack, JugglerSeqAttackState::Create(this));
 	this->AddState(State::State_RushAttack, JugglerRushAttackState::Create(this));
 
-	this->ChangeState(State::State_Idle);
-
 	return true;
 }
 
 
 void Juggler::OnActivate(bool isActive)
 {
+	if (isActive)
+	{
+	}
+	else
+	{
+		for (int i = 0; i < mCircleCount; i++)
+		{
+			((JugglerCircle*)GetParts(i))->Reposition();
+		}
+		this->ChangeState(State::State_Idle);
+	}
 	this->GetState(State::State_Idle)->SetActive(isActive);
+	
 }
 
 int Juggler::GetCircleCount()
@@ -64,4 +74,5 @@ float Juggler::GetCirclePivot()
 {
 	return mCirclePivot;
 }
+
 

@@ -8,8 +8,11 @@
 #include "MapTile.h"
 #include "DataManager.h"
 
+#define ZORDER_MAP 0
+#define ZORDER_PLAYER 1
 #define ZORDER_ENEMY 5
-#define IS_IMMOTAL_PLAYER true
+#define IS_IMMOTAL_PLAYER false
+#define	DRAG_DISTANCE 100
 
 Scene * ScenePlay::createScene()
 {
@@ -27,6 +30,8 @@ bool ScenePlay::init()
 	{
 		return false;
 	}
+	
+	srand(time(nullptr));
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
@@ -84,10 +89,10 @@ bool ScenePlay::init()
 
 #pragma region Create
 	mPlayMap = PlayMap::create();
-	mPlayNode->addChild(mPlayMap, 0);
+	mPlayNode->addChild(mPlayMap, ZORDER_MAP);
 
 	mPlayer = ActorManager::GetInstance()->GetPlayer();
-	mPlayNode->addChild(mPlayer, 1);
+	mPlayNode->addChild(mPlayer, ZORDER_PLAYER);
 
 	mArrow = Arrow::create();
 	mArrow->InitWithPlayer(mPlayer);
@@ -169,14 +174,13 @@ void ScenePlay::RoomSequence(int roomIndex, bool isReset)
 				mCurrentEnemy = nullptr;
 			}
 		}
-
+		DataManager::GetInstance()->SetMapSize(mPlayMap->GetMapContentSize());
 
 		Vec2 initPos;
 		initPos.x = mPlayMap->GetMapContentSize().width * 0.5;
 		initPos.y = mPlayMap->GetMapContentSize().height * 0.1;
 		mPlayer->InitPosition(initPos);
 
-		//mPlayer->SetMoveArea(mapContentSize);
 
 		mArrow->LockOn(Vec2(0, 1), true);
 
@@ -196,6 +200,7 @@ void ScenePlay::RoomSequence(int roomIndex, bool isReset)
 		nullptr
 		);
 	mFadeSprite->runAction(tSeq);
+
 }
 
 void ScenePlay::onEnter()
@@ -237,10 +242,8 @@ void ScenePlay::update(float dt)
 
 #pragma region Check Tile Search
 	auto tile = mPlayMap->GetTile(mPlayer->getPosition());
-	if (tile->GetSprite()->getColor() != Color3B::RED)
-	{
-		//tile->GetSprite()->setColor(Color3B::RED);
-	}
+	tile->SetHighlight(true);
+
 
 	tile = mPlayMap->GetTile(mArrow->getPosition());
 	if (tile->GetSprite()->getColor() != Color3B::GREEN)
@@ -293,7 +296,7 @@ void ScenePlay::GameOverSequence()
 {
 	mIsPlaying = false;
 	mPlayer->SetIsControl(false);
-	mCurrentEnemy->OnActivate(false);
+	//mCurrentEnemy->OnActivate(false);
 
 	auto gameOverSeq = Sequence::create(
 		DelayTime::create(0.3),
@@ -359,7 +362,6 @@ void ScenePlay::CalculatePlayNodePosition(float dt)
 
 	pos = (origin - targetPos) + Vec2(-mPlayNodeOffsetDirection.x * mPlayNodeOffsetScalar, -mPlayNodeOffsetDirection.y * mPlayNodeOffsetScalar);
 
-	//log("%f,%f", pos.y, mUIPadBack->getContentSize().height);
 	pos.y = MIN(pos.y, mUIPadBack->getContentSize().height);
 
 	pos = ccpLerp(mPlayNode->getPosition(), pos, dt);
@@ -384,7 +386,6 @@ bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)
 		if (mUIPadFront->getBoundingBox().containsPoint(touchPos) &&
 			CollisionUtils::GetInst()->ContainsPointToPixel(mUIPadFront, mUIPadFrontImage, touchPos))//move
 		{
-			//mTouchBeganPos = touch->getLocation();
 			mTouchBeganPos = convertToWorldSpace(mUIPadFront->getPosition());
 			mTouchState = TouchState::Move;
 			isTouchMoved = true;
@@ -424,24 +425,27 @@ void ScenePlay::onTouchMoved(Touch * touch, Event * unused_event)
 	case TouchState::Move:
 		dir = touchPos - mTouchBeganPos;
 
-		//log("%f,%f", dir.x, dir.y);
-
 		dir.x = clampf(dir.x / 60, -1, 1);
 		dir.y = clampf(dir.y / 60, -1, 1);
 
 		mPlayer->SetMoveDir(dir);
 
-		//mArrow->LockOn(atan2(dir.y, dir.x));
 		mArrow->LockOn(dir.getNormalized());
 
-		//log("%f", atan2(dir.y, dir.x));
 		break;
 	case TouchState::Shot:
 		dir = mTouchBeganPos - touchPos;
-		//mArrow->LockOn(atan2(dir.y, dir.x));
+
 		mArrow->LockOn(dir.getNormalized());
 
-		mPlayNodeOffsetDirection = dir.getNormalized();
+		if (mTouchBeganPos.distance(touchPos) > DRAG_DISTANCE)
+		{
+			mPlayNodeOffsetDirection = dir.getNormalized();
+		}
+		else
+		{
+			mPlayNodeOffsetDirection = Vec2::ZERO;
+		}
 		break;
 	}
 }
@@ -453,7 +457,7 @@ void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 	switch (mTouchState)
 	{
 	case TouchState::Shot:
-		if (mTouchBeganPos.distance(touchPos) > 100)
+		if (mTouchBeganPos.distance(touchPos) > DRAG_DISTANCE)
 		{
 			mArrow->Shot();
 		}

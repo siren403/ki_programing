@@ -12,13 +12,14 @@ bool MapTile::init()
 	return true;
 }
 
+void MapTile::SetHighlight(bool isHighlight)
+{
+}
+
 void MapTile::InitWithTileData(PlayMap * playMap, Vec2I tileIndex)
 {
 	mpPlayMap = playMap;
 	mTileIndex = tileIndex;
-	auto tileData = mpPlayMap->GetTileData(mTileIndex);
-	mTileSprite = Sprite::create(tileData.fileName);
-	this->addChild(mTileSprite, 0);
 }
 
 Sprite * MapTile::GetSprite()

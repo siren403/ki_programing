@@ -57,8 +57,7 @@ public:
 	//State
 	void ChangeState(int key);
 	EnemyFiniteState * GetState(int state);
-
-
+	
 
 	virtual ~Enemy();
 };

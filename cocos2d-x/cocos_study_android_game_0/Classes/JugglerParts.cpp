@@ -15,9 +15,6 @@ bool JugglerCircle::init()
 	}
 
 	auto sprite = this->SetSprite(Sprite::create("enemy/whitemask.png"));
-	//sprite->getTexture()->setAliasTexParameters();
-	
-
 
 	mIdleWatch = StopWatch::create();
 	mIdleWatch->OnStart();
@@ -32,7 +29,6 @@ bool JugglerCircle::init()
 
 void JugglerCircle::update(float dt)
 {
-	
 	switch (mState)
 	{
 	case State::State_Idle:
@@ -54,6 +50,7 @@ void JugglerCircle::UpdateIdle(float dt)
 	mIdlePosition.y = sin(
 		((PI * 2) * ((float)mRotateData.circleIndex / mRotateData.circleCount) + delta)
 		+ mRotateData.circlePivot + 0) * (mRotateData.circleRadius * mCircleRadiusRatio);
+	
 	if (delta >= PI * 2)
 	{
 		mIdleWatch->OnReset();
@@ -66,7 +63,6 @@ void JugglerCircle::UpdateAttack(float dt)
 	mAttackWatch->OnUpdate(dt);
 
 	Vec2 pos;
-	//pos += EasingFunc::EaseSinInOut(sin((PI / mAttackDuration) * mAttackWatch->GetAccTime()) * mAttackDuration, mAttackStartPos, mAttackTargetPos - mAttackStartPos, mAttackDuration);
 	pos.x += EasingFunc::EaseQuarticIn(sin((PI / mAttackDuration) * mAttackWatch->GetAccTime()) * mAttackDuration, mAttackStartPos.x, mAttackTargetPos.x - mAttackStartPos.x, mAttackDuration);
 	pos.y += EasingFunc::EaseLinear(sin((PI / mAttackDuration) * mAttackWatch->GetAccTime()) * mAttackDuration, mAttackStartPos.y, mAttackTargetPos.y - mAttackStartPos.y, mAttackDuration);
 
@@ -78,6 +74,8 @@ void JugglerCircle::UpdateAttack(float dt)
 		SetState(State::State_None);
 	}
 }
+
+#pragma region set,get
 
 void JugglerCircle::SetState(JugglerCircle::State state)
 {
@@ -115,16 +113,33 @@ float JugglerCircle::GetCircleRadiusRatio()
 	return mCircleRadiusRatio;
 }
 
+#pragma endregion
 
 void JugglerCircle::OnAttack(Vec2 targetPos, float duration)
 {
-
 	mAttackStartPos = this->getPosition();
 
 	mAttackTargetPos =  ((targetPos - Vec2::ZERO).getNormalized() * 700);
 	
 	mAttackDuration = duration == 0 ? 1 : duration;
 	SetState(State::State_SeqAttack);
+}
+
+void JugglerCircle::Reposition()
+{
+	mRotateSpeedRatio = 1;
+	mCircleRadiusRatio = 1;
+	mIdleWatch->OnReset();
+
+	mIdlePosition.x = cos(
+		((PI * 2) * ((float)mRotateData.circleIndex / mRotateData.circleCount))
+		+ mRotateData.circlePivot + 0) * (mRotateData.circleRadius * mCircleRadiusRatio);
+	mIdlePosition.y = sin(
+		((PI * 2) * ((float)mRotateData.circleIndex / mRotateData.circleCount))
+		+ mRotateData.circlePivot + 0) * (mRotateData.circleRadius * mCircleRadiusRatio);
+
+	this->setPosition(mIdlePosition);
+	mState = State::State_None;
 }
 
 

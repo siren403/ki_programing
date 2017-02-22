@@ -4,7 +4,6 @@
 #include "StopWatch.h"
 #include "ActorManager.h"
 #include "Player.h"
-#include "EasingFunc.h"
 
 #define PI 3.14159
 
@@ -26,6 +25,8 @@ JugglerNoneState::~JugglerNoneState()
 
 void JugglerNoneState::OnEnter()
 {
+	
+
 }
 
 void JugglerNoneState::OnUpdate(float dt)
@@ -37,7 +38,6 @@ void JugglerNoneState::OnExit()
 }
 
 #pragma endregion
-
 
 #pragma region Idle
 
@@ -83,8 +83,16 @@ void JugglerIdleState::OnUpdate(float dt)
 		if (mStopWatch->GetAccTime() > 4)
 		{
 			//NextState
-			//this->GetEntity<Juggler>()->ChangeState(Juggler::State::State_SeqAttack);
-			this->GetEntity<Juggler>()->ChangeState(Juggler::State::State_RushAttack);
+
+			float r = random(0, 1);
+			if (r < 0.5)
+			{
+				this->GetEntity<Juggler>()->ChangeState(Juggler::State::State_SeqAttack);
+			}
+			else
+			{
+				this->GetEntity<Juggler>()->ChangeState(Juggler::State::State_RushAttack);
+			}
 			mStopWatch->OnReset();
 		}
 	}
@@ -175,12 +183,24 @@ bool JugglerRushAttackState::InitState()
 	mStopWatch->retain();
 	mStopWatch->OnStart();
 
-	mChargingDuration = 3;
-	mChargingRotationRatio = 6;
-	mChargingRadius = 0.5;
+	mChargeDuration = 3;
+	mChargeRotationRatio = 6;
+	mChargeRadius = 0.5;
 
 	mRushDuration = 3;
 	mRushRadius = 4;
+
+#pragma region Easing Data
+	
+	mEaseChargeRotateData.startValue = 1;
+	mEaseChargeRotateData.changeValue = mChargeRotationRatio - 1;
+	mEaseChargeRotateData.duration = mChargeDuration;
+
+	mEaseOutRadiusData.startValue = mChargeRadius;
+	mEaseOutRadiusData.changeValue = mRushRadius - mChargeRadius;
+	mEaseOutRadiusData.duration = mRushDuration / 2;
+
+#pragma endregion
 	return true;
 }
 
@@ -191,6 +211,24 @@ JugglerRushAttackState::~JugglerRushAttackState()
 
 void JugglerRushAttackState::OnEnter()
 {
+	float r = random(0.0f, 1.0f);
+	EasingType type;
+	if (r < 0.3f)
+	{
+		type = EasingType::Ease_ExpoOut;
+	}
+	else if (r < 0.6f)
+	{
+		type = EasingType::Ease_ExpoIn;
+	}
+	else
+	{
+		type = EasingType::Ease_Linear;
+	}
+	mEaseChargeRotateData.type = type;
+	mEaseOutRadiusData.type = type;
+
+
 	for (int i = 0; i < this->GetEntity<Juggler>()->GetCircleCount(); i++)
 	{
 		auto circle = (JugglerCircle*)this->GetEntity<Juggler>()->GetParts(i);
@@ -201,26 +239,30 @@ void JugglerRushAttackState::OnEnter()
 void JugglerRushAttackState::OnUpdate(float dt)
 {
 	mStopWatch->OnUpdate(dt);
-	if (mIsCharging == false)
+	if (mIsCharging == false)//charge
 	{
 		for (int i = 0; i < this->GetEntity<Juggler>()->GetCircleCount(); i++)
 		{
 			auto circle = (JugglerCircle*)this->GetEntity<Juggler>()->GetParts(i);
-			float ratio = EasingFunc::EaseLinear(
-				mStopWatch->GetAccTime(), 1, mChargingRotationRatio - 1, mChargingDuration);
+
+			mEaseChargeRotateData.currentTime = mStopWatch->GetAccTime();
+
+			float ratio = EasingFunc::Ease(mEaseChargeRotateData);
 			circle->SetRotateSpeedRatio(ratio);
 
 			ratio = EasingFunc::EaseLinear(
-				mStopWatch->GetAccTime(), 1, mChargingRadius - 1, mChargingDuration);
+				mStopWatch->GetAccTime(), 1, mChargeRadius - 1, mChargeDuration);
 			circle->SetCircleRadiusRatio(ratio);
 		}
-		if (mStopWatch->GetAccTime() >= mChargingDuration)
+		if (mStopWatch->GetAccTime() >= mChargeDuration)
 		{
 			mIsCharging = true;
 			mStopWatch->OnReset();
+
+			
 		}
 	}
-	else
+	else//rush
 	{
 		for (int i = 0; i < this->GetEntity<Juggler>()->GetCircleCount(); i++)
 		{
@@ -229,8 +271,10 @@ void JugglerRushAttackState::OnUpdate(float dt)
 
 			if (mIsRushReturn == false)
 			{
-				ratio = EasingFunc::EaseLinear(
-					mStopWatch->GetAccTime(), mChargingRadius, mRushRadius - mChargingRadius, mRushDuration / 2);
+				//radius out
+				mEaseOutRadiusData.currentTime = mStopWatch->GetAccTime();
+
+				ratio = EasingFunc::Ease(mEaseOutRadiusData);
 				circle->SetCircleRadiusRatio(ratio);
 				if (mStopWatch->GetAccTime() >= mRushDuration / 2)
 				{
@@ -240,8 +284,9 @@ void JugglerRushAttackState::OnUpdate(float dt)
 			}
 			else
 			{
+				//radius in, rotate in
 				ratio = EasingFunc::EaseLinear(
-					mStopWatch->GetAccTime(), mChargingRotationRatio, 1 - mChargingRotationRatio, mRushDuration / 2);
+					mStopWatch->GetAccTime(), mChargeRotationRatio, 1 - mChargeRotationRatio, mRushDuration / 2);
 				circle->SetRotateSpeedRatio(ratio);
 
 				ratio = EasingFunc::EaseLinear(
@@ -254,7 +299,7 @@ void JugglerRushAttackState::OnUpdate(float dt)
 			mIsRushReturn = false;
 			mIsCharging = false;
 			mStopWatch->OnReset();
-			//mEntity->ChangeState(Juggler::State::State_None);
+			mEntity->ChangeState(Juggler::State::State_Idle);
 		}
 	}
 }

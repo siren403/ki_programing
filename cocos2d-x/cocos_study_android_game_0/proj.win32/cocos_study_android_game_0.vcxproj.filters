@@ -94,6 +94,15 @@
     <ClCompile Include="..\Classes\SceneShaderTest.cpp">
       <Filter>src\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\TileWhiteFloor.cpp">
+      <Filter>src\Map\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TileNormalBlock.cpp">
+      <Filter>src\Map\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TileBlackFloor.cpp">
+      <Filter>src\Map\Tiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -189,6 +198,15 @@
     <ClInclude Include="..\Classes\SceneShaderTest.h">
       <Filter>src\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\TileWhiteFloor.h">
+      <Filter>src\Map\Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TileNormalBlock.h">
+      <Filter>src\Map\Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TileBlackFloor.h">
+      <Filter>src\Map\Tiles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="resouce">
@@ -232,6 +250,9 @@
     </Filter>
     <Filter Include="src\Actor\Enemy\Faker">
       <UniqueIdentifier>{046b6388-a845-431e-998b-d50e3bda36d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Map\Tiles">
+      <UniqueIdentifier>{ad45260a-be32-4359-abcc-ddf48eb706db}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -72,6 +72,7 @@ EnemyFiniteState * Enemy::GetState(int state)
 }
 
 
+
 void Enemy::AddParts(int key, EnemyParts * tParts, bool isLifeParts, int localZOrder)
 {
 	mParts.insert(key, tParts);

@@ -3,6 +3,9 @@
 #include "Boss.h"
 #include "Juggler.h"
 #include "Faker.h"
+#include "TileWhiteFloor.h"
+#include "TileNormalBlock.h"
+#include "TileBlackFloor.h"
 
 ActorManager * ActorManager::mInstance = nullptr;
 
@@ -17,6 +20,8 @@ ActorManager * ActorManager::GetInstance()
 
 ActorManager::ActorManager()
 {
+#pragma region CreataEnemyFunc
+
 	mEnemyCreateFunctions.insert(pair<int, EnemyCreateFunc>(1, []() 
 	{
 		return Boss::create();
@@ -29,6 +34,25 @@ ActorManager::ActorManager()
 	{
 		return Faker::create();
 	}));
+#pragma endregion
+
+#pragma region CreateMapTile
+
+	mMapTileCreateFunctions.insert(pair<string, MapTileCreateFunc>("white_floor", []() 
+	{
+		return TileWhiteFloor::create();
+	}));
+	mMapTileCreateFunctions.insert(pair<string, MapTileCreateFunc>("normal_block", []()
+	{
+		return TileNormalBlock::create();
+	}));
+	mMapTileCreateFunctions.insert(pair<string, MapTileCreateFunc>("black_floor", []()
+	{
+		return TileBlackFloor::create();
+	}));
+#pragma endregion
+
+
 }
 
 Player * ActorManager::GetPlayer()
@@ -46,6 +70,17 @@ Enemy * ActorManager::GetEnemy(int key)
 	auto func = mEnemyCreateFunctions.find(key);
 
 	if (func != mEnemyCreateFunctions.end())
+	{
+		return func->second();
+	}
+	return nullptr;
+}
+
+MapTile * ActorManager::CreateTile(string key)
+{
+	auto func = mMapTileCreateFunctions.find(key);
+
+	if (func != mMapTileCreateFunctions.end())
 	{
 		return func->second();
 	}

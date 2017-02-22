@@ -31,7 +31,7 @@ private:
 	float mHitDelay = 0;
 	float mCurrentHitDelay = 0;
 	//move
-	float mMoveSpeedPower = 0;
+	float mMoveSpeed = 0;
 	Vec2 mMoveDir;
 	Vec2 mPrevPos;
 	bool mIsVerticalCollision = false;

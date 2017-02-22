@@ -1,6 +1,7 @@
 #include "FakerParts.h"
 #include "StopWatch.h"
 #include "EasingFunc.h"
+#include "DataManager.h"
 
 #define PI 3.14159
 
@@ -18,10 +19,16 @@ bool FakerSheep::init()
 	mFaceSprite->getTexture()->setAliasTexParameters();
 	sprite->addChild(mFaceSprite);
 
-	mStopWatch = StopWatch::create();
-	mStopWatch->OnStart();
-	this->addChild(mStopWatch);
+#pragma region StopWatchs
 
+	mMoveWatch = StopWatch::create();
+	mMoveWatch->OnStart();
+	this->addChild(mMoveWatch);
+	mHideWatch = StopWatch::create();
+	mHideWatch->OnStart();
+	this->addChild(mHideWatch);
+
+#pragma endregion
 	SetState(FakerSheep::State::State_Idle);
 	mJumpHeight = 50;
 	mHideDuration = 1;
@@ -41,6 +48,7 @@ void FakerSheep::update(float dt)
 		UpdateMove(dt);
 		break;
 	case FakerSheep::State::State_Hide:
+		UpdateMove(dt);
 		UpdateHide(dt);
 		break;
 	}
@@ -53,42 +61,50 @@ void FakerSheep::UpdateIdle(float dt)
 
 void FakerSheep::UpdateMove(float dt)
 {
-	mStopWatch->OnUpdate(dt);
+	mMoveWatch->OnUpdate(dt);
 
-	mOriginPosition += (mMoveDirection * mMoveSpeedPower) * dt;
+	mOriginPosition += (mMoveDirection * mMoveSpeed) * dt;
 
 	Vec2 pos = mOriginPosition;
-	pos.y += sin(PI * mStopWatch->GetAccTime()) * mJumpHeight;
+	pos.y += sin(PI * mMoveWatch->GetAccTime()) * mJumpHeight;
 	
-	if (mStopWatch->GetAccTime() >= 1)
+	if (mMoveWatch->GetAccTime() >= 1)
 	{
-		mStopWatch->OnReset();
+		mMoveWatch->OnReset();
 	}
 	
 	this->setPosition(pos);
+
 }
 
 void FakerSheep::UpdateHide(float dt)
 {
-	mStopWatch->OnUpdate(dt);
+	mHideWatch->OnUpdate(dt);
 
-	float amount = EasingFunc::EaseQuarticIn(mStopWatch->GetAccTime(), 255, 0 - 255, mHideDuration);
+	float amount = EasingFunc::EaseQuarticIn(mHideWatch->GetAccTime(), 255, 0 - 255, mHideDuration);
 	this->GetSprite()->setOpacity(amount);
 	mFaceSprite->setOpacity(amount);
 
-	if (mStopWatch->GetAccTime() >= mHideDuration)
+	if (mHideWatch->GetAccTime() >= mHideDuration)
 	{
-		this->SetOriginPosition(Vec2(0, -100));
-		this->GetSprite()->setOpacity(255);
-		mFaceSprite->setOpacity(255);
+		OnHidePosition();
+		SetSpriteAlpha(1);
 		SetState(FakerSheep::State::State_Idle);
 	}
+}
+
+void FakerSheep::SetSpriteAlpha(float alpha)
+{
+	this->GetSprite()->setOpacity(255 * alpha);
+	mFaceSprite->setOpacity(255 * alpha);
 }
 
 void FakerSheep::SetState(FakerSheep::State state)
 {
 	mState = state;
-	mStopWatch->OnReset();
+	mMoveWatch->OnReset();
+	mHideWatch->OnReset();
+	SetSpriteAlpha(1);
 }
 
 void FakerSheep::SetFace(FaceType type)
@@ -110,12 +126,13 @@ void FakerSheep::SetMoveDirection(float angle)
 	float radian = CC_DEGREES_TO_RADIANS(angle);
 	mMoveDirection.x = cos(radian);
 	mMoveDirection.y = sin(radian);
-	this->GetSprite()->setFlipX(mMoveDirection.x > 1 ? true : false);
+	this->GetSprite()->setScaleX(mMoveDirection.x > 0 ? -1 : 1);
+
 }
 
-void FakerSheep::SetMoveSpeedPower(float speedPower)
+void FakerSheep::SetMoveSpeed(float speed)
 {
-	mMoveSpeedPower = speedPower;
+	mMoveSpeed = speed;
 }
 
 void FakerSheep::SetOriginPosition(Vec2 pos)

@@ -26,14 +26,15 @@ public:
 	};
 private:
 	Sprite * mFaceSprite = nullptr;
-	StopWatch * mStopWatch = nullptr;
+	StopWatch * mMoveWatch = nullptr;
+	StopWatch * mHideWatch = nullptr;
 	
 	FakerSheep::FaceType mFaceType;
 	FakerSheep::State mState;
 
 	//Move
 	Vec2 mMoveDirection;
-	float mMoveSpeedPower;
+	float mMoveSpeed;
 	Vec2 mOriginPosition;
 	float mJumpHeight = 0;
 	//Hide
@@ -42,6 +43,8 @@ private:
 	void UpdateIdle(float dt);
 	void UpdateMove(float dt);
 	void UpdateHide(float dt);
+
+	void SetSpriteAlpha(float alpha);
 public:
 	CREATE_FUNC(FakerSheep);
 	virtual bool init() override;
@@ -51,7 +54,7 @@ public:
 	void SetFace(FaceType type);
 	void SetMoveDirection(Vec2 dir);
 	void SetMoveDirection(float angle);
-	void SetMoveSpeedPower(float speedPower);
+	void SetMoveSpeed(float speed);
 	void SetOriginPosition(Vec2 pos);
 	float GetHideDuration();
 

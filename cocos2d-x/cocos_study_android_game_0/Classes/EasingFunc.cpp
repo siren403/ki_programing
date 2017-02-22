@@ -2,6 +2,35 @@
 
 #define PI 3.14159
 
+float EasingFunc::Ease(EasingData data)
+{
+	float result;
+
+	switch (data.type)
+	{
+	case EasingType::Ease_Linear:
+		result = EasingFunc::EaseLinear(data.currentTime, data.startValue, data.changeValue, data.duration);
+		break;
+	case EasingType::Ease_QuarticIn:
+		result = EasingFunc::EaseQuarticIn(data.currentTime, data.startValue, data.changeValue, data.duration);
+		break;
+	case EasingType::Ease_ExpoIn:
+		result = EasingFunc::EaseExpoIn(data.currentTime, data.startValue, data.changeValue, data.duration);
+		break;
+	case EasingType::Ease_ExpoOut:
+		result = EasingFunc::EaseExpoOut(data.currentTime, data.startValue, data.changeValue, data.duration);
+		break;
+	case EasingType::Ease_ExpoInOut:
+		result = EasingFunc::EaseExpoInOut(data.currentTime, data.startValue, data.changeValue, data.duration);
+		break;
+	case EasingType::Ease_SinInOut:
+		result = EasingFunc::EaseSinInOut(data.currentTime, data.startValue, data.changeValue, data.duration);
+		break;
+	}
+
+	return result;
+}
+
 /*
 t = curTime : 누적시간.
 b = startValue : 시작값.
@@ -17,6 +46,27 @@ float EasingFunc::EaseQuarticIn(float curTime, float startValue, float changeVal
 {
 	curTime /= duration;
 	return changeValue*curTime*curTime*curTime*curTime + startValue;
+}
+
+float EasingFunc::EaseExpoIn(float curTime, float startValue, float changeValue, float duration)
+{
+	return changeValue * pow(2, 10 * (curTime / duration-1)) + startValue;
+}
+
+float EasingFunc::EaseExpoOut(float curTime, float startValue, float changeValue, float duration)
+{
+	return changeValue * (-pow(2, -10 * curTime / duration) + 1) + startValue;
+}
+
+float EasingFunc::EaseExpoInOut(float curTime, float startValue, float changeValue, float duration)
+{
+	curTime /= duration / 2;
+	if (curTime < 1)
+	{
+		return changeValue / 2 * pow(2, 10 * (curTime - 1)) + startValue;
+	}
+	curTime--;
+	return changeValue / 2 * (-pow(2, -10 * curTime) + 2) + startValue;
 }
 
 
