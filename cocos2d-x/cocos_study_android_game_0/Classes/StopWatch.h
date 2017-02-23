@@ -28,7 +28,7 @@ public:
 	//GetAccTime
 	float GetAccTime();
 
-	void OnStart();
+	void OnStart(float initTime = 0);
 	void OnUpdate(float dt);
 	float OnStop();
 	float OnPause();

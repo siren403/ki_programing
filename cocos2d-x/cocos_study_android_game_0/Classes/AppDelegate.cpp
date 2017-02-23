@@ -8,6 +8,10 @@ USING_NS_CC;
 
 #define WIDTH 720
 #define HEIGHT 1280
+#define SCENE_TITLE SceneTitle
+#define SCENE_PLAY ScenePlay
+#define SCENE_SHADERTEST SceneShaderTest
+#define START_SCENE SCENE_TITLE
 
 static cocos2d::Size designResolutionSize = cocos2d::Size(WIDTH, HEIGHT);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(WIDTH, HEIGHT);
@@ -79,15 +83,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
-    // create a scene. it's an autorelease object
-	//auto scene = HelloWorld::createScene();
-	//auto scene = SceneTitle::createScene();
-	auto scene = ScenePlay::createScene();
-	//auto scene = SceneShaderTest::createScene();
-
+	Scene * startScene = START_SCENE::createScene();
 
     // run
-    director->runWithScene(scene);
+    director->runWithScene(startScene);
 
     return true;
 }

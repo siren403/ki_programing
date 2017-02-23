@@ -47,6 +47,7 @@ void Juggler::OnActivate(bool isActive)
 {
 	if (isActive)
 	{
+
 	}
 	else
 	{

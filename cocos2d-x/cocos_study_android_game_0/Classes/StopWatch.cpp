@@ -36,11 +36,11 @@ float StopWatch::GetAccTime()
 }
 
 
-void StopWatch::OnStart()
+void StopWatch::OnStart(float initTime)
 {
 	if (mState == StopWatch::State::Stop)
 	{
-		mCurrentTime = 0;
+		mCurrentTime = initTime;
 	}
 	mState = StopWatch::State::Play;
 }
