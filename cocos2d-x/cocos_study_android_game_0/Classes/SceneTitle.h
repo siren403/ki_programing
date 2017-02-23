@@ -2,10 +2,15 @@
 #define __SCENETITLE_H__
 
 #include "cocos2d.h"
+#include <functional>
+#include <vector>
 
 using namespace cocos2d;
+using namespace std;
 
 class StopWatch;
+
+typedef function<bool(float)> UpdateFunc;
 
 class SceneTitle : public LayerColor
 {
@@ -27,6 +32,7 @@ private:
 	Size mVisibleSize;
 	Vec2 mCenterPosition;
 	Sprite * mMask = nullptr;
+	Vec2 mMaskInitPosition;
 
 	Node * mRenderNode = nullptr;
 	RenderTexture * mRenderTexture = nullptr;
@@ -37,6 +43,20 @@ private:
 	Vec2 mLensTargetPosition;
 
 	StopWatch * mStopWatch = nullptr;
+
+	//sequence update
+	int mUpdateFunctionIndex = 0;
+	vector<UpdateFunc> mUpdateFunctions;
+	StopWatch * mUpdateFunctionWatch = nullptr;
+
+	Sprite * mExclamationMark = nullptr;
+	int mTitleScriptIndex = 0;
+	int mScriptCharIndex = 0;
+	vector<string> mTitleScript;
+	Label * mTitleScriptLabel = nullptr;
+
+	//touch State
+	bool mIsTouchBegan = false;
 
 	void SetLensTargetPosition(Vec2 pos);
 };

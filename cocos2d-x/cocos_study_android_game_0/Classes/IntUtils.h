@@ -16,6 +16,14 @@ struct Vec2I
 	{
 
 	}
+	Vec2I operator-(const Vec2I& other)
+	{
+		return Vec2I(x - other.x, y - other.y);
+	}
+	Vec2I operator+(const Vec2I& other)
+	{
+		return Vec2I(x + other.x, y + other.y);
+	}
 };
 
 
@@ -23,6 +31,7 @@ class IntUtils
 {
 public:
 	static int ClampI(int value, int min, int max);
+	static float Dot(const Vec2I& a, const Vec2I& b);
 	
 };
 

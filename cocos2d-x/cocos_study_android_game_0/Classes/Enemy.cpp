@@ -32,6 +32,8 @@ void Enemy::AddState(int key, EnemyFiniteState * state)
 }
 void Enemy::ChangeState(int key)
 {
+	float r = random(0.0f, 1.0f);
+
 	if (mIsScheduleUpdate == false)
 	{
 		this->scheduleUpdate();

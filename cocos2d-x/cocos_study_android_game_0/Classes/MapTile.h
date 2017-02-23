@@ -16,6 +16,8 @@ public:
 	virtual bool init() override;
 
 	virtual void SetHighlight(bool isHighlight);
+	virtual void SetHighlight(bool isHighlight,float delay);
+
 
 	void InitWithTileData(PlayMap * playMap,Vec2I tileIndex);
 	Sprite * GetSprite();

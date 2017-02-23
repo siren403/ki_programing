@@ -80,10 +80,10 @@ private:
 	bool mIsCharging = false;
 	float mChargeDuration = 0;
 	float mChargeRotationRatio = 0;
-	float mChargeRadius = 0;
+	float mChargeRadiusRatio = 0;
 
 	float mRushDuration = 0;
-	float mRushRadius = 0;
+	float mRushRadiusRatio = 0;
 	bool mIsRushReturn = false;
 
 	EasingData mEaseChargeRotateData;

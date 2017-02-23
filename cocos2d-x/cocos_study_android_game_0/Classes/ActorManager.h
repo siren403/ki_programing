@@ -12,6 +12,7 @@ class Actor;
 class Player;
 class Enemy;
 class MapTile;
+class PlayMap;
 
 typedef function<Enemy*()> EnemyCreateFunc;
 typedef function<MapTile*()> MapTileCreateFunc;
@@ -29,12 +30,14 @@ public:
 private:
 	Player * mPlayer = nullptr;
 	Enemy * mEnemy = nullptr;
+	PlayMap * mPlayMap = nullptr;
 
 	map<int, EnemyCreateFunc> mEnemyCreateFunctions;
 	map<string, MapTileCreateFunc> mMapTileCreateFunctions;
 public:
 	Player * GetPlayer();
-	Enemy * GetEnemy(int key);
+	Enemy * CreateEnemy(int key);
+	PlayMap * GetPlayMap();
 	MapTile * CreateTile(string key);
 
 	Vec2 ConvertPlayerToEntity(Node * entity);

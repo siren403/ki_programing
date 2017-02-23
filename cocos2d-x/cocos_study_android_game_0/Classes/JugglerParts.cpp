@@ -63,14 +63,15 @@ void JugglerCircle::UpdateAttack(float dt)
 	mAttackWatch->OnUpdate(dt);
 
 	Vec2 pos;
-	pos.x += EasingFunc::EaseQuarticIn(sin((PI / mAttackDuration) * mAttackWatch->GetAccTime()) * mAttackDuration, mAttackStartPos.x, mAttackTargetPos.x - mAttackStartPos.x, mAttackDuration);
-	pos.y += EasingFunc::EaseLinear(sin((PI / mAttackDuration) * mAttackWatch->GetAccTime()) * mAttackDuration, mAttackStartPos.y, mAttackTargetPos.y - mAttackStartPos.y, mAttackDuration);
+	pos.x += EasingFunc::EaseExpoOut(sin(PI * (mAttackWatch->GetAccTime() / mAttackDuration)) * mAttackDuration, mAttackStartPos.x, mAttackTargetPos.x - mAttackStartPos.x, mAttackDuration);
+	pos.y += EasingFunc::EaseExpoOut(sin(PI * (mAttackWatch->GetAccTime() / mAttackDuration)) * mAttackDuration, mAttackStartPos.y, mAttackTargetPos.y - mAttackStartPos.y, mAttackDuration);
 
 	this->setPosition(pos);
 
 	if (mAttackWatch->GetAccTime() >= mAttackDuration)
 	{
 		mAttackWatch->OnReset();
+		this->setPosition(mIdlePosition);
 		SetState(State::State_None);
 	}
 }
@@ -113,14 +114,16 @@ float JugglerCircle::GetCircleRadiusRatio()
 	return mCircleRadiusRatio;
 }
 
+
 #pragma endregion
 
 void JugglerCircle::OnAttack(Vec2 targetPos, float duration)
 {
 	mAttackStartPos = this->getPosition();
 
-	mAttackTargetPos =  ((targetPos - Vec2::ZERO).getNormalized() * 700);
-	
+	//mAttackTargetPos =  ((targetPos - Vec2::ZERO).getNormalized() * 700);
+	mAttackTargetPos = targetPos;
+
 	mAttackDuration = duration == 0 ? 1 : duration;
 	SetState(State::State_SeqAttack);
 }
@@ -130,6 +133,7 @@ void JugglerCircle::Reposition()
 	mRotateSpeedRatio = 1;
 	mCircleRadiusRatio = 1;
 	mIdleWatch->OnReset();
+	mAttackWatch->OnReset();
 
 	mIdlePosition.x = cos(
 		((PI * 2) * ((float)mRotateData.circleIndex / mRotateData.circleCount))

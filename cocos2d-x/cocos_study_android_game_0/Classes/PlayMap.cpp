@@ -20,6 +20,16 @@ float PlayMap::GetTileWidth()
 	return mTileWidth * this->getScale();
 }
 
+int PlayMap::GetMapWidth()
+{
+	return mCurrentMapWidth;
+}
+
+int PlayMap::GetMapHeight()
+{
+	return mCurrentMapHeight;
+}
+
 Size PlayMap::GetMapContentSize()
 {
 	Size size;
@@ -172,13 +182,17 @@ void PlayMap::CheckCollisionTile(Actor * actor, Vec2 dir)
 		tempTile = this->GetTile(deltaTileIndex);
 		int tileType = mCurrentMapData->tilePlacement[deltaTileIndex.y][deltaTileIndex.x];
 
-		tempTile->setColor(Color3B::BLACK);
+		//tempTile->setColor(Color3B::BLACK);
 
 		if (mCurrentMapData->tileDatas.at(tileType).isCollision &&
 			utils::getCascadeBoundingBox(tempTile).intersectsRect(utils::getCascadeBoundingBox(actor)))
 		{
 			//	log("collision tile dx");
 			actor->OnCollisionOther(true, tempTile);
+			if (actor->GetActorType() == ActorType::Actor_Arrow)
+			{
+				tempTile->SetHighlight(true);
+			}
 		}
 	}
 	else
@@ -196,6 +210,10 @@ void PlayMap::CheckCollisionTile(Actor * actor, Vec2 dir)
 			utils::getCascadeBoundingBox(tempTile).intersectsRect(utils::getCascadeBoundingBox(actor)))
 		{
 			actor->OnCollisionOther(true, tempTile);
+			if (actor->GetActorType() == ActorType::Actor_Arrow)
+			{
+				tempTile->SetHighlight(true);
+			}
 		}
 	}
 	else

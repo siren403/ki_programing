@@ -7,12 +7,16 @@
 #include "PlayMap.h"
 #include "MapTile.h"
 #include "DataManager.h"
+#include "StopWatch.h"
 
 #define ZORDER_MAP 0
 #define ZORDER_PLAYER 1
 #define ZORDER_ENEMY 5
-#define IS_IMMOTAL_PLAYER false
+#define IS_IMMOTAL_PLAYER true
 #define	DRAG_DISTANCE 100
+#define ROLL_CONTROL_TIME 0.3
+#define FOLLOW_RATIO_ENEMY 0.3
+#define FOLLOW_RATIO_ARROW 0.65
 
 Scene * ScenePlay::createScene()
 {
@@ -38,7 +42,6 @@ bool ScenePlay::init()
 	//root
 	mRenderNode = Node::create();
 	this->addChild(mRenderNode, 0);
-
 
 	//root->uiNode
 	mUINode = Node::create();
@@ -77,7 +80,6 @@ bool ScenePlay::init()
 	this->addChild(mFadeSprite, 10);
 
 
-
 	//root->playNode
 	mPlayNodeSize = Size(visibleSize.width, visibleSize.height - uiPadBackSize.height);
 	mPlayNode = Node::create();
@@ -88,7 +90,7 @@ bool ScenePlay::init()
 	mPlayNodeOffsetDirection = Vec2::ZERO;
 
 #pragma region Create
-	mPlayMap = PlayMap::create();
+	mPlayMap = ActorManager::GetInstance()->GetPlayMap();
 	mPlayNode->addChild(mPlayMap, ZORDER_MAP);
 
 	mPlayer = ActorManager::GetInstance()->GetPlayer();
@@ -99,28 +101,24 @@ bool ScenePlay::init()
 	mPlayNode->addChild(mArrow, mPlayer->getLocalZOrder() + 1);
 #pragma endregion
 	
+#pragma region StopWatch
+
+	mRollStopWatch = StopWatch::create();
+	mRollStopWatch->SetAutoUpdate(true);
+	this->addChild(mRollStopWatch);
+
+	mShakeStopWatch = StopWatch::create();
+	mShakeStopWatch->SetAutoUpdate(true);
+	this->addChild(mShakeStopWatch);
+#pragma endregion
+
+	mFollowRatio = FOLLOW_RATIO_ENEMY;
+
 	RoomSequence(0);
-
-	/*auto tSeq = Sequence::create(
-		DelayTime::create(10),
-		CallFunc::create([this]() 
-	{
-		RoomSequence(mCurrentRoomIndex + 1);
-	}),
-		nullptr
-	);
-	this->runAction(tSeq);*/
-
-	//auto Spr = Sprite::create("CloseNormal.png");
-	//Spr->setScale(0.5);
-	//Spr->setPosition(360,905);
-	//Spr->setGlobalZOrder(10);
-	//this->addChild(Spr);
-
+	
 	this->scheduleUpdate();
 	return true;
 }
-
 
 void ScenePlay::RoomSequence(int roomIndex, bool isReset)
 {
@@ -128,6 +126,7 @@ void ScenePlay::RoomSequence(int roomIndex, bool isReset)
 	mIsPlaying = false;
 	mPlayer->SetIsControl(false);
 	mPlayer->SetAlive(true);
+	mCameraSecondTarget = nullptr;
 
 	auto mapData = DataManager::GetInstance()->GetMapData(roomIndex);
 	if (mapData == nullptr)
@@ -154,7 +153,7 @@ void ScenePlay::RoomSequence(int roomIndex, bool isReset)
 					mPlayNode->removeChild(mCurrentEnemy);
 					mCurrentEnemy = nullptr;
 				}
-				mCurrentEnemy = ActorManager::GetInstance()->GetEnemy(stageData->enemy.id);
+				mCurrentEnemy = ActorManager::GetInstance()->CreateEnemy(stageData->enemy.id);
 				mCurrentEnemy->SetCameraFollow(stageData->enemy.cameraFollow);
 				mPlayNode->addChild(mCurrentEnemy, ZORDER_ENEMY);
 			}
@@ -194,6 +193,7 @@ void ScenePlay::RoomSequence(int roomIndex, bool isReset)
 		if (mCurrentEnemy != nullptr)
 		{
 			mCurrentEnemy->OnActivate(true);
+			mCameraSecondTarget = mCurrentEnemy;
 		}
 		mIsPlaying = true;
 	}),
@@ -241,15 +241,15 @@ void ScenePlay::update(float dt)
 #pragma endregion
 
 #pragma region Check Tile Search
-	auto tile = mPlayMap->GetTile(mPlayer->getPosition());
-	tile->SetHighlight(true);
+	/*auto tile = mPlayMap->GetTile(mPlayer->getPosition());
+	tile->SetHighlight(true, 1);*/
 
 
-	tile = mPlayMap->GetTile(mArrow->getPosition());
-	if (tile->GetSprite()->getColor() != Color3B::GREEN)
-	{
-		//tile->GetSprite()->setColor(Color3B::GREEN);
-	}
+	//tile = mPlayMap->GetTile(mArrow->getPosition());
+	//if (tile->GetSprite()->getColor() != Color3B::GREEN)
+	//{
+	//	//tile->GetSprite()->setColor(Color3B::GREEN);
+	//}
 #pragma endregion
 
 
@@ -296,7 +296,6 @@ void ScenePlay::GameOverSequence()
 {
 	mIsPlaying = false;
 	mPlayer->SetIsControl(false);
-	//mCurrentEnemy->OnActivate(false);
 
 	auto gameOverSeq = Sequence::create(
 		DelayTime::create(0.3),
@@ -313,7 +312,6 @@ void ScenePlay::RoomClearSequence()
 {
 	//mPlayer->SetIsControl(false);
 	mIsPlaying = false;
-	mCurrentEnemy->OnActivate(false);
 
 	auto gameOverSeq = Sequence::create(
 		CallFunc::create([]()
@@ -348,10 +346,10 @@ void ScenePlay::CalculatePlayNodePosition(float dt)
 		targetPos = mCameraTarget->getPosition();
 	}
 
-	if (mCurrentEnemy != nullptr&& mCurrentEnemy->IsCameraFollow())
+	if (mCameraSecondTarget != nullptr/* && mCurrentEnemy->IsCameraFollow()*/)
 	{
-		Vec2 dist = mCurrentEnemy->getPosition() - targetPos;
-		targetPos += Vec2(dist.x *0.3, dist.y*0.3);
+		Vec2 dist = mCameraSecondTarget->getPosition() - targetPos;
+		targetPos += dist * mFollowRatio;
 	}
 
 	Vec2 pos;
@@ -366,10 +364,15 @@ void ScenePlay::CalculatePlayNodePosition(float dt)
 
 	pos = ccpLerp(mPlayNode->getPosition(), pos, dt);
 
+	if (mIsCameraShake)
+	{
+		/*float duration = 0.2;
+		float shake = sin((mShakeStopWatch->GetAccTime() / duration)*10.0f) * powf(0.5f, (mShakeStopWatch->GetAccTime() / duration));
+		pos.x += 3 * shake;*/
+	}
+		
 	mPlayNode->setPosition(pos);
 }
-
-
 
 
 bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)
@@ -389,6 +392,10 @@ bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)
 			mTouchBeganPos = convertToWorldSpace(mUIPadFront->getPosition());
 			mTouchState = TouchState::Move;
 			isTouchMoved = true;
+			//roll timer start
+			mRollStopWatch->OnStart();
+			float gray = 240;
+			mUIPadFront->setColor(Color3B(gray, gray, gray));
 		}
 		else if(mArrow->GetState() != Arrow::State::State_Drop)//attack
 		{
@@ -406,6 +413,13 @@ bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)
 			mArrow->SetReturnArrow(true);
 			mTouchState = TouchState::Collect;
 			isTouchMoved = true;
+
+			//camera shake, camera follow to arrow
+			mIsCameraShake = true;
+			mShakeStopWatch->OnStart();
+
+			mCameraSecondTarget = mArrow;
+			mFollowRatio = FOLLOW_RATIO_ARROW;
 		}
 		//isTouchMoved = true;
 	}
@@ -464,17 +478,28 @@ void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 		mPlayNodeOffsetDirection = Vec2::ZERO;
 		break;
 	case TouchState::Move:
-		if (!(mUIPadFront->getBoundingBox().containsPoint(touchPos) &&
-			CollisionUtils::GetInst()->ContainsPointToPixel(mUIPadFront, mUIPadFrontImage, touchPos)))//move
+		if (mRollStopWatch->OnStop() <= ROLL_CONTROL_TIME
+			|| !(mUIPadFront->getBoundingBox().containsPoint(touchPos) &&
+				CollisionUtils::GetInst()->ContainsPointToPixel(mUIPadFront, mUIPadFrontImage, touchPos)))//move
 		{
 			Vec2 dir = touch->getLocation() - mTouchBeganPos;
 			float endedRadian = atan2(dir.y, dir.x);
 			mPlayer->OnRoll(endedRadian);
 		}
 		mArrow->DisableLockOn();
+		mUIPadFront->setColor(Color3B::WHITE);
 		break;
 	case TouchState::Collect:
 		mArrow->SetReturnArrow(false);
+		mCameraSecondTarget = mCurrentEnemy;
+
+		//disable shake,camera follow
+		mIsCameraShake = false;
+		mShakeStopWatch->OnStop();
+
+		mCameraSecondTarget = mCurrentEnemy;
+		mFollowRatio = FOLLOW_RATIO_ENEMY;
+		
 		break;
 	}
 

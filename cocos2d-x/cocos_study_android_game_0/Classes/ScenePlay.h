@@ -17,6 +17,7 @@ class Enemy;
 class MapTileVector;
 class PlayMap;
 class Player;
+class StopWatch;
 
 enum TouchState
 {
@@ -52,6 +53,7 @@ private:
 	float mPadMaxDistance;
 	Vec2 mTouchBeganPos;
 	TouchState mTouchState = TouchState::None;
+	StopWatch * mRollStopWatch = nullptr;
 
 	//Map
 	PlayMap * mPlayMap;
@@ -63,6 +65,10 @@ private:
 	int mCurrentRoomIndex = 0;
 	bool mIsPlaying = false;
 	Node * mCameraTarget = nullptr;
+	Actor * mCameraSecondTarget = nullptr;
+	float mFollowRatio = 0;
+	bool mIsCameraShake = false;
+	StopWatch * mShakeStopWatch = nullptr;
 
 	//Screen
 	Sprite * mFadeSprite = nullptr;

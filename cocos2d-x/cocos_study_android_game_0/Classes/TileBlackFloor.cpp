@@ -15,10 +15,13 @@ bool TileBlackFloor::init()
 	mTileSprite->getTexture()->setAliasTexParameters();
 	this->addChild(mTileSprite, 0);
 
-	mStopWatch = StopWatch::create();
-	mStopWatch->SetAutoUpdate(true);
-	this->addChild(mStopWatch);
+	mDurationWatch = StopWatch::create();
+	mDurationWatch->SetAutoUpdate(true);
+	this->addChild(mDurationWatch);
 
+	mDelayWatch = StopWatch::create();
+	mDelayWatch->SetAutoUpdate(true);
+	this->addChild(mDelayWatch);
 
 	auto glCache = GLProgramCache::getInstance();
 
@@ -32,13 +35,12 @@ bool TileBlackFloor::init()
 
 
 	mGLState = GLProgramState::create(glCache->getGLProgram(GLPROGRAM_NAME));
-	//if (mGLState->getReferenceCount() == 1)
-	//{
 	mGLState->setUniformVec3("pointColor", Vec3(1, 0, 1));
-	mGLState->setUniformVec3("changeColor", Vec3(0.8, 0.2, 0.2));
+	mGLState->setUniformVec3("changeColor", Vec3(0.4, 0.1, 0.1));
 	mGLState->setUniformFloat("colorRatio", .0f);
-	//}
 	mTileSprite->setGLProgramState(mGLState);
+
+	mDuration = 0.6;
 
 	this->scheduleUpdate();
 	return true;
@@ -48,20 +50,24 @@ void TileBlackFloor::update(float dt)
 {
 	if (mIsHighlight)
 	{
-		if (mStopWatch->GetAccTime() >= PI)
+		if (mDelay == 0)
 		{
-			if (mIsEndHighlight)
+			if (mDurationWatch->GetAccTime() >= mDuration)
 			{
-				mIsEndHighlight = false;
 				mIsHighlight = false;
-				mStopWatch->OnStop();
+				mDurationWatch->OnStop();
 			}
-			else
+			mGLState->setUniformFloat("colorRatio", sin(PI * (mDurationWatch->GetAccTime() / mDuration)));
+		}
+		else
+		{
+			if (mDelayWatch->GetAccTime() >= mDelay)
 			{
-				mStopWatch->OnReset();
+				mDelay = 0;
+				mDelayWatch->OnStop();
+				mDurationWatch->OnStart();
 			}
 		}
-		mGLState->setUniformFloat("colorRatio", 0.5 * sin(mStopWatch->GetAccTime()));
 	}
 }
 
@@ -70,10 +76,21 @@ void TileBlackFloor::SetHighlight(bool isHighlight)
 	if (isHighlight)
 	{
 		mIsHighlight = true;
-		mStopWatch->OnStart();
+		mDurationWatch->OnStart();
 	}
-	else
+}
+
+void TileBlackFloor::SetHighlight(bool isHighlight, float delay)
+{
+	if (mIsHighlight)
 	{
-		mIsEndHighlight = true;
+		return;
+	}
+
+	if (isHighlight)
+	{
+		mIsHighlight = true;
+		mDelayWatch->OnStart();
+		mDelay = delay;
 	}
 }

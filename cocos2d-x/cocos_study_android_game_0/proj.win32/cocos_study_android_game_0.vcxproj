@@ -152,6 +152,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\BossFiniteState.cpp" />
     <ClCompile Include="..\Classes\BossParts.cpp" />
     <ClCompile Include="..\Classes\CollisionUtils.cpp" />
+    <ClCompile Include="..\Classes\ColorUtil.cpp" />
     <ClCompile Include="..\Classes\DataManager.cpp" />
     <ClCompile Include="..\Classes\EasingFunc.cpp" />
     <ClCompile Include="..\Classes\Enemy.cpp" />
@@ -174,6 +175,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\SpriteAnimator.cpp" />
     <ClCompile Include="..\Classes\MapTileVector.cpp" />
     <ClCompile Include="..\Classes\StopWatch.cpp" />
+    <ClCompile Include="..\Classes\TileBlackBlock.cpp" />
     <ClCompile Include="..\Classes\TileBlackFloor.cpp" />
     <ClCompile Include="..\Classes\TileNormalBlock.cpp" />
     <ClCompile Include="..\Classes\TileWhiteFloor.cpp" />
@@ -188,6 +190,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\BossFiniteState.h" />
     <ClInclude Include="..\Classes\BossParts.h" />
     <ClInclude Include="..\Classes\CollisionUtils.h" />
+    <ClInclude Include="..\Classes\ColorUtil.h" />
     <ClInclude Include="..\Classes\DataManager.h" />
     <ClInclude Include="..\Classes\EasingFunc.h" />
     <ClInclude Include="..\Classes\Enemy.h" />
@@ -210,6 +213,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\SpriteAnimator.h" />
     <ClInclude Include="..\Classes\MapTileVector.h" />
     <ClInclude Include="..\Classes\StopWatch.h" />
+    <ClInclude Include="..\Classes\TileBlackBlock.h" />
     <ClInclude Include="..\Classes\TileBlackFloor.h" />
     <ClInclude Include="..\Classes\TileNormalBlock.h" />
     <ClInclude Include="..\Classes\TileWhiteFloor.h" />

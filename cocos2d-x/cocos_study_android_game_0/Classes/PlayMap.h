@@ -28,6 +28,8 @@ public:
 	virtual bool init() override;
 
 	float GetTileWidth();
+	int GetMapWidth();
+	int GetMapHeight();
 	Size GetMapContentSize();
 	MapTile * GetTile(Vec2 pos);
 	MapTile * GetTile(Vec2I tileIndex);

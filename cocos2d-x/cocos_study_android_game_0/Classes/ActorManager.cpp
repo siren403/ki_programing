@@ -3,9 +3,11 @@
 #include "Boss.h"
 #include "Juggler.h"
 #include "Faker.h"
+#include "PlayMap.h"
 #include "TileWhiteFloor.h"
 #include "TileNormalBlock.h"
 #include "TileBlackFloor.h"
+#include "TileBlackBlock.h"
 
 ActorManager * ActorManager::mInstance = nullptr;
 
@@ -50,6 +52,10 @@ ActorManager::ActorManager()
 	{
 		return TileBlackFloor::create();
 	}));
+	mMapTileCreateFunctions.insert(pair<string, MapTileCreateFunc>("black_block", []()
+	{
+		return TileBlackBlock::create();
+	}));
 #pragma endregion
 
 
@@ -65,7 +71,7 @@ Player * ActorManager::GetPlayer()
 	return mPlayer;
 }
 
-Enemy * ActorManager::GetEnemy(int key)
+Enemy * ActorManager::CreateEnemy(int key)
 {
 	auto func = mEnemyCreateFunctions.find(key);
 
@@ -74,6 +80,15 @@ Enemy * ActorManager::GetEnemy(int key)
 		return func->second();
 	}
 	return nullptr;
+}
+
+PlayMap * ActorManager::GetPlayMap()
+{
+	if (mPlayMap == nullptr)
+	{
+		mPlayMap = PlayMap::create();
+	}
+	return mPlayMap;
 }
 
 MapTile * ActorManager::CreateTile(string key)

@@ -103,6 +103,12 @@
     <ClCompile Include="..\Classes\TileBlackFloor.cpp">
       <Filter>src\Map\Tiles</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\TileBlackBlock.cpp">
+      <Filter>src\Map\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ColorUtil.cpp">
+      <Filter>src\Support</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -206,6 +212,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\TileBlackFloor.h">
       <Filter>src\Map\Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TileBlackBlock.h">
+      <Filter>src\Map\Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ColorUtil.h">
+      <Filter>src\Support</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

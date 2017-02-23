@@ -4,6 +4,9 @@
 #include "StopWatch.h"
 #include "ActorManager.h"
 #include "Player.h"
+#include "IntUtils.h"
+#include "PlayMap.h"
+#include "MapTile.h"
 
 #define PI 3.14159
 
@@ -62,7 +65,6 @@ JugglerIdleState::~JugglerIdleState()
 void JugglerIdleState::OnEnter()
 {
 	auto circles = this->GetEntity<Juggler>();
-	Vec2 pos;
 	for (int i = 0; i < circles->GetCircleCount(); i++)
 	{
 		((JugglerCircle*)circles->GetPartsMap()->at(i))->SetState(JugglerCircle::State::State_Idle);
@@ -100,7 +102,7 @@ void JugglerIdleState::OnUpdate(float dt)
 
 void JugglerIdleState::OnExit()
 {
-
+	mStopWatch->OnReset();
 }
 
 #pragma endregion
@@ -140,14 +142,13 @@ void JugglerSeqAttackState::OnUpdate(float dt)
 {
 	mStopWatch->OnUpdate(dt);
 	int circleCount = this->GetEntity<Juggler>()->GetCircleCount();
-	float attackDuration = 3;
 	if (mCurrentAttackIndex <  circleCount)
 	{
 		if (mStopWatch->GetAccTime() >= 0.8)
 		{
 			auto circle = (JugglerCircle*)this->GetEntity<Juggler>()->GetParts(mCurrentAttackIndex);
 			Vec2 targetPos = ActorManager::GetInstance()->ConvertPlayerToEntity(mEntity);
-			circle->OnAttack(targetPos, attackDuration);
+			circle->OnAttack(targetPos, 2.7);
 			mCurrentAttackIndex++;
 			
 			mStopWatch->OnReset();
@@ -167,6 +168,7 @@ void JugglerSeqAttackState::OnUpdate(float dt)
 
 void JugglerSeqAttackState::OnExit()
 {
+	mStopWatch->OnReset();
 }
 #pragma endregion
 
@@ -185,10 +187,10 @@ bool JugglerRushAttackState::InitState()
 
 	mChargeDuration = 3;
 	mChargeRotationRatio = 6;
-	mChargeRadius = 0.5;
+	mChargeRadiusRatio = 0.5;
 
 	mRushDuration = 3;
-	mRushRadius = 4;
+	mRushRadiusRatio = 4;
 
 #pragma region Easing Data
 	
@@ -196,8 +198,8 @@ bool JugglerRushAttackState::InitState()
 	mEaseChargeRotateData.changeValue = mChargeRotationRatio - 1;
 	mEaseChargeRotateData.duration = mChargeDuration;
 
-	mEaseOutRadiusData.startValue = mChargeRadius;
-	mEaseOutRadiusData.changeValue = mRushRadius - mChargeRadius;
+	mEaseOutRadiusData.startValue = mChargeRadiusRatio;
+	mEaseOutRadiusData.changeValue = mRushRadiusRatio - mChargeRadiusRatio;
 	mEaseOutRadiusData.duration = mRushDuration / 2;
 
 #pragma endregion
@@ -211,6 +213,7 @@ JugglerRushAttackState::~JugglerRushAttackState()
 
 void JugglerRushAttackState::OnEnter()
 {
+#pragma region Rush Init
 	float r = random(0.0f, 1.0f);
 	EasingType type;
 	if (r < 0.3f)
@@ -228,12 +231,40 @@ void JugglerRushAttackState::OnEnter()
 	mEaseChargeRotateData.type = type;
 	mEaseOutRadiusData.type = type;
 
-
 	for (int i = 0; i < this->GetEntity<Juggler>()->GetCircleCount(); i++)
 	{
 		auto circle = (JugglerCircle*)this->GetEntity<Juggler>()->GetParts(i);
 		circle->SetState(JugglerCircle::State::State_Idle);
 	}
+#pragma endregion
+#pragma region warning
+
+	auto map = ActorManager::GetInstance()->GetPlayMap();
+	Vec2I posIndex = map->GetTileIndex(mEntity->getPosition());
+	MapTile * tempTile = nullptr;
+	Vec2I curTileIndex;
+	Vec2I distance;
+	float radius;
+	float rushRange = GetEntity<Juggler>()->GetCircleRadius() * mRushRadiusRatio / map->GetTileWidth();
+	for (int y = 0; y < map->GetMapHeight(); y++)
+	{
+		for (int x = 0; x < map->GetMapWidth(); x++)
+		{
+			curTileIndex = Vec2I(x, y);
+			distance = curTileIndex - posIndex;
+			radius = sqrt(IntUtils::Dot(distance, distance));
+
+			if (radius < rushRange)
+			{
+				map->GetTile(curTileIndex)->SetHighlight(true, mChargeDuration * 0.7 + radius * 0.07);
+			}
+		}
+	}
+
+	map->GetTile(mEntity->getPosition())->SetHighlight(true, 0);
+
+#pragma endregion
+
 }
 
 void JugglerRushAttackState::OnUpdate(float dt)
@@ -251,15 +282,16 @@ void JugglerRushAttackState::OnUpdate(float dt)
 			circle->SetRotateSpeedRatio(ratio);
 
 			ratio = EasingFunc::EaseLinear(
-				mStopWatch->GetAccTime(), 1, mChargeRadius - 1, mChargeDuration);
+				mStopWatch->GetAccTime(), 1, mChargeRadiusRatio - 1, mChargeDuration);
 			circle->SetCircleRadiusRatio(ratio);
 		}
-		if (mStopWatch->GetAccTime() >= mChargeDuration)
+		if (mStopWatch->GetAccTime() >= mChargeDuration) 
 		{
 			mIsCharging = true;
 			mStopWatch->OnReset();
 
 			
+
 		}
 	}
 	else//rush
@@ -290,7 +322,7 @@ void JugglerRushAttackState::OnUpdate(float dt)
 				circle->SetRotateSpeedRatio(ratio);
 
 				ratio = EasingFunc::EaseLinear(
-					mStopWatch->GetAccTime(), mRushRadius, 1 - mRushRadius, mRushDuration / 2);
+					mStopWatch->GetAccTime(), mRushRadiusRatio, 1 - mRushRadiusRatio, mRushDuration / 2);
 				circle->SetCircleRadiusRatio(ratio);
 			}
 		}
@@ -306,6 +338,9 @@ void JugglerRushAttackState::OnUpdate(float dt)
 
 void JugglerRushAttackState::OnExit()
 {
+	mStopWatch->OnReset();
+	mIsCharging = false;
+	mIsRushReturn = false;
 }
 
 #pragma endregion

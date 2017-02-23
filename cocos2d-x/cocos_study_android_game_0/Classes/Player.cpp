@@ -27,7 +27,7 @@ bool Player::init()
 	mState = State::Idle;
 
 	mRollRadian = 0;
-	mRollDistance = 130;
+	mRollDistance = 150;
 	mRollDuration = 0.3;
 
 

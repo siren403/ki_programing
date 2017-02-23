@@ -16,6 +16,10 @@ void MapTile::SetHighlight(bool isHighlight)
 {
 }
 
+void MapTile::SetHighlight(bool isHighlight, float delay)
+{
+}
+
 void MapTile::InitWithTileData(PlayMap * playMap, Vec2I tileIndex)
 {
 	mpPlayMap = playMap;
