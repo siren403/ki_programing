@@ -136,6 +136,7 @@ void SceneTitle::onTouchEnded(Touch * touch, Event * unused_event)
 {
 	//mLensTargetPosition = mMask->getPosition();
 	SetLensTargetPosition(mCenterPosition);
+	Director::getInstance()->replaceScene(TransitionFade::create(1,ScenePlay::createScene()));
 }
 
 void SceneTitle::onAcceleration(Acceleration * acc, Event * unused_event)
