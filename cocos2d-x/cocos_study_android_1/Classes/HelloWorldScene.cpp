@@ -1,7 +1,7 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 #include "CUnit.h"
-
+#include "SceneFont.h"
 USING_NS_CC;
 
 Scene* HelloWorld::createScene()
@@ -56,7 +56,7 @@ bool HelloWorld::init()
     // add a label shows "Hello World"
     // create and initialize a label
     
-    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
+    auto label = Label::createWithTTF("Hello World ÇÑ±Û", "fonts/NanumBarunGothicBold.ttf", 24);
     
     // position the label on the center of the screen
     label->setPosition(Vec2(origin.x + visibleSize.width/2,
@@ -84,8 +84,13 @@ bool HelloWorld::init()
 }
 
 
+
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
+
+	Director::getInstance()->replaceScene(SceneFont::createScene());
+
+	return;
     //Close the cocos2d-x game scene and quit the application
     Director::getInstance()->end();
 

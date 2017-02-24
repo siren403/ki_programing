@@ -12,7 +12,7 @@
 #define ZORDER_MAP 0
 #define ZORDER_PLAYER 1
 #define ZORDER_ENEMY 5
-#define IS_IMMOTAL_PLAYER true
+#define IS_IMMOTAL_PLAYER false
 #define	DRAG_DISTANCE 100
 #define ROLL_CONTROL_TIME 0.3
 #define FOLLOW_RATIO_ENEMY 0.3
@@ -131,7 +131,7 @@ void ScenePlay::RoomSequence(int roomIndex, bool isReset)
 	auto mapData = DataManager::GetInstance()->GetMapData(roomIndex);
 	if (mapData == nullptr)
 	{
-		log("nothing map");
+		//log("nothing map");
 		Director::getInstance()->end();
 		return;
 	}
@@ -276,7 +276,7 @@ void ScenePlay::update(float dt)
 		}
 		if (mCurrentEnemy->IsAlive() == false)
 		{
-			log("clear");
+			//log("clear");
 			RoomClearSequence();
 			return;
 		}
@@ -284,7 +284,7 @@ void ScenePlay::update(float dt)
 #pragma endregion
 	if (mPlayer->IsAlive() == false)
 	{
-		log("gameover");
+		//log("gameover");
 		GameOverSequence();
 		return;
 	}

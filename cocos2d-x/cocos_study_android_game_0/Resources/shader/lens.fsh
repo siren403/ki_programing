@@ -53,10 +53,16 @@ void main()
         uv.x += -(m.x - 0.5);
         uv.y += -(m.y - 0.5);
     }
+
     //border
-    vec2 oriuv = gl_FragCoord.xy / u_resolution.xy*2.-1.;
+    vec2 oriuv;
+    #ifdef GL_ES
+    oriuv = gl_FragCoord.xy / u_resolution.xy*1.-1.;
+    #else
+    oriuv = gl_FragCoord.xy / u_resolution.xy*2.-1.;
+    #endif
     // vec2 oriuv = gl_FragCoord.xy;//-1~1
-    color=mix(vec3(0.),color,pow(max(0.,.95-length(oriuv*oriuv*oriuv*vec2(1.05,1.1))),.3));
+    color = mix(vec3(0.),color,pow(max(0.,.95-length(oriuv*oriuv*oriuv*vec2(1.05,1.1))),.3));
 
     gl_FragColor = vec4(color, 1.0);
 }

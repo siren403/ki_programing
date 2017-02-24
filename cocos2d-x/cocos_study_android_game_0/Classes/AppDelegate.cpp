@@ -86,7 +86,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	Scene * startScene = START_SCENE::createScene();
 
     // run
-	director->runWithScene(TransitionFade::create(1, startScene));
+	//director->runWithScene(TransitionFade::create(1, startScene));
+	director->runWithScene(startScene);
 
     return true;
 }

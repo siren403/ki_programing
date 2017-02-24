@@ -1,6 +1,9 @@
-#include "SceneTitle.h"
+ï»¿#include "SceneTitle.h"
 #include "ScenePlay.h"
 #include "StopWatch.h"
+
+
+#pragma execution_character_set("utf-8")
 
 #define UNIFORM_LENS_OUTLINE 0.001
 #define UNIFORM_LENS_SIZE 1.5f
@@ -42,7 +45,6 @@ bool SceneTitle::init()
 	mRenderNode->addChild(mMask, 0);
 
 
-
 	mRenderTexture = RenderTexture::create(mVisibleSize.width, mVisibleSize.height,Texture2D::PixelFormat::RGBA8888);
 	mRenderTexture->retain();
 	
@@ -51,7 +53,7 @@ bool SceneTitle::init()
 	mRenderSprite->setFlipY(true);
 	this->addChild(mRenderSprite, 5);
 	auto glProg = GLProgram::createWithFilenames("shader/ccPositionTextureColor_noMVP_vert.vsh", "shader/lens.fsh");
-	mGLState = GLProgramState::getOrCreateWithGLProgram(glProg);
+	mGLState = GLProgramState::create(glProg);
 	mRenderSprite->setGLProgramState(mGLState);
 	mRenderSprite->setVisible(true);
 	
@@ -60,19 +62,19 @@ bool SceneTitle::init()
 	mGLState->setUniformVec3("u_lensColor", Vec3(1.0, 1.0, 1.0));
 	mGLState->setUniformFloat("u_outLine", UNIFORM_LENS_OUTLINE);
 	mGLState->setUniformFloat("u_inLine", UNIFORM_LENS_OUTLINE);
-	//mGLState->setUniformVec2("u_resolution", mRenderSprite->getContentSize());
-	mGLState->setUniformVec2("u_resolution", Vec2(mRenderSprite->getContentSize().width, mRenderSprite->getContentSize().height*0.82));
+	mGLState->setUniformVec2("u_resolution", mRenderSprite->getContentSize());
+	//mGLState->setUniformVec2("u_resolution", mVisibleSize);
 	SetLensTargetPosition(mCenterPosition);
 	mLensPosition = mLensTargetPosition;
-	//mGLState->setUniformVec2("u_mouse", mLensPosition);
-	mGLState->setUniformCallback("u_mouse", [this](GLProgram * tProg, Uniform * tUni)
+	mGLState->setUniformVec2("u_mouse", mCenterPosition);
+	/*mGLState->setUniformCallback("u_mouse", [this](GLProgram * tProg, Uniform * tUni)
 	{
 		tProg->setUniformLocationWith2f(
 			tUni->location,
 			this->mLensPosition.x,
 			this->mLensPosition.y
 		);
-	});
+	});*/
 
 #pragma region Watchs
 
@@ -106,7 +108,6 @@ bool SceneTitle::init()
 		{
 			mUpdateFunctionWatch->OnReset();
 			mExclamationMark->runAction(EaseExponentialOut::create(ScaleTo::create(0.3, 1)));
-				
 			return true;
 		}
 		return false;
@@ -149,17 +150,23 @@ bool SceneTitle::init()
 		return false;
 	});//show mask
 
-	mTitleScriptLabel = Label::create("script", "fonts/NanumGothicBold.ttf", 28);
-	mTitleScriptLabel->setPosition(mVisibleSize.width*0.5, mVisibleSize.height * 0.4);
+
+	mTitleScriptLabel = new Label();
+	mTitleScriptLabel->retain();
+	mTitleScriptLabel->initWithTTF(TTFConfig("fonts/NotoSansKR-Regular-Hestia.otf", 28),"script");
+
+	//mTitleScriptLabel = Label::create("script", "fonts/NotoSansKR-Regular-Hestia.otf", 28);
+	//mTitleScriptLabel = Label::create("script", "fonts/arial.ttf", 28);
+	//mTitleScriptLabel = Label::createWithSystemFont("script", "", 28);
+	mTitleScriptLabel->setPosition(mVisibleSize.width * 0.5, mVisibleSize.height * 0.4);
 	mTitleScriptLabel->setColor(Color3B::BLACK);
 	mTitleScriptLabel->setAnchorPoint(Vec2(0.5, 1));
 	mRenderNode->addChild(mTitleScriptLabel);
 
-	mTitleScript.push_back("Ã¹¹øÂ° ´ë»ç \n 1-1 script \n 1-1 script");
-	mTitleScript.push_back("µÎ¹øÂ° ´ë»ç");
-	mTitleScript.push_back("¼¼¹øÂ° ´ë»ç");
-	mTitleScript.push_back("³×¹øÂ° ´ë»ç");
-	mTitleScript.push_back("´Ù¼¸¹øÂ° ´ë»ç");
+	mTitleScript.push_back("1-1 script \n 1-1 script");
+	mTitleScript.push_back("ë‘ë²ˆì§¸ ëŒ€ì‚¬");
+	mTitleScript.push_back("1-3 script");
+	mTitleScript.push_back("ë„¤ë²ˆì§¸ ëŒ€ì‚¬");
 	mUpdateFunctions.push_back([this](float dt)
 	{
 		mUpdateFunctionWatch->OnUpdate(dt);
@@ -189,7 +196,22 @@ bool SceneTitle::init()
 	});//play script
 	mUpdateFunctions.push_back([this](float dt)
 	{
-		Director::getInstance()->replaceScene(TransitionFade::create(1,ScenePlay::createScene()));
+		if (mIsTouchBegan)
+		{
+			mExclamationMark->runAction(EaseExponentialOut::create(ScaleTo::create(0.3, 0)));
+			return true;
+		}
+		return false;
+	});//touch wait
+	mUpdateFunctions.push_back([this](float dt)
+	{
+		/*if (mIsTouchBegan)
+		{
+			Director::getInstance()->replaceScene(TransitionFade::create(1, ScenePlay::createScene()));
+			return true;
+		}
+		return false;*/
+		Director::getInstance()->replaceScene(TransitionFade::create(1, ScenePlay::createScene()));
 		return true;
 	});//next scene
 #pragma endregion
@@ -214,9 +236,12 @@ void SceneTitle::onEnter()
 void SceneTitle::onExit()
 {
 	//setAccelerometerEnabled(false);
-
+	CC_SAFE_RELEASE_NULL(mTitleScriptLabel);
 	CC_SAFE_RELEASE_NULL(mRenderTexture);
 	_eventDispatcher->removeEventListenersForTarget(this);
+	mUpdateFunctions.clear();
+	mTitleScript.clear();
+	this->unscheduleUpdate();
 	LayerColor::onExit();
 }
 
@@ -268,6 +293,8 @@ void SceneTitle::onTouchEnded(Touch * touch, Event * unused_event)
 {
 	//mLensTargetPosition = mMask->getPosition();
 	//SetLensTargetPosition(mCenterPosition);
+	//SetLensTargetPosition(mCenterPosition);
+
 	//Director::getInstance()->replaceScene(TransitionFade::create(1,ScenePlay::createScene()));
 }
 

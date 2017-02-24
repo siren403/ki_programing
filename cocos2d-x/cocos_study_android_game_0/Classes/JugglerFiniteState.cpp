@@ -87,7 +87,7 @@ void JugglerIdleState::OnUpdate(float dt)
 			//NextState
 
 			float r = random(0, 1);
-			if (r < 0.5)
+			if (r < 0.3)
 			{
 				this->GetEntity<Juggler>()->ChangeState(Juggler::State::State_SeqAttack);
 			}
@@ -131,6 +131,7 @@ JugglerSeqAttackState::~JugglerSeqAttackState()
 
 void JugglerSeqAttackState::OnEnter()
 {
+	mCurrentAttackIndex = 0;
 	for (int i = 0; i < this->GetEntity<Juggler>()->GetCircleCount(); i++)
 	{
 		auto circle = (JugglerCircle*)this->GetEntity<Juggler>()->GetParts(i);
