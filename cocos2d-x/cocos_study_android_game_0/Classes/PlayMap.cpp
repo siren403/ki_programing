@@ -44,7 +44,6 @@ MapTile * PlayMap::GetTile(Vec2 pos)
 {
 	MapTile * tile = nullptr;
 	Vec2I tileIndex = this->GetTileIndex(pos);
-	//log("tileIndex %d,%d", tileIndex.x, tileIndex.y);
 	tile = this->GetTile(tileIndex);
 	return tile;
 }

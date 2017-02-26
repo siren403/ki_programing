@@ -118,7 +118,7 @@ void Arrow::OnCollisionOther(bool isCollision, Node * other,Vec2 normal)
 			{
 				Vec2 worldPos = this->getParent()->convertToWorldSpace(this->getPosition());
 				Vec2 normal = CollisionUtils::GetInst()->GetPosToRectNormal(other, worldPos);
-				log("collision normal : %f,%f", normal.x, normal.y);
+				//log("collision normal : %f,%f", normal.x, normal.y);
 
 				Vec2 reflectDir;
 				reflectDir = mMoveDirection + ((normal * 2)*ccpDot(-mMoveDirection, normal));

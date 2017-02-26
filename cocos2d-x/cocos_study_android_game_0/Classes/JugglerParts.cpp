@@ -143,7 +143,7 @@ void JugglerCircle::Reposition()
 		+ mRotateData.circlePivot + 0) * (mRotateData.circleRadius * mCircleRadiusRatio);
 
 	this->setPosition(mIdlePosition);
-	mState = State::State_None;
+	mState = State::State_Idle;
 }
 
 

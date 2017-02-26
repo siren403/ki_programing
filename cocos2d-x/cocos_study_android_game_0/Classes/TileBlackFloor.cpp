@@ -40,7 +40,7 @@ bool TileBlackFloor::init()
 	mGLState->setUniformFloat("colorRatio", .0f);
 	mTileSprite->setGLProgramState(mGLState);
 
-	mDuration = 0.6;
+	mDuration = 1.8;
 
 	this->scheduleUpdate();
 	return true;

@@ -13,6 +13,7 @@ enum EasingType
 	Ease_ExpoOut = 3,
 	Ease_ExpoInOut = 4,
 	Ease_SinInOut = 5,
+	Ease_QuadInOut = 6,
 };
 
 struct EasingData
@@ -22,6 +23,16 @@ struct EasingData
 	float startValue;
 	float changeValue;
 	float duration;
+
+	EasingData()
+	{
+
+	}
+	EasingData(EasingType type,float curTime,float startValue,float changeValue,float duration)
+		: type(type),currentTime(curTime),startValue(startValue),changeValue(changeValue),duration(duration)
+	{
+
+	}
 };
 
 
@@ -33,6 +44,12 @@ public:
 	
 	//Linear
 	static float EaseLinear(float curTime, float startValue, float changeValue, float duration);
+
+
+	
+	//Quadratic
+	static float EaseQuadInOut(float curTime, float startValue, float changeValue, float duration);
+
 
 	//Quartic
 	static float EaseQuarticIn(float curTime, float startValue, float changeValue, float duration);

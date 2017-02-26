@@ -12,6 +12,8 @@ public:
 		State_Idle = 1,
 		State_SeqAttack = 2,
 		State_RushAttack = 3,
+		State_CornerAttack = 4,
+		State_VerticalAttack = 5,
 	};
 private:
 	int mCircleCount = 0;

@@ -27,7 +27,6 @@ public:
 	virtual void onTouchMoved(Touch * touch, Event * unused_event) override;
 	virtual void onTouchEnded(Touch * touch, Event * unused_event) override;
 
-	virtual void onAcceleration(Acceleration * acc, Event * unused_event) override;
 private:
 	Size mVisibleSize;
 	Vec2 mCenterPosition;

@@ -86,15 +86,15 @@ void JugglerIdleState::OnUpdate(float dt)
 		{
 			//NextState
 
-			float r = random(0, 1);
+			/*float r = random(0, 1);
 			if (r < 0.3)
-			{
 				this->GetEntity<Juggler>()->ChangeState(Juggler::State::State_SeqAttack);
-			}
 			else
-			{
-				this->GetEntity<Juggler>()->ChangeState(Juggler::State::State_RushAttack);
-			}
+				this->GetEntity<Juggler>()->ChangeState(Juggler::State::State_RushAttack);		
+			*/
+
+			//this->mEntity->ChangeState(Juggler::State::State_CornerAttack);
+			this->mEntity->ChangeState(Juggler::State::State_VerticalAttack);
 			mStopWatch->OnReset();
 		}
 	}
@@ -150,6 +150,11 @@ void JugglerSeqAttackState::OnUpdate(float dt)
 			auto circle = (JugglerCircle*)this->GetEntity<Juggler>()->GetParts(mCurrentAttackIndex);
 			Vec2 targetPos = ActorManager::GetInstance()->ConvertPlayerToEntity(mEntity);
 			circle->OnAttack(targetPos, 2.7);
+
+			auto tile = ActorManager::GetInstance()->GetPlayMap()->GetTile(
+				ActorManager::GetInstance()->GetPlayer()->getPosition());
+			tile->SetHighlight(true);
+
 			mCurrentAttackIndex++;
 			
 			mStopWatch->OnReset();
@@ -257,7 +262,7 @@ void JugglerRushAttackState::OnEnter()
 
 			if (radius < rushRange)
 			{
-				map->GetTile(curTileIndex)->SetHighlight(true, mChargeDuration * 0.7 + radius * 0.07);
+				map->GetTile(curTileIndex)->SetHighlight(true, mChargeDuration * 0.7 + radius * 0.05);
 			}
 		}
 	}
@@ -346,3 +351,173 @@ void JugglerRushAttackState::OnExit()
 
 #pragma endregion
 
+#pragma region CornerAttack
+
+bool JugglerCornerAttackState::InitState()
+{
+	if (!EnemyFiniteState::InitState())
+	{
+		return false;
+	}
+
+	Size mMapSize = ActorManager::GetInstance()->GetPlayMap()->GetMapContentSize();
+
+	mCornerPostions[0] = Vec2(mMapSize.width * 0.2, mMapSize.height * 0.8);
+	mCornerPostions[3] = Vec2(mMapSize.width * 0.8, mMapSize.height * 0.8);
+	mCornerPostions[2] = Vec2(mMapSize.width * 0.2, mMapSize.height * 0.2);
+	mCornerPostions[1] = Vec2(mMapSize.width * 0.8, mMapSize.height * 0.2);
+	mCornerIndex = 0;
+
+	mStopWatch = StopWatch::create();
+	mStopWatch->retain();
+	mStopWatch->OnStart();
+
+	return true;
+}
+
+JugglerCornerAttackState::~JugglerCornerAttackState()
+{
+	CC_SAFE_RELEASE_NULL(mStopWatch);
+}
+
+void JugglerCornerAttackState::OnEnter()
+{
+	mCornerIndex = 0;
+	mStartPosition = mEntity->getPosition();
+	//mMoveEasingData
+
+	InitMoveEasingData(EasingType::Ease_QuadInOut, mStartPosition, mCornerPostions[mCornerIndex]);
+}
+
+void JugglerCornerAttackState::OnUpdate(float dt)
+{
+	mStopWatch->OnUpdate(dt);
+	if (mStopWatch->GetAccTime() < mMoveXEasingData.duration)
+	{
+		Vec2 pos;
+		mMoveXEasingData.currentTime = mStopWatch->GetAccTime();
+		pos.x = EasingFunc::Ease(mMoveXEasingData);
+		mMoveYEasingData.currentTime = mStopWatch->GetAccTime();
+		pos.y = EasingFunc::Ease(mMoveYEasingData);
+
+		mEntity->setPosition(pos);
+	}
+	else
+	{
+		mStopWatch->OnReset();
+		if (mCornerIndex == 4)
+		{
+			mEntity->ChangeState(Juggler::State::State_Idle);
+			return;
+		}
+
+		int start = mCornerIndex;
+		int end = ++mCornerIndex;
+		if (end == 4)
+		{
+			end = 0;
+		}
+		InitMoveEasingData(EasingType::Ease_QuadInOut, mCornerPostions[start], mCornerPostions[end]);
+	}
+}
+
+void JugglerCornerAttackState::OnExit()
+{
+	mCornerIndex = 0;
+	mStopWatch->OnReset();
+}
+void JugglerCornerAttackState::InitMoveEasingData(EasingType type, Vec2 start, Vec2 end)
+{
+	mMoveXEasingData.type = type;
+	mMoveXEasingData.currentTime = 0;
+	mMoveXEasingData.startValue = start.x;
+	mMoveXEasingData.changeValue = end.x - start.x;
+	mMoveXEasingData.duration = 2;
+
+	mMoveYEasingData.type = type;
+	mMoveYEasingData.currentTime = 0;
+	mMoveYEasingData.startValue = start.y;
+	mMoveYEasingData.changeValue = end.y - start.y;
+	mMoveYEasingData.duration = 2;
+}
+#pragma endregion
+
+#pragma region VerticalAttack
+
+bool JugglerVerticalAttack::InitState()
+{
+	if (!EnemyFiniteState::InitState())
+	{
+		return false;
+	}
+
+	mCircleCount = GetEntity<Juggler>()->GetCircleCount();
+	mInitPositions.reserve(mCircleCount);
+
+	for (int i = 0; i < mCircleCount; i++)
+		mInitPositions.push_back(Vec2::ZERO);
+
+	mMapSize = ActorManager::GetInstance()->GetPlayMap()->GetMapContentSize();
+
+	mStopWatch = StopWatch::create();
+	mStopWatch->retain();
+	mStopWatch->OnStart();
+
+	return true;
+}
+
+JugglerVerticalAttack::~JugglerVerticalAttack()
+{
+	CC_SAFE_RELEASE_NULL(mStopWatch);
+}
+
+void JugglerVerticalAttack::OnEnter()
+{
+	JugglerCircle * circle = nullptr;
+	for (int i = 0; i < mCircleCount; i++)
+	{
+		circle = (JugglerCircle*)mEntity->GetPartsMap()->at(i);
+		mInitPositions[i] = circle->getPosition();
+		circle->SetState(JugglerCircle::State::State_None);
+	}
+}
+
+void JugglerVerticalAttack::OnUpdate(float dt)
+{
+	mStopWatch->OnUpdate(dt);
+
+	EasingData data;
+	data.type = EasingType::Ease_QuadInOut;
+	data.currentTime = mStopWatch->GetAccTime();
+	data.duration = 2;
+
+	for (int i = 0; i < mCircleCount; i++)
+	{
+		Vec2 pos;
+		
+		data.startValue = mInitPositions[i].x;
+		data.changeValue = (mMapSize.width * 0.1) - data.startValue;
+		pos.x = EasingFunc::Ease(data);
+		
+		data.startValue = mInitPositions[i].y;
+		data.changeValue = (mMapSize.height * (i * 0.1)) - data.startValue;
+		pos.y = EasingFunc::Ease(data);
+
+		pos = mEntity->getParent()->convertToWorldSpace(pos);
+		pos = mEntity->convertToNodeSpace(pos);
+		mEntity->GetPartsMap()->at(i)->setPosition(pos);
+
+		//mInitPositions[i] = mEntity->GetPartsMap()->at(i)->getPosition();
+	}
+
+	if (mStopWatch->GetAccTime() >= data.duration)
+	{
+		mStopWatch->OnReset();
+	}
+}
+
+void JugglerVerticalAttack::OnExit()
+{
+
+}
+#pragma endregion

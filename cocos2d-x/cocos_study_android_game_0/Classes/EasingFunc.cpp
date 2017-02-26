@@ -26,6 +26,9 @@ float EasingFunc::Ease(EasingData data)
 	case EasingType::Ease_SinInOut:
 		result = EasingFunc::EaseSinInOut(data.currentTime, data.startValue, data.changeValue, data.duration);
 		break;
+	case EasingType::Ease_QuadInOut:
+		result = EasingFunc::EaseQuadInOut(data.currentTime, data.startValue, data.changeValue, data.duration);
+		break;
 	}
 
 	return result;
@@ -40,6 +43,24 @@ d = duration
 float EasingFunc::EaseLinear(float curTime, float startValue, float changeValue, float duration)
 {
 	return changeValue*curTime / duration + startValue;
+}
+
+
+//quadratic easing in / out - acceleration until halfway, then deceleration
+//	Math.easeInOutQuad = function(t, b, c, d) {
+//	t /= d / 2;
+//	if (t < 1) return c / 2 * t*t + b;
+//	t--;
+//	return -c / 2 * (t*(t - 2) - 1) + b;
+//};
+float EasingFunc::EaseQuadInOut(float curTime, float startValue, float changeValue, float duration)
+{
+	curTime /= duration / 2;
+	if (curTime < 1) 
+		return changeValue / 2 * curTime*curTime + startValue;
+	
+	curTime--;
+	return -changeValue / 2 * (curTime*(curTime - 2) - 1) + startValue;
 }
 
 float EasingFunc::EaseQuarticIn(float curTime, float startValue, float changeValue, float duration)

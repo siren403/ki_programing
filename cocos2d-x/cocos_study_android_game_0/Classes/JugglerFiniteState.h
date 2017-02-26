@@ -4,8 +4,10 @@
 #include "EnemyFiniteState.h"
 #include "EasingFunc.h"
 #include "cocos2d.h"
+#include <vector>
 
 using namespace cocos2d;
+using namespace std;
 
 class StopWatch;
 
@@ -88,6 +90,53 @@ private:
 
 	EasingData mEaseChargeRotateData;
 	EasingData mEaseOutRadiusData;
+};
+
+#pragma endregion
+
+#pragma region CornerAttack
+
+class JugglerCornerAttackState : public EnemyFiniteState
+{
+public:
+	CREATE_STATE_FUNC(JugglerCornerAttackState);
+	virtual bool InitState() override;
+	virtual ~JugglerCornerAttackState();
+protected:
+	virtual void OnEnter() override;
+	virtual void OnUpdate(float dt) override;
+	virtual void OnExit() override;
+private:
+	Vec2 mCornerPostions[4];
+	int mCornerIndex = 0;
+	Vec2 mStartPosition;
+	EasingData mMoveXEasingData;
+	EasingData mMoveYEasingData;
+	StopWatch * mStopWatch = nullptr;
+
+	void InitMoveEasingData(EasingType type,Vec2 start,Vec2 end);
+
+};
+
+#pragma endregion
+
+#pragma region VerticalAttack
+
+class JugglerVerticalAttack : public EnemyFiniteState
+{
+public:
+	CREATE_STATE_FUNC(JugglerVerticalAttack);
+	virtual bool InitState() override;
+	virtual ~JugglerVerticalAttack();
+protected:
+	virtual void OnEnter() override;
+	virtual void OnUpdate(float dt) override;
+	virtual void OnExit() override;
+private:
+	int mCircleCount = 0;
+	vector<Vec2> mInitPositions;
+	StopWatch * mStopWatch = nullptr;
+	Size mMapSize;
 };
 
 #pragma endregion

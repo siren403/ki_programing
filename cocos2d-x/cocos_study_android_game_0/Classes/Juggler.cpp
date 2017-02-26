@@ -28,6 +28,7 @@ bool Juggler::init()
 		circle = JugglerCircle::create();
 		circle->SetRotateData(CircleRotateData(i, mCircleCount, mCircleRadius, mCirclePivot));
 		this->AddParts(i, circle);
+		circle->GetSprite()->setColor(Color3B(200,200,200));
 		if (i == 0)
 		{
 			//circle->GetSprite()->setColor(Color3B::GREEN);
@@ -38,6 +39,8 @@ bool Juggler::init()
 	this->AddState(State::State_Idle, JugglerIdleState::Create(this));
 	this->AddState(State::State_SeqAttack, JugglerSeqAttackState::Create(this));
 	this->AddState(State::State_RushAttack, JugglerRushAttackState::Create(this));
+	this->AddState(State::State_CornerAttack, JugglerCornerAttackState::Create(this));
+	this->AddState(State::State_VerticalAttack, JugglerVerticalAttack::Create(this));
 
 	return true;
 }
