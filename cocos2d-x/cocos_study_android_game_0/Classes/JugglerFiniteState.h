@@ -32,8 +32,6 @@ protected:
 
 class JugglerIdleState : public EnemyFiniteState
 {
-private:
-	StopWatch * mStopWatch = nullptr;
 public:
 	CREATE_STATE_FUNC(JugglerIdleState);
 	virtual bool InitState() override;
@@ -43,6 +41,9 @@ protected:
 	virtual void OnEnter() override;
 	virtual void OnUpdate(float dt) override;
 	virtual void OnExit() override;
+private:
+	StopWatch * mStopWatch = nullptr;
+	vector<int> mNextStates;
 };
 
 #pragma endregion
@@ -110,20 +111,23 @@ protected:
 private:
 	Vec2 mCornerPostions[4];
 	int mCornerIndex = 0;
+	int mCornerPositionPatterns[4][4];
+	int mCornerPatternIndex = 0;
+
 	Vec2 mStartPosition;
 	EasingData mMoveXEasingData;
 	EasingData mMoveYEasingData;
 	StopWatch * mStopWatch = nullptr;
 
 	void InitMoveEasingData(EasingType type,Vec2 start,Vec2 end);
-
+	Vec2 GetCornerPosition(int index);
 };
 
 #pragma endregion
 
-#pragma region VerticalAttack
+#pragma region ColRowAttack
 
-class JugglerVerticalAttack : public EnemyFiniteState
+class JugglerColRowAttack : public EnemyFiniteState
 {
 private:
 	enum State
@@ -138,9 +142,9 @@ private:
 
 	};
 public:
-	CREATE_STATE_FUNC(JugglerVerticalAttack);
+	CREATE_STATE_FUNC(JugglerColRowAttack);
 	virtual bool InitState() override;
-	virtual ~JugglerVerticalAttack();
+	virtual ~JugglerColRowAttack();
 protected:
 	virtual void OnEnter() override;
 	virtual void OnUpdate(float dt) override;
@@ -155,7 +159,7 @@ private:
 	Vec2 mPrevEntityPosition;
 	StopWatch * mStopWatch = nullptr;
 	Size mMapSize;
-	JugglerVerticalAttack::State mState;
+	JugglerColRowAttack::State mState;
 
 
 	void UpdateVerticalPosition(float dt);

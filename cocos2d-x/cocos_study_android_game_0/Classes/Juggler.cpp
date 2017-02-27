@@ -1,6 +1,9 @@
 #include "Juggler.h"
 #include "JugglerParts.h"
 #include "JugglerFiniteState.h"
+#include "ActorManager.h"
+#include "PlayMap.h"
+#include "MapTile.h"
 
 #define PI 3.14159
 
@@ -39,7 +42,25 @@ bool Juggler::init()
 	this->AddState(State::State_SeqAttack, JugglerSeqAttackState::Create(this));
 	this->AddState(State::State_RushAttack, JugglerRushAttackState::Create(this));
 	this->AddState(State::State_CornerAttack, JugglerCornerAttackState::Create(this));
-	this->AddState(State::State_VerticalAttack, JugglerVerticalAttack::Create(this));
+	this->AddState(State::State_ColRowAttack, JugglerColRowAttack::Create(this));
+
+
+	auto map = ActorManager::GetInstance()->GetPlayMap();
+	vector<Vec2I> outlineTileIndex;
+	for (int x = map->GetMapWidth() - 1; x >= 0; x--)
+		outlineTileIndex.push_back(Vec2I(x, 0));
+	for (int y = 0; y < map->GetMapHeight(); y++)
+		outlineTileIndex.push_back(Vec2I(0, y));
+	for (int x = 0; x < map->GetMapWidth(); x++)
+		outlineTileIndex.push_back(Vec2I(x, map->GetMapHeight() - 1));
+	for (int y = map->GetMapHeight() - 1; y >= 0; y--)
+		outlineTileIndex.push_back(Vec2I(map->GetMapWidth() - 1, y));
+	
+	for (int i = 0; i < outlineTileIndex.size(); i++)
+	{
+		map->GetTile(outlineTileIndex[i])->SetHighlight(true, 0.15 * i);
+	}
+
 
 	return true;
 }

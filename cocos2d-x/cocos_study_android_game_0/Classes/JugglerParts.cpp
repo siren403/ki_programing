@@ -63,8 +63,8 @@ void JugglerCircle::UpdateAttack(float dt)
 	mAttackWatch->OnUpdate(dt);
 
 	Vec2 pos;
-	pos.x += EasingFunc::EaseExpoOut(sin(PI * (mAttackWatch->GetAccTime() / mAttackDuration)) * mAttackDuration, mAttackStartPos.x, mAttackTargetPos.x - mAttackStartPos.x, mAttackDuration);
-	pos.y += EasingFunc::EaseExpoOut(sin(PI * (mAttackWatch->GetAccTime() / mAttackDuration)) * mAttackDuration, mAttackStartPos.y, mAttackTargetPos.y - mAttackStartPos.y, mAttackDuration);
+	pos.x += EasingFunc::EaseQuintOut(sin(PI * (mAttackWatch->GetAccTime() / mAttackDuration)) * mAttackDuration, mAttackStartPos.x, mAttackTargetPos.x - mAttackStartPos.x, mAttackDuration);
+	pos.y += EasingFunc::EaseQuintOut(sin(PI * (mAttackWatch->GetAccTime() / mAttackDuration)) * mAttackDuration, mAttackStartPos.y, mAttackTargetPos.y - mAttackStartPos.y, mAttackDuration);
 
 	this->setPosition(pos);
 

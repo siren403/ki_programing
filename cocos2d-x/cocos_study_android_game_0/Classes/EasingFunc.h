@@ -45,6 +45,8 @@ public:
 	//Linear
 	static float EaseLinear(float curTime, float startValue, float changeValue, float duration);
 
+	//quintic 
+	static float EaseQuintOut(float curTime, float startValue, float changeValue, float duration);
 
 	
 	//Quadratic

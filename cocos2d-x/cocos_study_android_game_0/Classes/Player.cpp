@@ -21,7 +21,6 @@ bool Player::init()
 	mSpriteAnim->GetSprite()->getTexture()->setAliasTexParameters();
 	this->addChild(mSpriteAnim);
 
-	mHP = 30;
 	mMoveSpeed = 200;
 	mMoveDir = Vec2::ZERO;
 	mState = State::Idle;
@@ -37,10 +36,6 @@ bool Player::init()
 
 void Player::update(float dt)
 {
-	if (mCurrentHitDelay >= 0)
-	{
-		mCurrentHitDelay -= dt;
-	}
 
 	if (mIsControl)
 	{
@@ -54,11 +49,7 @@ void Player::update(float dt)
 			updateMove(dt);
 			break;
 		}
-		/*Vec2 pos = this->getPosition();
-		pos.clamp(Vec2(mSpriteAnim->GetSprite()->getContentSize().width*0.5f, 
-			mSpriteAnim->GetSprite()->getContentSize().width*0.5f), mMoveArea);
-
-		this->setPosition(pos);*/
+	
 	}
 }
 Sprite * Player::GetSprite()
@@ -103,31 +94,6 @@ Player::State Player::GetState()
 {
 	return mState;
 }
-void Player::Hit()
-{
-	if (mCurrentHitDelay <= 0)
-	{
-		mHP--;
-		log("parts hit count : %d", mHP);
-		mCurrentHitDelay = mHitDelay;
-
-		if (mHP <= 0)
-		{
-			mIsControl = false;
-			mIsAlive = false;
-		}
-
-		if (mIsControl)
-		{
-			auto tHitSeq = Sequence::create(
-				TintTo::create(0.05, Color3B::RED),
-				TintTo::create(0.05, Color3B::WHITE),
-				nullptr
-			);
-			mSpriteAnim->GetSprite()->runAction(tHitSeq);
-		}
-	}
-}
 
 void Player::OnRoll(float rollRadian)
 {
@@ -138,6 +104,12 @@ void Player::OnRoll(float rollRadian)
 		mRollStartPos = this->getPosition();
 		mRollDestPos.x = mRollStartPos.x + (cos(rollRadian) * mRollDistance);
 		mRollDestPos.y = mRollStartPos.y + (sin(rollRadian) * mRollDistance);
+
+		mSpriteAnim->GetSprite()->stopAction(mRollColorAction);
+		mRollColorAction = mSpriteAnim->GetSprite()->runAction(Sequence::create(
+			TintTo::create(mRollDuration*0.75, Color3B(60,60,255)),
+			TintTo::create(mRollDuration*0.25, Color3B::WHITE),
+			nullptr));
 	}
 	
 }
@@ -170,10 +142,14 @@ void Player::OnCollisionOther(bool isCollision, Node * other, Vec2 normal)
 				}
 				break;
 			case ActorType::Actor_EnemyParts:
-				
 				log("dead");
 				mIsAlive = false;
-				
+				mSpriteAnim->GetSprite()->runAction(Sequence::create(
+					TintTo::create(0.16,Color3B::RED),
+					DelayTime::create(0.05),
+					TintTo::create(0.16, Color3B::WHITE),
+					nullptr));
+
 				break;
 			}
 			
@@ -248,10 +224,7 @@ void Player::updateRoll(float dt)
 		this->setPosition(pos);
 		mPrevPos = this->getPosition();
 
-		//float start = 10;
-		//float end = 20;
-		//float delta = EasingFunc::EaseSinInOut(mRollCurTime, 10, 10, mRollDuration);
-		//log("delta %f to %f : %f", start, end, delta);
+		
 	}
 
 }

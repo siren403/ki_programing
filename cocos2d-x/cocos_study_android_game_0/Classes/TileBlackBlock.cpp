@@ -19,6 +19,10 @@ bool TileBlackBlock::init()
 	mStopWatch = StopWatch::create();
 	mStopWatch->SetAutoUpdate(true);
 	this->addChild(mStopWatch);
+	
+	mDelayWatch = StopWatch::create();
+	mDelayWatch->SetAutoUpdate(true);
+	this->addChild(mDelayWatch);
 
 	auto glCache = GLProgramCache::getInstance();
 
@@ -37,7 +41,7 @@ bool TileBlackBlock::init()
 	mGLState->setUniformFloat("colorRatio", .0f);
 	mTileSprite->setGLProgramState(mGLState);
 
-	mDuration = 0.35;
+	mDuration = 3.5;
 
 	this->scheduleUpdate();
 
@@ -46,22 +50,32 @@ bool TileBlackBlock::init()
 
 void TileBlackBlock::update(float dt)
 {
+	if (mDelayWatch->GetAccTime() >= mDelay)
+	{
+		mIsHighlight = true;
+		mStopWatch->OnStart();
+		mDelayWatch->OnStop();
+	}
+
 	if (mIsHighlight)
 	{
 		if (mStopWatch->GetAccTime() >= mDuration)
 		{
-			mIsHighlight = false;
-			mStopWatch->OnStop();
+			mStopWatch->OnReset();
 		}
 		mGLState->setUniformFloat("colorRatio", sin(PI * (mStopWatch->GetAccTime() / mDuration)));
 	}
 }
 
-void TileBlackBlock::SetHighlight(bool isHighlight)
+void TileBlackBlock::SetHighlight(bool isHighlight, float delay)
 {
+	if (mIsHighlight)
+	{
+		return;
+	}
 	if (isHighlight)
 	{
-		mIsHighlight = true;
-		mStopWatch->OnStart();
+		mDelayWatch->OnStart();
+		mDelay = delay;
 	}
 }

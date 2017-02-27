@@ -20,6 +20,7 @@ struct MapData
 {
 	map<int, TileData> tileDatas;
 	vector<vector<int>> tilePlacement;
+	bool isLastMap;
 };
 
 #pragma endregion

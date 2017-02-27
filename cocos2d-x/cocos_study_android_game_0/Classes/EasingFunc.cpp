@@ -45,14 +45,19 @@ float EasingFunc::EaseLinear(float curTime, float startValue, float changeValue,
 	return changeValue*curTime / duration + startValue;
 }
 
-
-//quadratic easing in / out - acceleration until halfway, then deceleration
-//	Math.easeInOutQuad = function(t, b, c, d) {
-//	t /= d / 2;
-//	if (t < 1) return c / 2 * t*t + b;
+//quintic easing out - decelerating to zero velocity
+//Math.easeOutQuint = function(t, b, c, d) {
+//	t /= d;
 //	t--;
-//	return -c / 2 * (t*(t - 2) - 1) + b;
+//	return c*(t*t*t*t*t + 1) + b;
 //};
+float EasingFunc::EaseQuintOut(float curTime, float startValue, float changeValue, float duration)
+{
+	curTime /= duration;
+	curTime--;
+	return changeValue*(curTime*curTime*curTime*curTime*curTime + 1) + startValue;
+}
+
 float EasingFunc::EaseQuadInOut(float curTime, float startValue, float changeValue, float duration)
 {
 	curTime /= duration / 2;

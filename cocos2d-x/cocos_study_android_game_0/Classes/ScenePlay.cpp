@@ -12,11 +12,11 @@
 #define ZORDER_MAP 0
 #define ZORDER_PLAYER 1
 #define ZORDER_ENEMY 5
-#define IS_IMMOTAL_PLAYER true
+#define IS_IMMOTAL_PLAYER false
 #define	DRAG_DISTANCE 100
 #define ROLL_CONTROL_TIME 0.3
 #define FOLLOW_RATIO_ENEMY 0.3
-#define FOLLOW_RATIO_ARROW 0.65
+#define FOLLOW_RATIO_ARROW 0.43
 
 Scene * ScenePlay::createScene()
 {
@@ -72,13 +72,11 @@ bool ScenePlay::init()
 
 #pragma endregion
 
-
 	mFadeSprite = Sprite::create("white4x4.jpg");
 	mFadeSprite->setTextureRect(Rect(0, 0, visibleSize.width, visibleSize.height));
 	mFadeSprite->setAnchorPoint(Vec2(0, 0));
 	mFadeSprite->setColor(Color3B::BLACK);
 	this->addChild(mFadeSprite, 10);
-
 
 	//root->playNode
 	mPlayNodeSize = Size(visibleSize.width, visibleSize.height - uiPadBackSize.height);
@@ -98,7 +96,7 @@ bool ScenePlay::init()
 
 	mArrow = Arrow::create();
 	mArrow->InitWithPlayer(mPlayer);
-	mPlayNode->addChild(mArrow, mPlayer->getLocalZOrder() + 1);
+	mPlayNode->addChild(mArrow, ZORDER_PLAYER + 1);
 #pragma endregion
 	
 #pragma region StopWatch
@@ -240,19 +238,6 @@ void ScenePlay::update(float dt)
 
 #pragma endregion
 
-#pragma region Check Tile Search
-	/*auto tile = mPlayMap->GetTile(mPlayer->getPosition());
-	tile->SetHighlight(true, 1);*/
-
-
-	//tile = mPlayMap->GetTile(mArrow->getPosition());
-	//if (tile->GetSprite()->getColor() != Color3B::GREEN)
-	//{
-	//	//tile->GetSprite()->setColor(Color3B::GREEN);
-	//}
-#pragma endregion
-
-
 #pragma region mArrow State Check
 
 	if (mArrow->GetState() == Arrow::State::State_Shot)
@@ -276,7 +261,6 @@ void ScenePlay::update(float dt)
 		}
 		if (mCurrentEnemy->IsAlive() == false)
 		{
-			//log("clear");
 			RoomClearSequence();
 			return;
 		}
@@ -284,7 +268,6 @@ void ScenePlay::update(float dt)
 #pragma endregion
 	if (mPlayer->IsAlive() == false)
 	{
-		//log("gameover");
 		GameOverSequence();
 		return;
 	}
@@ -313,24 +296,39 @@ void ScenePlay::RoomClearSequence()
 	//mPlayer->SetIsControl(false);
 	mIsPlaying = false;
 
-	auto gameOverSeq = Sequence::create(
-		CallFunc::create([]()
-	{
-		Director::getInstance()->getScheduler()->setTimeScale(0.2);
-	}),
+	auto lastSeq = Sequence::create(
+		CallFunc::create([](){
+		Director::getInstance()->getScheduler()->setTimeScale(0.2);}),
 		DelayTime::create(0.3),
-		CallFunc::create([]()
-	{
-		Director::getInstance()->getScheduler()->setTimeScale(1);
-	}),
-		CallFunc::create([this]()
-	{
-		this->RoomSequence(mCurrentRoomIndex + 1);
-	}),
+		CallFunc::create([](){
+		Director::getInstance()->getScheduler()->setTimeScale(1);}),
 		nullptr
 		);
 
-	mPlayNode->runAction(gameOverSeq);
+	Sequence * clearSeq = nullptr;
+
+	if (DataManager::GetInstance()->GetMapData(mCurrentRoomIndex))
+	{
+		clearSeq = Sequence::create(
+			lastSeq,
+			FadeIn::create(1),
+			DelayTime::create(0.7),
+			CallFunc::create([this]() { Director::getInstance()->end(); }),
+			nullptr);
+		mFadeSprite->runAction(clearSeq);
+	}
+	else
+	{
+		clearSeq = Sequence::create(
+			lastSeq,
+			CallFunc::create([this](){this->RoomSequence(mCurrentRoomIndex + 1);}),
+			nullptr);
+		mPlayNode->runAction(clearSeq);
+
+	}
+
+	
+	
 }
 
 void ScenePlay::CalculatePlayNodePosition(float dt)

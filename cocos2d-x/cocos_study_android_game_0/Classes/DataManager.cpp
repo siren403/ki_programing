@@ -102,6 +102,8 @@ DataManager::DataManager()
 		}
 		reverse(curMapData.tilePlacement.begin(), curMapData.tilePlacement.end());
 
+		curMapData.isLastMap = docMapData["isLastMap"].GetBool();
+
 		mPlayMapData.push_back(curMapData);
 	}
 #pragma endregion
