@@ -451,13 +451,25 @@ bool JugglerVerticalAttack::InitState()
 		return false;
 	}
 
-	mCircleCount = GetEntity<Juggler>()->GetCircleCount();
-	mInitPositions.reserve(mCircleCount);
-
-	for (int i = 0; i < mCircleCount; i++)
-		mInitPositions.push_back(Vec2::ZERO);
-
 	mMapSize = ActorManager::GetInstance()->GetPlayMap()->GetMapContentSize();
+	mCircleCount = GetEntity<Juggler>()->GetCircleCount() + 1;//parts + lifeParts
+	mCircles.reserve(mCircleCount);
+	mInitPositions.reserve(mCircleCount);
+	mLeftPositions.reserve(mCircleCount);
+	mPrevPositions.reserve(mCircleCount);
+
+
+	Vec2 tempPos;
+	for (int i = 0; i < mCircleCount; i++)
+	{
+		mInitPositions.push_back(Vec2::ZERO);
+		tempPos.x = mMapSize.width * 0.1;
+		tempPos.y = (mMapSize.height * (i * 0.07)) + mMapSize.height * 0.1;
+		mLeftPositions.push_back(tempPos);
+
+		mPrevPositions.push_back(Vec2::ZERO);
+	}
+
 
 	mStopWatch = StopWatch::create();
 	mStopWatch->retain();
@@ -474,50 +486,176 @@ JugglerVerticalAttack::~JugglerVerticalAttack()
 void JugglerVerticalAttack::OnEnter()
 {
 	JugglerCircle * circle = nullptr;
-	for (int i = 0; i < mCircleCount; i++)
+
+	int lifeCircleIndex = random(0, mCircleCount - 2);
+	for (int i = 0; i < mCircleCount - 1; i++)
 	{
 		circle = (JugglerCircle*)mEntity->GetPartsMap()->at(i);
-		mInitPositions[i] = circle->getPosition();
+		
 		circle->SetState(JugglerCircle::State::State_None);
+		mCircles.pushBack(circle);
+		if (i == lifeCircleIndex)
+		{
+			circle = (JugglerCircle*)mEntity->GetParts(LIFEPARTS_KEY);
+			mCircles.pushBack(circle);
+		}
 	}
+	for (int i = 0; i < mCircleCount; i++)
+	{
+		circle = mCircles.at(i);
+		mInitPositions[i] = mEntity->convertToWorldSpace(circle->getPosition());
+		mInitPositions[i] = mEntity->getParent()->convertToNodeSpace(mInitPositions[i]);
+	}
+	mState = State::State_MoveStartPosition;
 }
 
 void JugglerVerticalAttack::OnUpdate(float dt)
 {
 	mStopWatch->OnUpdate(dt);
-
-	EasingData data;
-	data.type = EasingType::Ease_QuadInOut;
-	data.currentTime = mStopWatch->GetAccTime();
-	data.duration = 2;
-
-	for (int i = 0; i < mCircleCount; i++)
+	switch (mState)
 	{
-		Vec2 pos;
-		
-		data.startValue = mInitPositions[i].x;
-		data.changeValue = (mMapSize.width * 0.1) - data.startValue;
-		pos.x = EasingFunc::Ease(data);
-		
-		data.startValue = mInitPositions[i].y;
-		data.changeValue = (mMapSize.height * (i * 0.1)) - data.startValue;
-		pos.y = EasingFunc::Ease(data);
-
-		pos = mEntity->getParent()->convertToWorldSpace(pos);
-		pos = mEntity->convertToNodeSpace(pos);
-		mEntity->GetPartsMap()->at(i)->setPosition(pos);
-
-		//mInitPositions[i] = mEntity->GetPartsMap()->at(i)->getPosition();
-	}
-
-	if (mStopWatch->GetAccTime() >= data.duration)
-	{
-		mStopWatch->OnReset();
+	case JugglerVerticalAttack::State_MoveStartPosition:
+		UpdateMoveStartPosition(dt);
+		break;
+	case JugglerVerticalAttack::State_LeftToRight:
+		UpdateLeftToRight(dt);
+		break;
+	case JugglerVerticalAttack::State_RightToLeft:
+		UpdateRightToLeft(dt);
+		break;
+	case JugglerVerticalAttack::State_ReturnInitPosition:
+		UpdateReturnInitPosition(dt);
+		break;
 	}
 }
 
 void JugglerVerticalAttack::OnExit()
 {
+	mCircles.clear();
+	mStopWatch->OnReset();
+}
+void JugglerVerticalAttack::UpdateMoveStartPosition(float dt)
+{
 
+	EasingData data;
+	data.type = EasingType::Ease_QuadInOut;
+	data.currentTime = mStopWatch->GetAccTime();
+	data.duration = 1;
+
+	for (int i = 0; i < mCircleCount; i++)
+	{
+		Vec2 pos;
+
+		data.startValue = mInitPositions[i].x;
+		data.changeValue = mLeftPositions[i].x - data.startValue;
+		pos.x = EasingFunc::Ease(data);
+
+		data.startValue = mInitPositions[i].y;
+		data.changeValue = mLeftPositions[i].y - data.startValue;
+		pos.y = EasingFunc::Ease(data);
+
+		pos = mEntity->getParent()->convertToWorldSpace(pos);
+		pos = mEntity->convertToNodeSpace(pos);
+		mCircles.at(i)->setPosition(pos);
+	}
+	if (mStopWatch->GetAccTime() >= data.duration)
+	{
+		mStopWatch->OnReset();
+		SavePrevPosition();
+		mState = State::State_LeftToRight;
+	}
+}
+void JugglerVerticalAttack::UpdateLeftToRight(float dt)
+{
+	EasingData data;
+	data.type = EasingType::Ease_QuadInOut;
+	data.currentTime = mStopWatch->GetAccTime();
+	data.duration = 1.3f;
+
+	for (int i = 0; i < mCircleCount; i++)
+	{
+		Vec2 pos;
+
+		data.startValue = mLeftPositions[i].x;
+		data.changeValue = (mMapSize.width * 0.9) - data.startValue;
+		pos.x = EasingFunc::Ease(data);
+
+		pos.y = mLeftPositions[i].y;
+
+		pos = mEntity->getParent()->convertToWorldSpace(pos);
+		pos = mEntity->convertToNodeSpace(pos);
+		mCircles.at(i)->setPosition(pos);
+	}
+	if (mStopWatch->GetAccTime() >= data.duration)
+	{
+		mStopWatch->OnReset();
+		SavePrevPosition();
+		mState = State::State_RightToLeft;
+	}
+}
+void JugglerVerticalAttack::UpdateRightToLeft(float dt)
+{
+	EasingData data;
+	data.type = EasingType::Ease_QuadInOut;
+	data.currentTime = mStopWatch->GetAccTime();
+	data.duration = 1.3f;
+
+	for (int i = 0; i < mCircleCount; i++)
+	{
+		Vec2 pos;
+
+		data.startValue = mPrevPositions[i].x;
+		data.changeValue = mLeftPositions[i].x - data.startValue;
+		pos.x = EasingFunc::Ease(data);
+
+		pos.y = mLeftPositions[i].y;
+
+		pos = mEntity->getParent()->convertToWorldSpace(pos);
+		pos = mEntity->convertToNodeSpace(pos);
+		mCircles.at(i)->setPosition(pos);
+	}
+	if (mStopWatch->GetAccTime() >= data.duration)
+	{
+		mStopWatch->OnReset();
+		SavePrevPosition();
+		mState = State::State_ReturnInitPosition;
+	}
+}
+void JugglerVerticalAttack::UpdateReturnInitPosition(float dt)
+{
+	EasingData data;
+	data.type = EasingType::Ease_QuadInOut;
+	data.currentTime = mStopWatch->GetAccTime();
+	data.duration = 1.3;
+
+	for (int i = 0; i < mCircleCount; i++)
+	{
+		Vec2 pos;
+
+		data.startValue = mPrevPositions[i].x;
+		data.changeValue = mInitPositions[i].x - data.startValue;
+		pos.x = EasingFunc::Ease(data);
+
+		data.startValue = mPrevPositions[i].y;
+		data.changeValue = mInitPositions[i].y - data.startValue;
+		pos.y = EasingFunc::Ease(data);
+
+		pos = mEntity->getParent()->convertToWorldSpace(pos);
+		pos = mEntity->convertToNodeSpace(pos);
+		mCircles.at(i)->setPosition(pos);
+	}
+	if (mStopWatch->GetAccTime() >= data.duration)
+	{
+		mStopWatch->OnReset();
+		mEntity->ChangeState(Juggler::State::State_Idle);
+	}
+}
+void JugglerVerticalAttack::SavePrevPosition()
+{
+	for (int i = 0; i < mCircleCount; i++)
+	{
+		mPrevPositions[i] = mEntity->convertToWorldSpace(mCircles.at(i)->getPosition());
+		mPrevPositions[i] = mEntity->getParent()->convertToNodeSpace(mPrevPositions[i]);
+	}
 }
 #pragma endregion

@@ -3,6 +3,9 @@
 
 #include "Enemy.h"
 
+#define LIFEPARTS_KEY -1
+
+
 class Juggler : public Enemy
 {
 public:

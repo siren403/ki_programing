@@ -125,8 +125,8 @@ bool SceneTitle::init()
 	//mTitleScriptLabel->retain();
 	//mTitleScriptLabel->initWithTTF(TTFConfig("fonts/NotoSansKR-Regular-Hestia.otf", 28),"script");
 
-	mTitleScriptLabel = Label::create("script", "fonts/NotoSansKR-Regular-Hestia.otf", 45);
-	mTitleScriptLabel->setPosition(mVisibleSize.width * 0.5, mVisibleSize.height * 0.4);
+	mTitleScriptLabel = Label::create("", "fonts/NotoSansKR-Regular-Hestia.otf", 45);
+	mTitleScriptLabel->setPosition(mVisibleSize.width * 0.5, mVisibleSize.height * 0.35);
 	mTitleScriptLabel->setColor(Color3B::BLACK);
 	mTitleScriptLabel->setAnchorPoint(Vec2(0.5, 1));
 	mRenderNode->addChild(mTitleScriptLabel);

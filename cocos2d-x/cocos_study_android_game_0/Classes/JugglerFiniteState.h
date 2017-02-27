@@ -10,6 +10,7 @@ using namespace cocos2d;
 using namespace std;
 
 class StopWatch;
+class JugglerCircle;
 
 #pragma region None
 
@@ -124,6 +125,17 @@ private:
 
 class JugglerVerticalAttack : public EnemyFiniteState
 {
+private:
+	enum State
+	{
+		State_None = 0,
+		State_MoveStartPosition = 1,
+		State_LeftToRight = 2,
+		State_RightToLeft = 3,
+		State_TopToBottom = 4,
+		State_BottomToTop = 5,
+		State_ReturnInitPosition = 6,
+	};
 public:
 	CREATE_STATE_FUNC(JugglerVerticalAttack);
 	virtual bool InitState() override;
@@ -134,9 +146,20 @@ protected:
 	virtual void OnExit() override;
 private:
 	int mCircleCount = 0;
+	Vector<JugglerCircle*> mCircles;
 	vector<Vec2> mInitPositions;
+	vector<Vec2> mLeftPositions;
+	vector<Vec2> mPrevPositions;
 	StopWatch * mStopWatch = nullptr;
 	Size mMapSize;
+	JugglerVerticalAttack::State mState;
+
+	void UpdateMoveStartPosition(float dt);
+	void UpdateLeftToRight(float dt);
+	void UpdateRightToLeft(float dt);
+	void UpdateReturnInitPosition(float dt);
+
+	void SavePrevPosition();
 };
 
 #pragma endregion

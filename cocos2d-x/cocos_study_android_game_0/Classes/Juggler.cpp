@@ -3,7 +3,6 @@
 #include "JugglerFiniteState.h"
 
 #define PI 3.14159
-#define LIFEPARTS_KEY -1
 
 bool Juggler::init()
 {
@@ -54,11 +53,14 @@ void Juggler::OnActivate(bool isActive)
 	}
 	else
 	{
+		GetParts(LIFEPARTS_KEY)->setPosition(Vec2::ZERO);
+
 		for (int i = 0; i < mCircleCount; i++)
 		{
 			((JugglerCircle*)GetParts(i))->Reposition();
 		}
 		this->ChangeState(State::State_Idle);
+
 	}
 	this->GetState(State::State_Idle)->SetActive(isActive);
 	

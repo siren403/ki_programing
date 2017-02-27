@@ -12,10 +12,10 @@
 #define ZORDER_MAP 0
 #define ZORDER_PLAYER 1
 #define ZORDER_ENEMY 5
-#define IS_IMMOTAL_PLAYER false
+#define IS_IMMOTAL_PLAYER true
 #define	DRAG_DISTANCE 100
 #define ROLL_CONTROL_TIME 0.3
-#define FOLLOW_RATIO_ENEMY 0.3
+#define FOLLOW_RATIO_ENEMY 0.4
 #define FOLLOW_RATIO_ARROW 0.65
 
 Scene * ScenePlay::createScene()
