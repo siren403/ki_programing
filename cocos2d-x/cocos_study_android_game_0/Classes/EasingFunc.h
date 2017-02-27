@@ -39,7 +39,7 @@ struct EasingData
 class EasingFunc
 {
 public:
-	static float Ease(EasingData data);
+	static float Ease(const EasingData & data);
 	
 	
 	//Linear

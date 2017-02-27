@@ -2,7 +2,7 @@
 
 #define PI 3.14159
 
-float EasingFunc::Ease(EasingData data)
+float EasingFunc::Ease(const EasingData & data)
 {
 	float result;
 
