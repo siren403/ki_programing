@@ -106,6 +106,10 @@ void Enemy::SetAlive(bool tIsAlive)
 	{
 		mPartMapItor->second->SetAlive(tIsAlive);
 	}*/
+	if (mLifeParts != nullptr)
+	{
+		mLifeParts->SetAlive(tIsAlive);
+	}
 }
 
 bool Enemy::IsAlive()

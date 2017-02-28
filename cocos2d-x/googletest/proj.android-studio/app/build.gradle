@@ -8,8 +8,8 @@ android {
         applicationId "com.gtest.a6kigs12.googletest"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 102
-        versionName "1.0.2"
+        versionCode 103
+        versionName "1.0.3"
     }
 
     sourceSets.main {
@@ -48,6 +48,7 @@ dependencies {
     compile project(':libcocos2dx')
 
     compile project(':libraries:BaseGameUtils')
+    compile 'com.google.firebase:firebase-ads:10.0.1'
 }
 
 task cleanAssets(type: Delete) {

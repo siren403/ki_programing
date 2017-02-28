@@ -443,13 +443,13 @@ void JugglerCornerAttackState::InitMoveEasingData(EasingType type, Vec2 start, V
 	mMoveXEasingData.currentTime = 0;
 	mMoveXEasingData.startValue = start.x;
 	mMoveXEasingData.changeValue = end.x - start.x;
-	mMoveXEasingData.duration = 2;
+	mMoveXEasingData.duration = 1.6;
 
 	mMoveYEasingData.type = type;
 	mMoveYEasingData.currentTime = 0;
 	mMoveYEasingData.startValue = start.y;
 	mMoveYEasingData.changeValue = end.y - start.y;
-	mMoveYEasingData.duration = 2;
+	mMoveYEasingData.duration = 1.6;
 }
 Vec2 JugglerCornerAttackState::GetCornerPosition(int index)
 {

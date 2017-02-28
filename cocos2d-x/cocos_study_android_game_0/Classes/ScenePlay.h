@@ -69,6 +69,9 @@ private:
 	float mFollowRatio = 0;
 	bool mIsCameraShake = false;
 	StopWatch * mShakeStopWatch = nullptr;
+	int mKillCount = 0;
+	Sprite * mKillCountBackground = nullptr;
+	Label * mKillCountLabel = nullptr;
 
 	//Screen
 	Sprite * mFadeSprite = nullptr;
@@ -78,6 +81,8 @@ private:
 
 	void GameOverSequence();
 	void RoomClearSequence();
+
+	void ShowKillCount();
 public:
 	static Scene * createScene();
 	CREATE_FUNC(ScenePlay);

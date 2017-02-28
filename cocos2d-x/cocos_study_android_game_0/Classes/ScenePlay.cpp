@@ -12,7 +12,7 @@
 #define ZORDER_MAP 0
 #define ZORDER_PLAYER 1
 #define ZORDER_ENEMY 5
-#define IS_IMMOTAL_PLAYER false
+#define IS_IMMOTAL_PLAYER true
 #define	DRAG_DISTANCE 100
 #define ROLL_CONTROL_TIME 0.3
 #define FOLLOW_RATIO_ENEMY 0.3
@@ -47,7 +47,7 @@ bool ScenePlay::init()
 	mUINode = Node::create();
 	mRenderNode->addChild(mUINode, 10);
 
-#pragma region Pad
+#pragma region UI
 
 	mUIPadBack = Sprite::create("ui/pad/ui_pad_back.jpg");
 	mUIPadBack->setAnchorPoint(Vec2(0.5, 0));
@@ -70,7 +70,26 @@ bool ScenePlay::init()
 
 	mPadMaxDistance = 3;
 
+	mKillCountBackground = Sprite::create("white4x4.jpg");
+	mKillCountBackground->setTextureRect(Rect(0, 0, 720, 140));
+	mKillCountBackground->setAnchorPoint(Vec2(0, 0.5));
+	mKillCountBackground->setColor(Color3B::BLACK);
+	mKillCountBackground->setOpacity(255 * 0.5);
+	mKillCountBackground->setPosition(-mKillCountBackground->getContentSize().width, visibleSize.height*0.85);
+
+	mKillCountLabel = Label::createWithTTF("99", "fonts/NotoSansKR-Regular-Hestia.otf", 85);
+	mKillCountLabel->setColor(Color3B::WHITE);
+	mKillCountLabel->setPosition(
+		mKillCountBackground->getContentSize().width*0.5,
+		mKillCountBackground->getContentSize().height*0.5);
+	mKillCountBackground->addChild(mKillCountLabel);
+	
+
+
+	mUINode->addChild(mKillCountBackground);
+
 #pragma endregion
+
 
 	mFadeSprite = Sprite::create("white4x4.jpg");
 	mFadeSprite->setTextureRect(Rect(0, 0, visibleSize.width, visibleSize.height));
@@ -135,7 +154,7 @@ void ScenePlay::RoomSequence(int roomIndex, bool isReset)
 	}
 
 	auto tSeq = Sequence::create(
-		FadeIn::create(1),
+		FadeIn::create(0.15),
 		CallFunc::create([this, isReset]()
 	{
 		auto stageData = DataManager::GetInstance()->GetStageData(mCurrentRoomIndex);
@@ -160,6 +179,7 @@ void ScenePlay::RoomSequence(int roomIndex, bool isReset)
 			pos.x = mPlayMap->GetMapContentSize().width * stageData->enemy.position.x;
 			pos.y = mPlayMap->GetMapContentSize().height * stageData->enemy.position.y;
 			mCurrentEnemy->setPosition(pos);
+			mCurrentEnemy->SetAlive(true);
 			mCurrentEnemy->OnActivate(false);
 		}
 		else
@@ -178,15 +198,15 @@ void ScenePlay::RoomSequence(int roomIndex, bool isReset)
 		initPos.y = mPlayMap->GetMapContentSize().height * 0.1;
 		mPlayer->InitPosition(initPos);
 
-
 		mArrow->LockOn(Vec2(0, 1), true);
 
 		CalculatePlayNodePosition(1);
 	}),
-		DelayTime::create(0.1),
-		FadeOut::create(1),
+		/*DelayTime::create(0.1),*/
+		FadeOut::create(0.15),
 		CallFunc::create([this]()
 	{
+		ShowKillCount();
 		mPlayer->SetIsControl(true);
 		if (mCurrentEnemy != nullptr)
 		{
@@ -298,8 +318,8 @@ void ScenePlay::RoomClearSequence()
 
 	auto lastSeq = Sequence::create(
 		CallFunc::create([](){
-		Director::getInstance()->getScheduler()->setTimeScale(0.2);}),
-		DelayTime::create(0.3),
+		Director::getInstance()->getScheduler()->setTimeScale(0.3);}),
+		DelayTime::create(0.15),
 		CallFunc::create([](){
 		Director::getInstance()->getScheduler()->setTimeScale(1);}),
 		nullptr
@@ -311,11 +331,12 @@ void ScenePlay::RoomClearSequence()
 	{
 		clearSeq = Sequence::create(
 			lastSeq,
-			FadeIn::create(1),
-			DelayTime::create(0.7),
-			CallFunc::create([this]() { Director::getInstance()->end(); }),
+			//FadeIn::create(0.15),
+			//CallFunc::create([this]() { Director::getInstance()->end(); }),
+			CallFunc::create([this]() {this->RoomSequence(mCurrentRoomIndex,true); }),
 			nullptr);
 		mFadeSprite->runAction(clearSeq);
+		mKillCount++;
 	}
 	else
 	{
@@ -329,6 +350,18 @@ void ScenePlay::RoomClearSequence()
 
 	
 	
+}
+
+void ScenePlay::ShowKillCount()
+{
+	mKillCountLabel->setString(StringUtils::format("%d", mKillCount));
+	mKillCountBackground->runAction(
+		Sequence::create(
+			EaseExponentialInOut::create(MoveTo::create(1.3, Vec2(0, mKillCountBackground->getPosition().y))),
+			DelayTime::create(0.15),
+			EaseExponentialInOut::create(MoveTo::create(1.3, Vec2(-mKillCountBackground->getContentSize().width, mKillCountBackground->getPosition().y))),
+			//EaseQuinticActionOut::create(RotateBy::create(1.8, Vec3(360*4,0,0))),
+			nullptr));
 }
 
 void ScenePlay::CalculatePlayNodePosition(float dt)
