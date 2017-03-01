@@ -1,0 +1,12 @@
+{
+    "stages":[
+        {
+            "key":0,
+            "enemy":{
+                "id":2,
+                "position":{"x":0.5,"y":0.8},
+                "cameraFollow":true
+            }
+        }
+    ]
+}

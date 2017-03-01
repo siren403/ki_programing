@@ -109,6 +109,12 @@
     <ClCompile Include="..\Classes\ColorUtil.cpp">
       <Filter>src\Support</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\ShaderWrapper.cpp">
+      <Filter>src\Support\ShaderWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SWPointColor.cpp">
+      <Filter>src\Support\ShaderWrapper</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -219,6 +225,12 @@
     <ClInclude Include="..\Classes\ColorUtil.h">
       <Filter>src\Support</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\ShaderWrapper.h">
+      <Filter>src\Support\ShaderWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SWPointColor.h">
+      <Filter>src\Support\ShaderWrapper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="resouce">
@@ -265,6 +277,9 @@
     </Filter>
     <Filter Include="src\Map\Tiles">
       <UniqueIdentifier>{ad45260a-be32-4359-abcc-ddf48eb706db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Support\ShaderWrapper">
+      <UniqueIdentifier>{18588e40-9fbf-43c4-80b7-49b9484f90e8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

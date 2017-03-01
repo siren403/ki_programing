@@ -1,7 +1,7 @@
 ﻿#include "SceneTitle.h"
 #include "ScenePlay.h"
 #include "StopWatch.h"
-
+#include "DataManager.h"
 
 #pragma execution_character_set("utf-8")
 
@@ -44,6 +44,33 @@ bool SceneTitle::init()
 	mMask->setScale(0);
 	mRenderNode->addChild(mMask, 0);
 
+	auto screenBezel = Sprite::create("screen_bezel.png");
+	screenBezel->getTexture()->setAliasTexParameters();
+	screenBezel->setScale(CC_CONTENT_SCALE_FACTOR() * 2);
+	screenBezel->setPosition(mCenterPosition);
+	mRenderNode->addChild(screenBezel, 10);
+
+	mTitleNameLabel = Label::create("ONE\nLIFE", "fonts/NotoSansKR-Regular-Hestia.otf", 120);
+	for (int i = 0; i < mTitleNameLabel->getStringLength(); i++)
+	{
+		auto letter = mTitleNameLabel->getLetter(i);
+		if (letter != nullptr)
+		{
+			letter->setColor(i % 2 == 0 ? Color3B::WHITE : Color3B::BLACK);
+		}
+	}
+	mTitleNameLabel->setPosition(mCenterPosition.x, mVisibleSize.height*0.7);
+	mRenderNode->addChild(mTitleNameLabel, screenBezel->getLocalZOrder() + 1);
+
+
+	mTitleScriptLabel = Label::create("", "fonts/NotoSansKR-Regular-Hestia.otf", 45);
+	mTitleScriptLabel->setPosition(mVisibleSize.width * 0.5, mVisibleSize.height * 0.35);
+	mTitleScriptLabel->setColor(Color3B::BLACK);
+	mTitleScriptLabel->setAnchorPoint(Vec2(0.5, 1));
+	mRenderNode->addChild(mTitleScriptLabel);
+
+
+	mTitleScript = DataManager::GetInstance()->GetTitleScripts();
 
 #pragma region Watchs
 
@@ -64,13 +91,13 @@ bool SceneTitle::init()
 	mExclamationMark->setScale(0);
 	mRenderNode->addChild(mExclamationMark, mMask->getLocalZOrder() + 1);
 
+	mTitleScriptLabel->setString(mTitleScript->at(mTitleScriptIndex++));
 	mUpdateFunctions.push_back([this](float dt)
 	{
-		mUpdateFunctionWatch->OnUpdate(dt);
-		if (mUpdateFunctionWatch->GetAccTime() >= 2)
+		if (mIsTouchBegan)
 		{
-			mUpdateFunctionWatch->OnReset();
-			mExclamationMark->runAction(EaseExponentialOut::create(ScaleTo::create(0.3, 1)));
+			mTitleScriptLabel->setString("\n");
+			mTitleNameLabel->runAction(FadeOut::create(0.3f));
 			return true;
 		}
 		return false;
@@ -78,9 +105,10 @@ bool SceneTitle::init()
 	mUpdateFunctions.push_back([this](float dt)
 	{
 		mUpdateFunctionWatch->OnUpdate(dt);
-		if (mUpdateFunctionWatch->GetAccTime() >= 0.3)
+		if (mUpdateFunctionWatch->GetAccTime() >= 0.5)
 		{
 			mUpdateFunctionWatch->OnReset();
+			mExclamationMark->runAction(EaseExponentialOut::create(ScaleTo::create(0.3, 1)));
 			mExclamationMark->runAction(RepeatForever::create(
 				Sequence::create(
 					EaseSineInOut::create(MoveBy::create(1, Vec2(0, -15))),
@@ -94,13 +122,15 @@ bool SceneTitle::init()
 	});
 	mUpdateFunctions.push_back([this](float dt)
 	{
-		if (mIsTouchBegan)
+		mUpdateFunctionWatch->OnUpdate(dt);
+		if (mUpdateFunctionWatch->GetAccTime() >= 1)
 		{
 			mExclamationMark->runAction(EaseExponentialOut::create(ScaleTo::create(0.3, 0)));
+			mUpdateFunctionWatch->OnReset();
 			return true;
 		}
 		return false;
-	});//touch wait
+	});
 	mUpdateFunctions.push_back([this](float dt) 
 	{
 		mUpdateFunctionWatch->OnUpdate(dt);
@@ -113,38 +143,16 @@ bool SceneTitle::init()
 		return false;
 	});//show mask
 	
-	//auto glProg = GLProgram::createWithFilenames("shader/ccPositionTextureColor_noMVP_vert.vsh", "shader/lens.fsh");
-	//setGLProgram(glProg);
-	//mGLState = GLProgramState::getOrCreateWithGLProgram(glProg);
-	//mGLState->setUniformVec2("u_resolution", mVisibleSize);
-	//SetLensTargetPosition(mCenterPosition);
-	//mLensPosition = mLensTargetPosition;
-
-
-	//mTitleScriptLabel = new Label();
-	//mTitleScriptLabel->retain();
-	//mTitleScriptLabel->initWithTTF(TTFConfig("fonts/NotoSansKR-Regular-Hestia.otf", 28),"script");
-
-	mTitleScriptLabel = Label::create("", "fonts/NotoSansKR-Regular-Hestia.otf", 45);
-	mTitleScriptLabel->setPosition(mVisibleSize.width * 0.5, mVisibleSize.height * 0.35);
-	mTitleScriptLabel->setColor(Color3B::BLACK);
-	mTitleScriptLabel->setAnchorPoint(Vec2(0.5, 1));
-	mRenderNode->addChild(mTitleScriptLabel);
-
-	mTitleScript.push_back("1-1 script \n 1-1 script");
-	mTitleScript.push_back("두번째 대사");
-	mTitleScript.push_back("1-3 script");
-	mTitleScript.push_back("네번째 대사");
 	mUpdateFunctions.push_back([this](float dt)
 	{
 		mUpdateFunctionWatch->OnUpdate(dt);
-		if (mTitleScript.size() > 0 && mTitleScriptIndex < mTitleScript.size())
+		if (mTitleScript->size() > 0 && mTitleScriptIndex < mTitleScript->size())
 		{
 			if (mUpdateFunctionWatch->GetAccTime() >= 0.05)
 			{
-				if (mScriptCharIndex < mTitleScript[mTitleScriptIndex].length())
+				if (mScriptCharIndex < mTitleScript->at(mTitleScriptIndex).length())
 				{
-					mTitleScriptLabel->setString(mTitleScript[mTitleScriptIndex].substr(0, mScriptCharIndex + 1));
+					mTitleScriptLabel->setString(mTitleScript->at(mTitleScriptIndex).substr(0, mScriptCharIndex + 1));
 					mUpdateFunctionWatch->OnReset();
 					mScriptCharIndex++;
 				}
@@ -164,18 +172,15 @@ bool SceneTitle::init()
 	});//play script
 	mUpdateFunctions.push_back([this](float dt)
 	{
-		if (mIsTouchBegan)
+		mUpdateFunctionWatch->OnUpdate(dt);
+		if (mUpdateFunctionWatch->GetAccTime() >= 1)
 		{
 			mMask->runAction(EaseExponentialOut::create(ScaleTo::create(0.3, 0)));
+			Director::getInstance()->replaceScene(TransitionFade::create(1, ScenePlay::createScene()));
 			return true;
 		}
 		return false;
-	});//touch wait
-	mUpdateFunctions.push_back([this](float dt)
-	{
-		Director::getInstance()->replaceScene(TransitionFade::create(1, ScenePlay::createScene()));
-		return true;
-	});//next scene
+	});
 #pragma endregion
 
 	this->scheduleUpdate();
@@ -198,7 +203,6 @@ void SceneTitle::onExit()
 {
 	_eventDispatcher->removeEventListenersForTarget(this);
 	mUpdateFunctions.clear();
-	mTitleScript.clear();
 	this->unscheduleUpdate();
 	LayerColor::onExit();
 }
@@ -213,7 +217,6 @@ void SceneTitle::update(float dt)
 			mUpdateFunctionIndex++;
 		}
 	}
-	
 
 	Vec2 pos = mMaskInitPosition;
 	pos.x += sin((3.14159 * 2) * (mStopWatch->GetAccTime() / 5)) * 13;
@@ -223,9 +226,6 @@ void SceneTitle::update(float dt)
 	{
 		mStopWatch->OnReset();
 	}
-
-	mLensPosition = ccpLerp(mLensPosition, mLensTargetPosition, dt);
-	mLensPosition = ccpClamp(mLensPosition, Vec2::ZERO, mVisibleSize);
 
 	mIsTouchBegan = false;
 }
@@ -244,7 +244,5 @@ void SceneTitle::onTouchEnded(Touch * touch, Event * unused_event)
 }
 
 
-void SceneTitle::SetLensTargetPosition(Vec2 pos)
-{
-	mLensTargetPosition = Vec2(mVisibleSize.width - pos.x, mVisibleSize.height - pos.y);
-}
+
+

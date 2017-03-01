@@ -1,0 +1,287 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="win32">
+      <UniqueIdentifier>{84a8ebd7-7cf0-47f6-b75e-d441df67da40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource">
+      <UniqueIdentifier>{715254bc-d70b-4ec5-bf29-467dd3ace079}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor">
+      <UniqueIdentifier>{50912a66-c8ce-4577-90a8-dd4900148635}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Surpport">
+      <UniqueIdentifier>{aab4c7a7-3d80-4a8f-9167-30af9eaff379}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor\Player">
+      <UniqueIdentifier>{73bece16-9d90-4092-a79b-403e39588596}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor\Enemy">
+      <UniqueIdentifier>{39e4aff3-1f25-4bfe-b2d3-087cdef196c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor\Enemy\sample">
+      <UniqueIdentifier>{53188ae6-da4c-4fe4-986a-c9d545180403}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor\Enemy\Faker">
+      <UniqueIdentifier>{c1db2e5b-ac1a-4600-89c1-f8ce8f462c68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor\Enemy\Base">
+      <UniqueIdentifier>{9c6f8fd7-39a6-4916-8b1d-2b802fec334e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor\Enemy\Juggler">
+      <UniqueIdentifier>{66482c22-5940-473b-8023-d5eb0c0b4843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor\Map">
+      <UniqueIdentifier>{ad3df38f-ae38-4fe4-b229-25c683dfd80e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Scene">
+      <UniqueIdentifier>{b3e48977-5bd3-450d-b09f-46f2df05b6f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Actor\Map\Tile">
+      <UniqueIdentifier>{3a4b7576-57b2-4e55-a9da-545c6bc3914a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Surpport\Shader">
+      <UniqueIdentifier>{12fb830b-451c-42a0-9ed2-d704e514b353}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AppDelegate.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\DataManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Actor.cpp">
+      <Filter>src\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ActorManager.cpp">
+      <Filter>src\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CollisionUtils.cpp">
+      <Filter>src\Surpport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ColorUtil.cpp">
+      <Filter>src\Surpport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\EasingFunc.cpp">
+      <Filter>src\Surpport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\IntUtils.cpp">
+      <Filter>src\Surpport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Player.cpp">
+      <Filter>src\Actor\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Arrow.cpp">
+      <Filter>src\Actor\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Boss.cpp">
+      <Filter>src\Actor\Enemy\sample</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BossFiniteState.cpp">
+      <Filter>src\Actor\Enemy\sample</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BossParts.cpp">
+      <Filter>src\Actor\Enemy\sample</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Faker.cpp">
+      <Filter>src\Actor\Enemy\Faker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\FakerFiniteState.cpp">
+      <Filter>src\Actor\Enemy\Faker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\FakerParts.cpp">
+      <Filter>src\Actor\Enemy\Faker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Enemy.cpp">
+      <Filter>src\Actor\Enemy\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\EnemyFiniteState.cpp">
+      <Filter>src\Actor\Enemy\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\EnemyParts.cpp">
+      <Filter>src\Actor\Enemy\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Juggler.cpp">
+      <Filter>src\Actor\Enemy\Juggler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\JugglerFiniteState.cpp">
+      <Filter>src\Actor\Enemy\Juggler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\JugglerParts.cpp">
+      <Filter>src\Actor\Enemy\Juggler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MapTile.cpp">
+      <Filter>src\Actor\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MapTileVector.cpp">
+      <Filter>src\Actor\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\PlayMap.cpp">
+      <Filter>src\Actor\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SpriteAnimator.cpp">
+      <Filter>src\Surpport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\StopWatch.cpp">
+      <Filter>src\Surpport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ScenePlay.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SceneTitle.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SceneShaderTest.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TileBlackBlock.cpp">
+      <Filter>src\Actor\Map\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TileBlackFloor.cpp">
+      <Filter>src\Actor\Map\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TileNormalBlock.cpp">
+      <Filter>src\Actor\Map\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TileWhiteFloor.cpp">
+      <Filter>src\Actor\Map\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ShaderWrapper.cpp">
+      <Filter>src\Surpport\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SWPointColor.cpp">
+      <Filter>src\Surpport\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameSharing.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="main.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AppDelegate.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\DataManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Actor.h">
+      <Filter>src\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ActorManager.h">
+      <Filter>src\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CollisionUtils.h">
+      <Filter>src\Surpport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ColorUtil.h">
+      <Filter>src\Surpport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\EasingFunc.h">
+      <Filter>src\Surpport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\IntUtils.h">
+      <Filter>src\Surpport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Player.h">
+      <Filter>src\Actor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Arrow.h">
+      <Filter>src\Actor\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Boss.h">
+      <Filter>src\Actor\Enemy\sample</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BossFiniteState.h">
+      <Filter>src\Actor\Enemy\sample</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BossParts.h">
+      <Filter>src\Actor\Enemy\sample</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Faker.h">
+      <Filter>src\Actor\Enemy\Faker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\FakerFiniteState.h">
+      <Filter>src\Actor\Enemy\Faker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\FakerParts.h">
+      <Filter>src\Actor\Enemy\Faker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\EnemyParts.h">
+      <Filter>src\Actor\Enemy\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Enemy.h">
+      <Filter>src\Actor\Enemy\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\EnemyFiniteState.h">
+      <Filter>src\Actor\Enemy\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Juggler.h">
+      <Filter>src\Actor\Enemy\Juggler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\JugglerFiniteState.h">
+      <Filter>src\Actor\Enemy\Juggler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\JugglerParts.h">
+      <Filter>src\Actor\Enemy\Juggler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MapTile.h">
+      <Filter>src\Actor\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MapTileVector.h">
+      <Filter>src\Actor\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PlayMap.h">
+      <Filter>src\Actor\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SpriteAnimator.h">
+      <Filter>src\Surpport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\StopWatch.h">
+      <Filter>src\Surpport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ScenePlay.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SceneTitle.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SceneShaderTest.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TileBlackBlock.h">
+      <Filter>src\Actor\Map\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TileBlackFloor.h">
+      <Filter>src\Actor\Map\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TileNormalBlock.h">
+      <Filter>src\Actor\Map\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TileWhiteFloor.h">
+      <Filter>src\Actor\Map\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ShaderWrapper.h">
+      <Filter>src\Surpport\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SWPointColor.h">
+      <Filter>src\Surpport\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameSharing.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="game.rc">
+      <Filter>resource</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

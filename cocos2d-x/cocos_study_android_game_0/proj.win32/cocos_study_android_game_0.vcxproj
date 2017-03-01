@@ -172,9 +172,11 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\ScenePlay.cpp" />
     <ClCompile Include="..\Classes\SceneShaderTest.cpp" />
     <ClCompile Include="..\Classes\SceneTitle.cpp" />
+    <ClCompile Include="..\Classes\ShaderWrapper.cpp" />
     <ClCompile Include="..\Classes\SpriteAnimator.cpp" />
     <ClCompile Include="..\Classes\MapTileVector.cpp" />
     <ClCompile Include="..\Classes\StopWatch.cpp" />
+    <ClCompile Include="..\Classes\SWPointColor.cpp" />
     <ClCompile Include="..\Classes\TileBlackBlock.cpp" />
     <ClCompile Include="..\Classes\TileBlackFloor.cpp" />
     <ClCompile Include="..\Classes\TileNormalBlock.cpp" />
@@ -210,9 +212,11 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\ScenePlay.h" />
     <ClInclude Include="..\Classes\SceneShaderTest.h" />
     <ClInclude Include="..\Classes\SceneTitle.h" />
+    <ClInclude Include="..\Classes\ShaderWrapper.h" />
     <ClInclude Include="..\Classes\SpriteAnimator.h" />
     <ClInclude Include="..\Classes\MapTileVector.h" />
     <ClInclude Include="..\Classes\StopWatch.h" />
+    <ClInclude Include="..\Classes\SWPointColor.h" />
     <ClInclude Include="..\Classes\TileBlackBlock.h" />
     <ClInclude Include="..\Classes\TileBlackFloor.h" />
     <ClInclude Include="..\Classes\TileNormalBlock.h" />

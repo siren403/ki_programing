@@ -34,12 +34,6 @@ private:
 	Vec2 mMaskInitPosition;
 
 	Node * mRenderNode = nullptr;
-	RenderTexture * mRenderTexture = nullptr;
-	Sprite * mRenderSprite = nullptr;
-	GLProgramState * mGLState = nullptr;
-
-	Vec2 mLensPosition;
-	Vec2 mLensTargetPosition;
 
 	StopWatch * mStopWatch = nullptr;
 
@@ -48,16 +42,17 @@ private:
 	vector<UpdateFunc> mUpdateFunctions;
 	StopWatch * mUpdateFunctionWatch = nullptr;
 
+	Label * mTitleNameLabel = nullptr;
 	Sprite * mExclamationMark = nullptr;
 	int mTitleScriptIndex = 0;
 	int mScriptCharIndex = 0;
-	vector<string> mTitleScript;
+	vector<string> * mTitleScript = nullptr;
 	Label * mTitleScriptLabel = nullptr;
 
 	//touch State
 	bool mIsTouchBegan = false;
 
-	void SetLensTargetPosition(Vec2 pos);
+
 };
 
 #endif // !__SCENETITLE_H__
