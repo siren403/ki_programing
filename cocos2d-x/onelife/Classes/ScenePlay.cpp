@@ -13,12 +13,12 @@
 #define ZORDER_MAP 0
 #define ZORDER_PLAYER 1
 #define ZORDER_ENEMY 5
-#define IS_IMMOTAL_PLAYER true
+#define IS_IMMOTAL_PLAYER false
 #define	DRAG_DISTANCE 100
 #define ROLL_CONTROL_TIME 0.3
 #define FOLLOW_RATIO_ENEMY 0.3
 #define FOLLOW_RATIO_ARROW 0.43
-#define GAMEEND_ENEMY_DEATH_COUNT 1
+#define GAMEEND_ENEMY_DEATH_COUNT 5
 
 Scene * ScenePlay::createScene()
 {
@@ -342,7 +342,7 @@ void ScenePlay::RoomClearSequence()
 		}
 		else
 		{
-			ShowGameResult();
+			//ShowGameResult();
 			mPlayNode->runAction(lastSeq);
 		}
 	}

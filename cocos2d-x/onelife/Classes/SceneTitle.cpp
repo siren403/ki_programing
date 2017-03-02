@@ -187,31 +187,47 @@ bool SceneTitle::init()
 #pragma region GooglePlay
 
 	//auto btn = MenuItemLabel::create()
-	auto btnBoard = MenuItemFont::create("leaderboard", [](Ref * sender) 
+	/*auto icon = Sprite::create("ui/archievements.png");
+	icon->setPosition(mVisibleSize.width * 0.1f, mVisibleSize.height*0.1f);
+	mRenderNode->addChild(icon);*/
+
+	auto btnArchievements = MenuItemImage::create("ui/archievements.png", "ui/archievements.png", [](Ref * sender) 
+	{
+		GameSharing::ShowAchievementsUI();
+	});
+	btnArchievements->setPosition(mVisibleSize.width * 0.05f, mVisibleSize.height*0.04f);
+	btnArchievements->setScale(CC_CONTENT_SCALE_FACTOR() * 0.3f);
+	auto btnLeaderboard = MenuItemImage::create("ui/leaderboard.png", "ui/leaderboard.png", [](Ref * sender) 
+	{
+		GameSharing::ShowLeaderboards(0);
+	});
+	btnLeaderboard->setPosition(mVisibleSize.width * 0.15f, mVisibleSize.height*0.04f);
+	btnLeaderboard->setScale(CC_CONTENT_SCALE_FACTOR() * 0.3f);
+
+	/*auto btnBoard = MenuItemFont::create("leaderboard", [](Ref * sender) 
 	{
 		GameSharing::ShowLeaderboards(0);
 	});
 	btnBoard->setColor(Color3B::RED);
-	btnBoard->setPosition(mCenterPosition.x, mVisibleSize.height*0.9f);
-
-	auto btnArchievements = MenuItemFont::create("archievements", [](Ref * sender)
+	btnBoard->setPosition(mCenterPosition.x, mVisibleSize.height*0.9f);*/
+	/*auto btnArchievements = MenuItemFont::create("archievements", [](Ref * sender)
 	{
 		GameSharing::ShowAchievementsUI();
 	});
 	btnArchievements->setPosition(mCenterPosition.x, mVisibleSize.height*0.8f);
-	btnArchievements->setColor(Color3B::RED);
+	btnArchievements->setColor(Color3B::RED);*/
 
-	auto btnsubmit = MenuItemFont::create("submit", [](Ref * sender)
+	/*auto btnsubmit = MenuItemFont::create("submit", [](Ref * sender)
 	{
 		GameSharing::SubmitScore(777, 0);
 		GameSharing::UnlockAchivement(0);
-	});
-	btnsubmit->setPosition(mCenterPosition.x, mVisibleSize.height*0.7f);
-	btnsubmit->setColor(Color3B::RED);
+	});*/
+	//btnsubmit->setPosition(mCenterPosition.x, mVisibleSize.height * 0.7f);
+	//btnsubmit->setColor(Color3B::RED);
 
-	auto google = Menu::create(btnBoard, btnArchievements, btnsubmit, nullptr);
+	auto google = Menu::create(btnLeaderboard, btnArchievements, nullptr);
 	google->setPosition(Vec2::ZERO);
-	mRenderNode->addChild(google);
+	mRenderNode->addChild(google, screenBezel->getLocalZOrder() + 1);
 
 #pragma endregion
 
