@@ -18,6 +18,8 @@ class MapTileVector;
 class PlayMap;
 class Player;
 class StopWatch;
+class SWDrawCircle;
+class EffectEnemyKill;
 
 enum TouchState
 {
@@ -29,6 +31,20 @@ enum TouchState
 
 class ScenePlay : public LayerColor
 {
+public:
+	static Scene * createScene();
+	CREATE_FUNC(ScenePlay);
+
+	//라이프 사이클 오버라이드
+	virtual bool init() override;
+	virtual void onEnter() override;
+	virtual void onExit() override;
+	virtual void update(float dt) override;
+
+	//Input 인터페이스 오버라이드
+	virtual bool onTouchBegan(Touch * touch, Event * unused_event) override;
+	virtual void onTouchMoved(Touch * touch, Event * unused_event) override;
+	virtual void onTouchEnded(Touch * touch, Event * unused_event) override;
 private:
 	//레이어 구분
 	Node * mRenderNode = nullptr;//this 다음으로 최상위 노드
@@ -44,6 +60,7 @@ private:
 	//player
 	Player * mPlayer = nullptr;
 	Arrow * mArrow = nullptr;
+	SWDrawCircle * mPlayerHitCircle = nullptr;
 
 	//ui
 	Sprite * mUIPadBack = nullptr;
@@ -61,6 +78,7 @@ private:
 
 	//Enemy
 	Enemy * mCurrentEnemy = nullptr;
+	EffectEnemyKill * mEFEnemyKill = nullptr;
 
 	//GameState
 	int mCurrentRoomIndex = 0;
@@ -68,7 +86,6 @@ private:
 	Node * mCameraTarget = nullptr;
 	Actor * mCameraSecondTarget = nullptr;
 	float mFollowRatio = 0;
-	bool mIsCameraShake = false;
 	StopWatch * mShakeStopWatch = nullptr;
 	int mKillCount = 0;
 	Sprite * mKillCountBackground = nullptr;
@@ -83,23 +100,9 @@ private:
 	void GameOverSequence();
 	void RoomClearSequence();
 
+	FiniteTimeAction * CreateShake();
 	void ShowKillCount();
 	void ShowGameResult();
-public:
-	static Scene * createScene();
-	CREATE_FUNC(ScenePlay);
-
-	//라이프 사이클 오버라이드
-	virtual bool init() override;
-	virtual void onEnter() override;
-	virtual void onExit() override;
-	virtual void update(float dt) override;
-
-	//Input 인터페이스 오버라이드
-	virtual bool onTouchBegan(Touch * touch, Event * unused_event) override;
-	virtual void onTouchMoved(Touch * touch, Event * unused_event) override;
-	virtual void onTouchEnded(Touch * touch, Event * unused_event) override;
-
 };
 
 #endif // !__SCENEPLAY_H__

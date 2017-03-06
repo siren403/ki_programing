@@ -33,6 +33,9 @@ bool Player::init()
 	mShaderPointColor->SetChangeColor(ColorUtil::Convert255ToOne(100, 190, 240));
 	mShaderPointColor->SetColorRatio(POINT_COLOR_RATIO_MIN);
 
+	
+
+
 	mPointColorWatch = StopWatch::create();
 	mPointColorWatch->SetAutoUpdate(true);
 	mPointColorWatch->OnStart();
@@ -85,7 +88,6 @@ void Player::SetIsControl(bool tIsControl)
 {
 	mIsControl = tIsControl;
 }
-
 bool Player::GetIsControl()
 {
 	return mIsControl;

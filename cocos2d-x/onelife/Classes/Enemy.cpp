@@ -143,6 +143,15 @@ unsigned int Enemy::GetDeathCount()
 	return mDeathCount;
 }
 
+// 0 ~ 1
+void Enemy::SetOpacity(float value)
+{
+	for (mPartMapItor = mParts.begin(); mPartMapItor != mParts.end(); ++mPartMapItor)
+	{
+		mPartMapItor->second->GetSprite()->setOpacity(255 * value);
+	}
+}
+
 void Enemy::DestroyParts()
 {
 	//mDestroyPartsCount++;

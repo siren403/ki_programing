@@ -13,6 +13,7 @@ public:
 	ShaderWrapper(const string& fshFileName,Sprite * targetSprite);
 	virtual ~ShaderWrapper();
 
+	GLProgramState * GetGLState();
 	void SetFloat(const string& uniformName,const float& value);
 	void SetVec3(const string& uniformName, const Vec3& value);
 protected:

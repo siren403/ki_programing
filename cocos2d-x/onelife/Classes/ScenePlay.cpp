@@ -9,6 +9,9 @@
 #include "DataManager.h"
 #include "StopWatch.h"
 #include "SceneTitle.h"
+#include "SWDrawCircle.h"
+#include "EffectEnemyKill.h"
+
 
 #define ZORDER_MAP 0
 #define ZORDER_PLAYER 1
@@ -92,7 +95,6 @@ bool ScenePlay::init()
 
 #pragma endregion
 
-
 	mFadeSprite = Sprite::create("white4x4.jpg");
 	mFadeSprite->setTextureRect(Rect(0, 0, mVisibleSize.width, mVisibleSize.height));
 	mFadeSprite->setAnchorPoint(Vec2(0, 0));
@@ -109,6 +111,7 @@ bool ScenePlay::init()
 	mPlayNodeOffsetDirection = Vec2::ZERO;
 
 #pragma region Create
+
 	mPlayMap = ActorManager::GetInstance()->GetPlayMap();
 	mPlayNode->addChild(mPlayMap, ZORDER_MAP);
 
@@ -118,6 +121,16 @@ bool ScenePlay::init()
 	mArrow = Arrow::create();
 	mArrow->InitWithPlayer(mPlayer);
 	mPlayNode->addChild(mArrow, ZORDER_PLAYER + 1);
+
+	mPlayerHitCircle = new SWDrawCircle();
+	mPlayerHitCircle->GetSprite()->setColor(Color3B::GRAY);
+	mPlayNode->addChild(mPlayerHitCircle->GetSprite(), ZORDER_PLAYER + 1);
+	mPlayerHitCircle->SetCircleSize(0);
+	mPlayerHitCircle->SetInline(1);
+
+	mEFEnemyKill = EffectEnemyKill::create();
+	mPlayNode->addChild(mEFEnemyKill, ZORDER_ENEMY + 1);
+		
 #pragma endregion
 	
 #pragma region StopWatch
@@ -181,6 +194,7 @@ void ScenePlay::RoomSequence(int roomIndex, bool isReset)
 			pos.x = mPlayMap->GetMapContentSize().width * stageData->enemy.position.x;
 			pos.y = mPlayMap->GetMapContentSize().height * stageData->enemy.position.y;
 			mCurrentEnemy->setPosition(pos);
+			mCurrentEnemy->SetOpacity(1);
 			mCurrentEnemy->SetAlive(true);
 			mCurrentEnemy->OnActivate(false);
 		}
@@ -199,6 +213,7 @@ void ScenePlay::RoomSequence(int roomIndex, bool isReset)
 		initPos.x = mPlayMap->GetMapContentSize().width * 0.5;
 		initPos.y = mPlayMap->GetMapContentSize().height * 0.1;
 		mPlayer->InitPosition(initPos);
+		mPlayer->GetSprite()->setOpacity(255);
 
 		mArrow->LockOn(Vec2(0, 1), true);
 
@@ -238,6 +253,8 @@ void ScenePlay::onExit()
 {
 	_eventDispatcher->removeEventListenersForTarget(this);
 	CC_SAFE_RELEASE_NULL(mUIPadFrontImage);
+	CC_SAFE_DELETE(mPlayerHitCircle);
+
 	ActorManager::GetInstance()->OnReferenceReset();
 	LayerColor::onExit();
 }
@@ -299,9 +316,27 @@ void ScenePlay::GameOverSequence()
 {
 	mIsPlaying = false;
 	mPlayer->SetIsControl(false);
+	
+	mPlayerHitCircle->GetSprite()->setPosition(mPlayer->getPosition());
+	auto hitCircle = Spawn::create(
+		CallFunc::create([this]() { mPlayer->GetSprite()->setOpacity(0); }),
+		EaseExponentialOut::create(
+			ActionFloat::create(0.6f, 0, 1, CC_CALLBACK_1(SWDrawCircle::SetCircleSize, mPlayerHitCircle))),
+		Sequence::create(
+			EaseQuarticActionIn::create(
+				ActionFloat::create(0.4f, 1, 0, CC_CALLBACK_1(SWDrawCircle::SetInline, mPlayerHitCircle))),
+			nullptr),
+		CallFunc::create([this]()
+	{
+		mPlayerHitCircle->SetInline(1);
+		mPlayerHitCircle->SetCircleSize(0);
+	}),
+		nullptr);
+
 
 	auto gameOverSeq = Sequence::create(
-		DelayTime::create(0.3),
+		Spawn::create(CreateShake(), hitCircle, nullptr),
+		DelayTime::create(0.6f),
 		CallFunc::create([this]()
 	{
 		this->RoomSequence(mCurrentRoomIndex, true);
@@ -313,15 +348,17 @@ void ScenePlay::GameOverSequence()
 
 void ScenePlay::RoomClearSequence()
 {
-	//mPlayer->SetIsControl(false);
 	mIsPlaying = false;
 	mKillCount++;
-	auto lastSeq = Sequence::create(
-		CallFunc::create([](){
-			Director::getInstance()->getScheduler()->setTimeScale(0.3);}),
-		DelayTime::create(0.15),
-		CallFunc::create([this](){
-			Director::getInstance()->getScheduler()->setTimeScale(1);}),
+
+	auto lastSeq = Spawn::create(
+		mEFEnemyKill->CreateAction(mPlayer->getPosition(), mCurrentEnemy->getPosition()),
+		//DelayTime::create(0.5f),
+		CreateShake(),
+		ActionFloat::create(1.0f, 1, 0, [this](float value) 
+	{
+		mCurrentEnemy->SetOpacity(value);
+	}),
 		nullptr
 		);
 
@@ -331,12 +368,15 @@ void ScenePlay::RoomClearSequence()
 	{
 		if (mCurrentEnemy->GetDeathCount() < GAMEEND_ENEMY_DEATH_COUNT)
 		{
-			ShowKillCount();
 			clearSeq = Sequence::create(
 				lastSeq,
 				//FadeIn::create(0.15),
 				//CallFunc::create([this]() { Director::getInstance()->end(); }),
-				CallFunc::create([this]() {this->RoomSequence(mCurrentRoomIndex, true); }),
+				CallFunc::create([this]() 
+			{
+				ShowKillCount();
+				this->RoomSequence(mCurrentRoomIndex, true);
+			}),
 				nullptr);
 			mFadeSprite->runAction(clearSeq);
 		}
@@ -358,6 +398,19 @@ void ScenePlay::RoomClearSequence()
 
 	
 	
+}
+
+FiniteTimeAction * ScenePlay::CreateShake()
+{
+	auto shake = ActionFloat::create(0.2f, 0, 1, [this](float value)
+	{
+		float shake = sin(value*10.0f) * powf(0.5f, value);
+		Vec2 pos = mPlayNode->getPosition();
+		pos.x += 4 * shake;
+		pos.y += 4 * shake;
+		mPlayNode->setPosition(pos);
+	});
+	return shake;
 }
 
 void ScenePlay::ShowKillCount()
@@ -435,13 +488,6 @@ void ScenePlay::CalculatePlayNodePosition(float dt)
 	pos.y = MIN(pos.y, mUIPadBack->getContentSize().height);
 
 	pos = ccpLerp(mPlayNode->getPosition(), pos, dt);
-
-	if (mIsCameraShake)
-	{
-		/*float duration = 0.2;
-		float shake = sin((mShakeStopWatch->GetAccTime() / duration)*10.0f) * powf(0.5f, (mShakeStopWatch->GetAccTime() / duration));
-		pos.x += 3 * shake;*/
-	}
 		
 	mPlayNode->setPosition(pos);
 }
@@ -487,7 +533,6 @@ bool ScenePlay::onTouchBegan(Touch * touch, Event * unused_event)
 			isTouchMoved = true;
 
 			//camera shake, camera follow to arrow
-			mIsCameraShake = true;
 			mShakeStopWatch->OnStart();
 
 			mCameraSecondTarget = mArrow;
@@ -565,8 +610,7 @@ void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 		mArrow->SetReturnArrow(false);
 		mCameraSecondTarget = mCurrentEnemy;
 
-		//disable shake,camera follow
-		mIsCameraShake = false;
+		//camera follow
 		mShakeStopWatch->OnStop();
 
 		mCameraSecondTarget = mCurrentEnemy;

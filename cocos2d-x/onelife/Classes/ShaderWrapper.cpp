@@ -15,6 +15,11 @@ ShaderWrapper::~ShaderWrapper()
 	mGLState = nullptr;
 }
 
+GLProgramState * ShaderWrapper::GetGLState()
+{
+	return mGLState;
+}
+
 void ShaderWrapper::SetFloat(const string & uniformName, const float& value)
 {
 	if (mGLState != nullptr)

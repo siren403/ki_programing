@@ -155,6 +155,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\ColorUtil.cpp" />
     <ClCompile Include="..\Classes\DataManager.cpp" />
     <ClCompile Include="..\Classes\EasingFunc.cpp" />
+    <ClCompile Include="..\Classes\EffectEnemyKill.cpp" />
     <ClCompile Include="..\Classes\Enemy.cpp" />
     <ClCompile Include="..\Classes\EnemyFiniteState.cpp" />
     <ClCompile Include="..\Classes\EnemyParts.cpp" />
@@ -176,6 +177,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\ShaderWrapper.cpp" />
     <ClCompile Include="..\Classes\SpriteAnimator.cpp" />
     <ClCompile Include="..\Classes\StopWatch.cpp" />
+    <ClCompile Include="..\Classes\SWDrawArc.cpp" />
+    <ClCompile Include="..\Classes\SWDrawCircle.cpp" />
     <ClCompile Include="..\Classes\SWPointColor.cpp" />
     <ClCompile Include="..\Classes\TileBlackBlock.cpp" />
     <ClCompile Include="..\Classes\TileBlackFloor.cpp" />
@@ -195,6 +198,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\ColorUtil.h" />
     <ClInclude Include="..\Classes\DataManager.h" />
     <ClInclude Include="..\Classes\EasingFunc.h" />
+    <ClInclude Include="..\Classes\EffectEnemyKill.h" />
     <ClInclude Include="..\Classes\Enemy.h" />
     <ClInclude Include="..\Classes\EnemyFiniteState.h" />
     <ClInclude Include="..\Classes\EnemyParts.h" />
@@ -216,6 +220,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\ShaderWrapper.h" />
     <ClInclude Include="..\Classes\SpriteAnimator.h" />
     <ClInclude Include="..\Classes\StopWatch.h" />
+    <ClInclude Include="..\Classes\SWDrawArc.h" />
+    <ClInclude Include="..\Classes\SWDrawCircle.h" />
     <ClInclude Include="..\Classes\SWPointColor.h" />
     <ClInclude Include="..\Classes\TileBlackBlock.h" />
     <ClInclude Include="..\Classes\TileBlackFloor.h" />

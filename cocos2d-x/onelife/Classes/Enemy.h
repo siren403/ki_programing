@@ -47,6 +47,7 @@ public:
 	void SetCameraFollow(bool isFollow);
 	bool IsCameraFollow();
 	unsigned int GetDeathCount();
+	void SetOpacity(float value);
 
 	//EnemyParts
 	void AddParts(int key, EnemyParts * tParts,bool isLifeParts = false, int localZOrder = 0);

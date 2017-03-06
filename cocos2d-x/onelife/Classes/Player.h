@@ -44,7 +44,9 @@ public:
 private:
 
 	SpriteAnimator * mSpriteAnim = nullptr;
+
 	SWPointColor * mShaderPointColor = nullptr;
+
 	StopWatch * mPointColorWatch = nullptr;
 
 	bool mIsControl = false;
