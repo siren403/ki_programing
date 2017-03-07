@@ -47,7 +47,7 @@ bool Player::init()
 
 	mRollRadian = 0;
 	mRollDistance = 150;
-	mRollDuration = 0.3f;
+	mRollDuration = 0.35f;
 
 	SimpleAudioEngine::getInstance()->preloadEffect("sound/pop_clip_in.mp3");
 
@@ -122,7 +122,12 @@ Player::State Player::GetState()
 	return mState;
 }
 
-void Player::OnRoll(float rollRadian)
+float Player::GetRollDuration()
+{
+	return mRollDuration;
+}
+
+bool Player::OnRoll(float rollRadian)
 {
 	if (mState == State::Move)
 	{
@@ -132,15 +137,16 @@ void Player::OnRoll(float rollRadian)
 		mRollDestPos.x = mRollStartPos.x + (cos(rollRadian) * mRollDistance);
 		mRollDestPos.y = mRollStartPos.y + (sin(rollRadian) * mRollDistance);
 
-		mSpriteAnim->GetSprite()->stopAction(mRollColorAction);
+		/*mSpriteAnim->GetSprite()->stopAction(mRollColorAction);
 		mRollColorAction = mSpriteAnim->GetSprite()->runAction(Sequence::create(
 			TintTo::create(mRollDuration*0.75, Color3B(60,60,255)),
 			TintTo::create(mRollDuration*0.25, Color3B::WHITE),
-			nullptr));
+			nullptr));*/
 
+		return true;
 		//SimpleAudioEngine::getInstance()->playEffect("sound/pop_clip_in.mp3");
 	}
-	
+	return false;
 }
 
 void Player::OnCollisionOther(bool isCollision, Node * other, Vec2 normal)

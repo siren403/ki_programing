@@ -22,6 +22,7 @@
 #define FOLLOW_RATIO_ENEMY 0.3
 #define FOLLOW_RATIO_ARROW 0.43
 #define GAMEEND_ENEMY_DEATH_COUNT 5
+#define PLYER_HIT_CIRCLE_COLOR Color3B(110,110,110)
 
 Scene * ScenePlay::createScene()
 {
@@ -123,10 +124,17 @@ bool ScenePlay::init()
 	mPlayNode->addChild(mArrow, ZORDER_PLAYER + 1);
 
 	mPlayerHitCircle = new SWDrawCircle();
-	mPlayerHitCircle->GetSprite()->setColor(Color3B(110,110,110));
-	mPlayNode->addChild(mPlayerHitCircle->GetSprite(), ZORDER_PLAYER + 1);
+	mPlayerHitCircle->GetSprite()->setColor(PLYER_HIT_CIRCLE_COLOR);
+	mPlayNode->addChild(mPlayerHitCircle->GetSprite(), ZORDER_PLAYER + 2);
 	mPlayerHitCircle->SetCircleSize(0);
 	mPlayerHitCircle->SetInline(1);
+
+	mRollCircle = new SWDrawCircle();
+	mRollCircle->GetSprite()->setColor(Color3B::WHITE);
+	mRollCircle->GetSprite()->setOpacity(255 * 0.75f);
+	mPlayNode->addChild(mRollCircle->GetSprite(), ZORDER_PLAYER + 1);
+	mRollCircle->SetCircleSize(0);
+	mRollCircle->SetInline(1);
 
 	mEFEnemyKill = EffectEnemyKill::create();
 	mPlayNode->addChild(mEFEnemyKill, ZORDER_ENEMY + 1);
@@ -254,6 +262,7 @@ void ScenePlay::onExit()
 	_eventDispatcher->removeEventListenersForTarget(this);
 	CC_SAFE_RELEASE_NULL(mUIPadFrontImage);
 	CC_SAFE_DELETE(mPlayerHitCircle);
+	CC_SAFE_DELETE(mRollCircle);
 
 	ActorManager::GetInstance()->OnReferenceReset();
 	LayerColor::onExit();
@@ -308,6 +317,10 @@ void ScenePlay::update(float dt)
 		GameOverSequence();
 		return;
 	}
+	else
+	{
+		mRollCircle->GetSprite()->setPosition(mPlayer->getPosition());
+	}
 
 	mArrow->OnCollisionOther(false, nullptr);
 }
@@ -318,24 +331,11 @@ void ScenePlay::GameOverSequence()
 	mPlayer->SetIsControl(false);
 	
 	mPlayerHitCircle->GetSprite()->setPosition(mPlayer->getPosition());
-	auto hitCircle = Spawn::create(
-		CallFunc::create([this]() { mPlayer->GetSprite()->setOpacity(0); }),
-		EaseExponentialOut::create(
-			ActionFloat::create(0.6f, 0, 1, CC_CALLBACK_1(SWDrawCircle::SetCircleSize, mPlayerHitCircle))),
-		Sequence::create(
-			EaseQuarticActionIn::create(
-				ActionFloat::create(0.4f, 1, 0, CC_CALLBACK_1(SWDrawCircle::SetInline, mPlayerHitCircle))),
-			nullptr),
-		CallFunc::create([this]()
-	{
-		mPlayerHitCircle->SetInline(1);
-		mPlayerHitCircle->SetCircleSize(0);
-	}),
-		nullptr);
+	
 
 
 	auto gameOverSeq = Sequence::create(
-		Spawn::create(CreateShake(), hitCircle, nullptr),
+		Spawn::create(CreateCameraShake(), CreateHitCircle(), nullptr),
 		DelayTime::create(0.6f),
 		CallFunc::create([this]()
 	{
@@ -354,7 +354,7 @@ void ScenePlay::RoomClearSequence()
 	auto lastSeq = Spawn::create(
 		mEFEnemyKill->CreateAction(mPlayer->getPosition(), mCurrentEnemy->getPosition()),
 		//DelayTime::create(0.5f),
-		CreateShake(),
+		CreateCameraShake(),
 		ActionFloat::create(1.0f, 1, 0, [this](float value) 
 	{
 		mCurrentEnemy->SetOpacity(value);
@@ -400,7 +400,7 @@ void ScenePlay::RoomClearSequence()
 	
 }
 
-FiniteTimeAction * ScenePlay::CreateShake()
+FiniteTimeAction * ScenePlay::CreateCameraShake()
 {
 	auto shake = ActionFloat::create(0.2f, 0, 1, [this](float value)
 	{
@@ -411,6 +411,47 @@ FiniteTimeAction * ScenePlay::CreateShake()
 		mPlayNode->setPosition(pos);
 	});
 	return shake;
+}
+
+FiniteTimeAction * ScenePlay::CreateHitCircle()
+{
+	auto hitCircle = Spawn::create(
+		CallFunc::create([this]() 
+	{ 
+		mPlayer->GetSprite()->setOpacity(0);
+	}),
+		EaseExponentialOut::create(
+			ActionFloat::create(0.6f, 0, 1, CC_CALLBACK_1(SWDrawCircle::SetCircleSize, mPlayerHitCircle))),
+		Sequence::create(
+			EaseQuarticActionIn::create(
+				ActionFloat::create(0.4f, 1, 0, CC_CALLBACK_1(SWDrawCircle::SetInline, mPlayerHitCircle))),
+			nullptr),
+		CallFunc::create([this]()
+	{
+		mPlayerHitCircle->SetInline(1);
+		mPlayerHitCircle->SetCircleSize(0);
+	}),
+		nullptr);
+	return hitCircle;
+}
+
+FiniteTimeAction * ScenePlay::CreateRollCircle()
+{
+	auto action = Sequence::create(
+		CallFunc::create([this]() 
+	{ 
+		mRollCircle->SetInline(0.05f); 
+	}),
+		EaseExponentialOut::create(
+			ActionFloat::create(mPlayer->GetRollDuration() * 0.3f, 0, 0.25f, CC_CALLBACK_1(SWDrawCircle::SetCircleSize, mRollCircle))),
+		Spawn::create(
+			EaseExponentialOut::create(
+				ActionFloat::create(mPlayer->GetRollDuration() * 0.5f, 0.05f, 1.0f, CC_CALLBACK_1(SWDrawCircle::SetInline, mRollCircle))),
+			EaseExponentialOut::create(
+				ActionFloat::create(mPlayer->GetRollDuration() / 0.5f, 0.25f, 0.0f, CC_CALLBACK_1(SWDrawCircle::SetCircleSize, mRollCircle))),
+			nullptr),
+		nullptr);
+	return action;
 }
 
 void ScenePlay::ShowKillCount()
@@ -595,13 +636,17 @@ void ScenePlay::onTouchEnded(Touch * touch, Event * unused_event)
 		mPlayNodeOffsetDirection = Vec2::ZERO;
 		break;
 	case TouchState::Move:
-		if (mRollStopWatch->OnStop() <= ROLL_CONTROL_TIME
-			|| !(mUIPadFront->getBoundingBox().containsPoint(touchPos) &&
-				CollisionUtils::GetInst()->ContainsPointToPixel(mUIPadFront, mUIPadFrontImage, touchPos)))//move
+		if (mRollStopWatch->OnStop() <= ROLL_CONTROL_TIME 
+			|| !(mUIPadFront->getBoundingBox().containsPoint(touchPos)
+			&& CollisionUtils::GetInst()->ContainsPointToPixel(mUIPadFront, mUIPadFrontImage, touchPos)))//move
 		{
 			Vec2 dir = touch->getLocation() - mTouchBeganPos;
 			float endedRadian = atan2(dir.y, dir.x);
-			mPlayer->OnRoll(endedRadian);
+
+			if (mPlayer->OnRoll(endedRadian))
+			{
+				this->runAction(CreateRollCircle());
+			}
 		}
 		mArrow->DisableLockOn();
 		mUIPadFront->setColor(Color3B::WHITE);

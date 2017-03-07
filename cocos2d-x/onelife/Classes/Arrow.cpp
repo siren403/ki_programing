@@ -23,15 +23,20 @@ bool Arrow::init()
 	mSprite->getTexture()->setAliasTexParameters();
 	this->addChild(mSprite);
 
+	float factorMin = 0.4f;
+	float factorMax = 0.8f;
 	mLaserShader = new ShaderWrapper("shader/arrow_laser.fsh", mSprite);
-	/*this->runAction(RepeatForever::create(ActionFloat::create(1, 0.6f, 0.65f, [this](float value) 
-	{
-		mLaserShader->SetFloat("u_laserFactor", value);
-	})));*/
+	this->runAction(RepeatForever::create(
+		Sequence::create(
+			ActionFloat::create(1, factorMin, factorMax, [this](float value) {
+			mLaserShader->SetFloat("u_laserFactor", value);}),
+			ActionFloat::create(1, factorMax, factorMin, [this](float value) {
+				mLaserShader->SetFloat("u_laserFactor", value); }),
+			nullptr)));
 	mLaserShader->SetFloat("u_laserFactor", 0.85f);
 	mSprite->runAction(RepeatForever::create(Sequence::create(
 		TintTo::create(1, Color3B(0, 255,0)),
-		TintTo::create(1, Color3B(0, 255,0)),
+		TintTo::create(1, Color3B(0, 200,0)),
 		nullptr)));
 
 

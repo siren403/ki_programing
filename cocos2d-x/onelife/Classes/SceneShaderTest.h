@@ -25,7 +25,7 @@ private:
 
 	ShaderWrapper * mDrawShader = nullptr;
 
-	SWDrawCircle * mDrawCircle = nullptr;
+	SWDrawCircle * mPlayerHitCircle = nullptr;
 	SWDrawArc * mDrawArc = nullptr;
 };
 

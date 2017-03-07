@@ -61,6 +61,7 @@ private:
 	Player * mPlayer = nullptr;
 	Arrow * mArrow = nullptr;
 	SWDrawCircle * mPlayerHitCircle = nullptr;
+	SWDrawCircle * mRollCircle = nullptr;
 
 	//ui
 	Sprite * mUIPadBack = nullptr;
@@ -100,7 +101,9 @@ private:
 	void GameOverSequence();
 	void RoomClearSequence();
 
-	FiniteTimeAction * CreateShake();
+	FiniteTimeAction * CreateCameraShake();
+	FiniteTimeAction * CreateHitCircle();
+	FiniteTimeAction * CreateRollCircle();
 	void ShowKillCount();
 	void ShowGameResult();
 };

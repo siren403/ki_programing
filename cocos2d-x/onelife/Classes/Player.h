@@ -35,8 +35,9 @@ public:
 	Vec2 GetMoveDir();
 	void SetMoveArea(Size area);
 	Player::State GetState();
+	float GetRollDuration();
 
-	void OnRoll(float rollRadian);
+	bool OnRoll(float rollRadian);
 
 	virtual void OnCollisionOther(bool isCollision, Node * other, Vec2 normal = Vec2::ZERO) override;
 

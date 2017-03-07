@@ -40,25 +40,25 @@ bool SceneShaderTest::init()
 
 #pragma region circle test
 
-	mDrawCircle = new SWDrawCircle();
-	mDrawCircle->GetSprite()->setPosition(centerPos);
-	mDrawCircle->GetSprite()->setColor(Color3B::GRAY);
+	mPlayerHitCircle = new SWDrawCircle();
+	mPlayerHitCircle->GetSprite()->setPosition(centerPos);
+	mPlayerHitCircle->GetSprite()->setColor(Color3B::GRAY);
 	auto spawn = Spawn::create(
 		CallFunc::create([this]()
 	{
-		mDrawCircle->SetInline(1);
-		mDrawCircle->SetCircleSize(0);
+		mPlayerHitCircle->SetInline(1);
+		mPlayerHitCircle->SetCircleSize(0);
 	}),
 		EaseExponentialInOut::create(
-			ActionFloat::create(0.6f, 0, 1, CC_CALLBACK_1(SWDrawCircle::SetCircleSize, mDrawCircle))),
+			ActionFloat::create(0.6f, 0, 1, CC_CALLBACK_1(SWDrawCircle::SetCircleSize, mPlayerHitCircle))),
 		Sequence::create(
 			DelayTime::create(0.15f),
 			EaseQuarticActionIn::create(
-				ActionFloat::create(0.45f, 1, 0, CC_CALLBACK_1(SWDrawCircle::SetInline, mDrawCircle))),
+				ActionFloat::create(0.45f, 1, 0, CC_CALLBACK_1(SWDrawCircle::SetInline, mPlayerHitCircle))),
 			nullptr),
 		nullptr);
 	this->runAction(RepeatForever::create(spawn));
-	//this->addChild(mDrawCircle->GetSprite());
+	//this->addChild(mPlayerHitCircle->GetSprite());
 #pragma endregion
 
 	Vec2 dir = centerPos - Vec2(visibleSize.width * 0.2f, visibleSize.height * 0.2f);
@@ -138,10 +138,10 @@ void SceneShaderTest::update(float dt)
 
 	//mGLState->setUniformFloat("colorRatio", sin(mCurrentTime));
 
-	//mDrawCircle->SetCircleSize(1.0f);
-	//mDrawCircle->SetCircleSize(EasingFunc::EaseExpoInOut(mCurrentTime, 0, 1, PI));
-	//mDrawCircle->SetInline(0.1);
-	//mDrawCircle->SetInline(EasingFunc::EaseExpoInOut(mCurrentTime, 1, -1, PI));
+	//mPlayerHitCircle->SetCircleSize(1.0f);
+	//mPlayerHitCircle->SetCircleSize(EasingFunc::EaseExpoInOut(mCurrentTime, 0, 1, PI));
+	//mPlayerHitCircle->SetInline(0.1);
+	//mPlayerHitCircle->SetInline(EasingFunc::EaseExpoInOut(mCurrentTime, 1, -1, PI));
 
 }
 
@@ -149,6 +149,6 @@ void SceneShaderTest::onExit()
 {
 	LayerColor::onExit();
 
-	CC_SAFE_DELETE(mDrawCircle);
+	CC_SAFE_DELETE(mPlayerHitCircle);
 	CC_SAFE_DELETE(mDrawArc);
 }
