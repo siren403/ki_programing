@@ -123,7 +123,7 @@ bool ScenePlay::init()
 	mPlayNode->addChild(mArrow, ZORDER_PLAYER + 1);
 
 	mPlayerHitCircle = new SWDrawCircle();
-	mPlayerHitCircle->GetSprite()->setColor(Color3B::GRAY);
+	mPlayerHitCircle->GetSprite()->setColor(Color3B(110,110,110));
 	mPlayNode->addChild(mPlayerHitCircle->GetSprite(), ZORDER_PLAYER + 1);
 	mPlayerHitCircle->SetCircleSize(0);
 	mPlayerHitCircle->SetInline(1);

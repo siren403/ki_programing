@@ -10,7 +10,7 @@ USING_NS_CC;
 #define SCENE_TITLE SceneTitle
 #define SCENE_PLAY ScenePlay
 #define SCENE_SHADERTEST SceneShaderTest
-#define START_SCENE SCENE_PLAY
+#define START_SCENE SCENE_TITLE
 
 static cocos2d::Size designResolutionSize = cocos2d::Size(WIDTH, HEIGHT);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(WIDTH, HEIGHT);

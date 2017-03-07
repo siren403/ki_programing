@@ -7,6 +7,7 @@ varying vec2 v_texCoord;
 #endif
 
 uniform vec3 pointColor;
+uniform vec3 baseColor;
 uniform vec3 changeColor;
 uniform float colorRatio;
 
@@ -16,9 +17,8 @@ void main()
 
     if(color.rgb == pointColor)
     {
-        // color = v_fragmentColor.rgb;
-        // color += addColor;
-        color.rgb = changeColor * colorRatio;
+        color.rgb = mix(baseColor,changeColor,colorRatio);
+        // color.rgb = changeColor * colorRatio;
     }
 
     gl_FragColor = color * v_fragmentColor;

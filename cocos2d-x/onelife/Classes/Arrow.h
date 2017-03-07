@@ -9,6 +9,7 @@
 using namespace cocos2d;
 
 class Player;
+class ShaderWrapper;
 
 class Arrow : public Actor
 {
@@ -22,6 +23,7 @@ public:
 	};
 private:
 
+	ShaderWrapper * mLaserShader = nullptr;
 	Sprite * mSprite = nullptr;
 	Player * mPlayer = nullptr;
 

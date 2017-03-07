@@ -138,7 +138,7 @@ void Player::OnRoll(float rollRadian)
 			TintTo::create(mRollDuration*0.25, Color3B::WHITE),
 			nullptr));
 
-		SimpleAudioEngine::getInstance()->playEffect("sound/pop_clip_in.mp3");
+		//SimpleAudioEngine::getInstance()->playEffect("sound/pop_clip_in.mp3");
 	}
 	
 }

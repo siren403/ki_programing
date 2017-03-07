@@ -11,6 +11,7 @@ public:
 	void SetPointColor(const Vec3& color);
 	void SetChangeColor(const Vec3& color);
 	void SetColorRatio(const float& ratio);
+	void SetBaseColor(const Vec3& color);
 };
 
 #endif // !__SWPOINTCOLOR_H__

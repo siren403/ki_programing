@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "CollisionUtils.h"
 #include "SimpleAudioEngine.h"
+#include "ShaderWrapper.h"
 
 using namespace CocosDenshion;
 
@@ -17,10 +18,22 @@ bool Arrow::init()
 	}
 	mType = ActorType::Actor_Arrow;
 
-	mSprite = Sprite::create("samples/arrow.png");
-	mSprite->setScale(2 * CC_CONTENT_SCALE_FACTOR());
+	mSprite = Sprite::create("samples/arrow_laser.png");
+	mSprite->setScale(0.3f * CC_CONTENT_SCALE_FACTOR());
 	mSprite->getTexture()->setAliasTexParameters();
 	this->addChild(mSprite);
+
+	mLaserShader = new ShaderWrapper("shader/arrow_laser.fsh", mSprite);
+	/*this->runAction(RepeatForever::create(ActionFloat::create(1, 0.6f, 0.65f, [this](float value) 
+	{
+		mLaserShader->SetFloat("u_laserFactor", value);
+	})));*/
+	mLaserShader->SetFloat("u_laserFactor", 0.85f);
+	mSprite->runAction(RepeatForever::create(Sequence::create(
+		TintTo::create(1, Color3B(0, 255,0)),
+		TintTo::create(1, Color3B(0, 255,0)),
+		nullptr)));
+
 
 	SimpleAudioEngine::getInstance()->preloadEffect("sound/bow_fire.wav");
 	SimpleAudioEngine::getInstance()->preloadEffect("sound/pop_clip_in.mp3");
@@ -163,8 +176,8 @@ void Arrow::UpdateLock(float dt)
 	Vec2 arrowPos;
 
 	float radian = atan2(mMoveDirection.y, mMoveDirection.x);
-	arrowPos.x = mPlayer->getPosition().x + cos(radian) * mPlayer->GetSprite()->getContentSize().width;
-	arrowPos.y = mPlayer->getPosition().y + sin(radian) * mPlayer->GetSprite()->getContentSize().width;
+	arrowPos.x = mPlayer->getPosition().x + cos(radian) * mPlayer->GetSprite()->getContentSize().width * 1.4f;
+	arrowPos.y = mPlayer->getPosition().y + sin(radian) * mPlayer->GetSprite()->getContentSize().width * 1.4f;
 
 	this->setRotation(-CC_RADIANS_TO_DEGREES((PI * 0.5) + radian));
 	this->setPosition(arrowPos);

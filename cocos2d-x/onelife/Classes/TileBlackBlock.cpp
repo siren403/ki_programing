@@ -12,7 +12,7 @@ bool TileBlackBlock::init()
 		return false;
 	}
 
-	mTileSprite = Sprite::create("tile/tile_black_wall.png");
+	mTileSprite = Sprite::create("tile/tile_block_0.png");
 	mTileSprite->getTexture()->setAliasTexParameters();
 	this->addChild(mTileSprite, 0);
 
@@ -26,8 +26,10 @@ bool TileBlackBlock::init()
 	
 	mShaderPointColor = new SWPointColor(mTileSprite);
 	mShaderPointColor->SetPointColor(Vec3(1, 0, 1));
-	mShaderPointColor->SetChangeColor(ColorUtil::Convert255ToOne(90, 220, 90));
+	mShaderPointColor->SetBaseColor(ColorUtil::Convert255ToOne(166, 154, 129));
+	mShaderPointColor->SetChangeColor(ColorUtil::Convert255ToOne(255, 255, 255));
 	mShaderPointColor->SetColorRatio(.0f);
+
 
 	mDuration = 3.5f;
 

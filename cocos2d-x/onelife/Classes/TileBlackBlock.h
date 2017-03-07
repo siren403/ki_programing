@@ -15,7 +15,6 @@ public:
 	virtual void update(float dt) override;
 	virtual ~TileBlackBlock();
 
-	//virtual void SetHighlight(bool isHighlight) override;
 	virtual void SetHighlight(bool isHighlight, float delay) override;
 private:
 	StopWatch * mStopWatch = nullptr;

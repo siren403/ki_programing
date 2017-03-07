@@ -21,3 +21,8 @@ void SWPointColor::SetColorRatio(const float & ratio)
 {
 	mGLState->setUniformFloat("colorRatio", ratio);
 }
+
+void SWPointColor::SetBaseColor(const Vec3 & color)
+{
+	mGLState->setUniformVec3("baseColor", color);
+}

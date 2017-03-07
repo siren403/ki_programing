@@ -97,91 +97,91 @@ bool SceneTitle::init()
 	{
 		if (mIsTouchBegan)
 		{
-			mTitleScriptLabel->setString("\n");
-			mTitleNameLabel->runAction(FadeOut::create(0.3f));
+			Director::getInstance()->replaceScene(TransitionFade::create(1, ScenePlay::createScene()));
+			//mTitleScriptLabel->setString("\n");
+			//mTitleNameLabel->runAction(FadeOut::create(0.3f));
 			return true;
 		}
 		return false;
 	});//show exclamation mark
-	mUpdateFunctions.push_back([this](float dt)
-	{
-		mUpdateFunctionWatch->OnUpdate(dt);
-		if (mUpdateFunctionWatch->GetAccTime() >= 0.5)
-		{
-			mUpdateFunctionWatch->OnReset();
-			mExclamationMark->runAction(EaseExponentialOut::create(ScaleTo::create(0.3, 1)));
-			mExclamationMark->runAction(RepeatForever::create(
-				Sequence::create(
-					EaseSineInOut::create(MoveBy::create(1, Vec2(0, -15))),
-					EaseSineInOut::create(MoveBy::create(1, Vec2(0, 15))),
-					nullptr
-				)
-			));
-			return true;
-		}
-		return false;
-	});
-	mUpdateFunctions.push_back([this](float dt)
-	{
-		mUpdateFunctionWatch->OnUpdate(dt);
-		if (mUpdateFunctionWatch->GetAccTime() >= 1)
-		{
-			mExclamationMark->runAction(EaseExponentialOut::create(ScaleTo::create(0.3, 0)));
-			mUpdateFunctionWatch->OnReset();
-			return true;
-		}
-		return false;
-	});
-	mUpdateFunctions.push_back([this](float dt) 
-	{
-		mUpdateFunctionWatch->OnUpdate(dt);
-		if (mUpdateFunctionWatch->GetAccTime() >= 0.5)
-		{
-			mUpdateFunctionWatch->OnReset();
-			mMask->runAction(EaseExponentialOut::create(ScaleTo::create(0.85, 6)));
-			return true;
-		}
-		return false;
-	});//show mask
-	
-	mUpdateFunctions.push_back([this](float dt)
-	{
-		mUpdateFunctionWatch->OnUpdate(dt);
-		if (mTitleScript->size() > 0 && mTitleScriptIndex < mTitleScript->size())
-		{
-			if (mUpdateFunctionWatch->GetAccTime() >= 0.05)
-			{
-				if (mScriptCharIndex < mTitleScript->at(mTitleScriptIndex).length())
-				{
-					mTitleScriptLabel->setString(mTitleScript->at(mTitleScriptIndex).substr(0, mScriptCharIndex + 1));
-					mUpdateFunctionWatch->OnReset();
-					mScriptCharIndex++;
-				}
-				else
-				{
-					if (mIsTouchBegan)
-					{
-						mTitleScriptLabel->setString("\n");
-						mScriptCharIndex = 0;
-						mTitleScriptIndex++;
-					}
-				}
-			}
-			return false;
-		}
-		return true;
-	});//play script
-	mUpdateFunctions.push_back([this](float dt)
-	{
-		mUpdateFunctionWatch->OnUpdate(dt);
-		if (mUpdateFunctionWatch->GetAccTime() >= 1)
-		{
-			mMask->runAction(EaseExponentialOut::create(ScaleTo::create(0.3, 0)));
-			Director::getInstance()->replaceScene(TransitionFade::create(1, ScenePlay::createScene()));
-			return true;
-		}
-		return false;
-	});
+	//mUpdateFunctions.push_back([this](float dt)
+	//{
+	//	mUpdateFunctionWatch->OnUpdate(dt);
+	//	if (mUpdateFunctionWatch->GetAccTime() >= 0.5)
+	//	{
+	//		mUpdateFunctionWatch->OnReset();
+	//		mExclamationMark->runAction(EaseExponentialOut::create(ScaleTo::create(0.3, 1)));
+	//		mExclamationMark->runAction(RepeatForever::create(
+	//			Sequence::create(
+	//				EaseSineInOut::create(MoveBy::create(1, Vec2(0, -15))),
+	//				EaseSineInOut::create(MoveBy::create(1, Vec2(0, 15))),
+	//				nullptr
+	//			)
+	//		));
+	//		return true;
+	//	}
+	//	return false;
+	//});
+	//mUpdateFunctions.push_back([this](float dt)
+	//{
+	//	mUpdateFunctionWatch->OnUpdate(dt);
+	//	if (mUpdateFunctionWatch->GetAccTime() >= 1)
+	//	{
+	//		mExclamationMark->runAction(EaseExponentialOut::create(ScaleTo::create(0.3, 0)));
+	//		mUpdateFunctionWatch->OnReset();
+	//		return true;
+	//	}
+	//	return false;
+	//});
+	//mUpdateFunctions.push_back([this](float dt) 
+	//{
+	//	mUpdateFunctionWatch->OnUpdate(dt);
+	//	if (mUpdateFunctionWatch->GetAccTime() >= 0.5)
+	//	{
+	//		mUpdateFunctionWatch->OnReset();
+	//		mMask->runAction(EaseExponentialOut::create(ScaleTo::create(0.85, 6)));
+	//		return true;
+	//	}
+	//	return false;
+	//});//show mask
+	//mUpdateFunctions.push_back([this](float dt)
+	//{
+	//	mUpdateFunctionWatch->OnUpdate(dt);
+	//	if (mTitleScript->size() > 0 && mTitleScriptIndex < mTitleScript->size())
+	//	{
+	//		if (mUpdateFunctionWatch->GetAccTime() >= 0.05)
+	//		{
+	//			if (mScriptCharIndex < mTitleScript->at(mTitleScriptIndex).length())
+	//			{
+	//				mTitleScriptLabel->setString(mTitleScript->at(mTitleScriptIndex).substr(0, mScriptCharIndex + 1));
+	//				mUpdateFunctionWatch->OnReset();
+	//				mScriptCharIndex++;
+	//			}
+	//			else
+	//			{
+	//				if (mIsTouchBegan)
+	//				{
+	//					mTitleScriptLabel->setString("\n");
+	//					mScriptCharIndex = 0;
+	//					mTitleScriptIndex++;
+	//				}
+	//			}
+	//		}
+	//		return false;
+	//	}
+	//	return true;
+	//});//play script
+	//mUpdateFunctions.push_back([this](float dt)
+	//{
+	//	mUpdateFunctionWatch->OnUpdate(dt);
+	//	if (mUpdateFunctionWatch->GetAccTime() >= 1)
+	//	{
+	//		mMask->runAction(EaseExponentialOut::create(ScaleTo::create(0.3, 0)));
+	//		Director::getInstance()->replaceScene(TransitionFade::create(1, ScenePlay::createScene()));
+	//		return true;
+	//	}
+	//	return false;
+	//});
 #pragma endregion
 
 #pragma region GooglePlay

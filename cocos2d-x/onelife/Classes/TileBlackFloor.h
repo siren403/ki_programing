@@ -4,11 +4,14 @@
 #include "MapTile.h"
 
 class StopWatch;
+class SWPointColor;
+
 
 class TileBlackFloor : public MapTile
 {
 public:
 	CREATE_FUNC(TileBlackFloor);
+	virtual ~TileBlackFloor();
 	virtual bool init() override;
 	virtual void update(float dt) override;
 	
@@ -18,7 +21,8 @@ public:
 private:
 	StopWatch * mDurationWatch = nullptr;
 	StopWatch * mDelayWatch = nullptr;
-	GLProgramState * mGLState = nullptr;
+	SWPointColor * mPointColor = nullptr;
+	
 	float mDuration = 0;
 	float mDelay = 0;
 	bool mIsHighlight = false;
