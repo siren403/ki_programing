@@ -62,9 +62,9 @@ FiniteTimeAction * EffectEnemyKill::CreateAction(Vec2 playerPos, Vec2 enemyPos)
 		CallFunc::create([this]()
 	{
 		mLine_0->setScaleX(0);
-		mLine_0->setRotation(-mLineAngle);
+		mLine_0->setRotation(0);
 		mLine_1->setScaleX(0);
-		mLine_1->setRotation(mLineAngle);
+		mLine_1->setRotation(0);
 	}),
 		nullptr);
 	//effect->runAction(RepeatForever::create(seq));

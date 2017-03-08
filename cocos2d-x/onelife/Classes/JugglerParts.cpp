@@ -51,6 +51,8 @@ void JugglerCircle::UpdateIdle(float dt)
 		((PI * 2) * ((float)mRotateData.circleIndex / mRotateData.circleCount) + delta)
 		+ mRotateData.circlePivot + 0) * (mRotateData.circleRadius * mCircleRadiusRatio);
 	
+	mIdlePosition += mOffset;
+
 	if (delta >= PI * 2)
 	{
 		mIdleWatch->OnReset();
@@ -112,6 +114,16 @@ void JugglerCircle::SetCircleRadiusRatio(float ratio)
 float JugglerCircle::GetCircleRadiusRatio()
 {
 	return mCircleRadiusRatio;
+}
+
+CircleRotateData JugglerCircle::GetRotateData()
+{
+	return mRotateData;
+}
+
+void JugglerCircle::SetOffset(Vec2 offset)
+{
+	mOffset = offset;
 }
 
 void JugglerCircle::StartAnimation()

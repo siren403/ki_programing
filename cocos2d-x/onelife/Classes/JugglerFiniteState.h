@@ -117,6 +117,7 @@ private:
 	EasingData mMoveXEasingData;
 	EasingData mMoveYEasingData;
 	StopWatch * mStopWatch = nullptr;
+	Size mMapSize;
 
 	void InitMoveEasingData(EasingType type,Vec2 start,Vec2 end);
 	Vec2 GetCornerPosition(int index);

@@ -345,12 +345,12 @@ bool JugglerCornerAttackState::InitState()
 		return false;
 	}
 
-	Size mMapSize = ActorManager::GetInstance()->GetPlayMap()->GetMapContentSize();
+	mMapSize = ActorManager::GetInstance()->GetPlayMap()->GetMapContentSize();
 
-	mCornerPostions[0] = Vec2(mMapSize.width * 0.2f, mMapSize.height * 0.8f);
-	mCornerPostions[1] = Vec2(mMapSize.width * 0.8f, mMapSize.height * 0.8f);
-	mCornerPostions[2] = Vec2(mMapSize.width * 0.2f, mMapSize.height * 0.2f);
-	mCornerPostions[3] = Vec2(mMapSize.width * 0.8f, mMapSize.height * 0.2f);
+	mCornerPostions[0] = Vec2(mMapSize.width * 0.3f, mMapSize.height * 0.7f);
+	mCornerPostions[1] = Vec2(mMapSize.width * 0.7f, mMapSize.height * 0.7f);
+	mCornerPostions[2] = Vec2(mMapSize.width * 0.3f, mMapSize.height * 0.3f);
+	mCornerPostions[3] = Vec2(mMapSize.width * 0.7f, mMapSize.height * 0.3f);
 	mCornerIndex = 0;
 
 #pragma region corner patters
@@ -425,10 +425,7 @@ void JugglerCornerAttackState::OnUpdate(float dt)
 
 		int start = mCornerIndex;
 		int end = ++mCornerIndex;
-		if (end == 4)
-		{
-			end = 0;
-		}
+		
 		InitMoveEasingData(EasingType::Ease_QuadInOut, GetCornerPosition(start), GetCornerPosition(end));
 	}
 }
@@ -599,7 +596,7 @@ void JugglerColRowAttack::UpdateVerticalMove(float dt)
 {
 	EasingData data;
 	data.type = EasingType::Ease_QuadInOut;
-	data.duration = 2.6f;
+	data.duration = 3.6f;
 	data.currentTime = sin(PI * (mStopWatch->GetAccTime()/data.duration)) * data.duration;
 
 	Vec2 pos;
@@ -657,7 +654,7 @@ void JugglerColRowAttack::UpdateHorizonMove(float dt)
 {
 	EasingData data;
 	data.type = EasingType::Ease_QuadInOut;
-	data.duration = 2.6f;
+	data.duration = 3.6f;
 	data.currentTime = sin(PI * (mStopWatch->GetAccTime() / data.duration)) * data.duration;
 
 	Vec2 pos;

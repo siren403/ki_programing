@@ -63,8 +63,8 @@ bool Juggler::init()
 	}
 
 	mNextStates.push_back(Juggler::State::State_Idle);
-	mNextStates.push_back(Juggler::State::State_RushAttack);
 	mNextStates.push_back(Juggler::State::State_SeqAttack);
+	mNextStates.push_back(Juggler::State::State_RushAttack);
 	mNextStates.push_back(Juggler::State::State_CornerAttack);
 	mNextStates.push_back(Juggler::State::State_ColRowAttack);
 

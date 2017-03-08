@@ -43,6 +43,7 @@ private:
 	StopWatch * mAttackWatch = nullptr;
 	
 	Vec2 mIdlePosition;
+	Vec2 mOffset;
 
 	//attack
 	float mAttackDuration = 0;
@@ -64,6 +65,8 @@ public:
 	float GetRotateSpeedRatio();
 	void SetCircleRadiusRatio(float ratio);
 	float GetCircleRadiusRatio();
+	CircleRotateData GetRotateData();
+	void SetOffset(Vec2 offset);
 
 	void StartAnimation();
 

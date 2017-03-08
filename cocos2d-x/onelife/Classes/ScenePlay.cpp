@@ -21,7 +21,7 @@
 #define ROLL_CONTROL_TIME 0.3
 #define FOLLOW_RATIO_ENEMY 0.3
 #define FOLLOW_RATIO_ARROW 0.43
-#define GAMEEND_ENEMY_DEATH_COUNT 5
+#define GAMEEND_ENEMY_DEATH_COUNT 4
 #define PLYER_HIT_CIRCLE_COLOR Color3B(110,110,110)
 
 Scene * ScenePlay::createScene()
@@ -227,7 +227,6 @@ void ScenePlay::RoomSequence(int roomIndex, bool isReset)
 
 		CalculatePlayNodePosition(1);
 	}),
-		/*DelayTime::create(0.1),*/
 		FadeOut::create(0.15),
 		CallFunc::create([this]()
 	{
@@ -382,7 +381,7 @@ void ScenePlay::RoomClearSequence()
 		}
 		else
 		{
-			//ShowGameResult();
+			ShowGameResult();
 			mPlayNode->runAction(lastSeq);
 		}
 	}
@@ -487,6 +486,7 @@ void ScenePlay::ShowGameResult()
 				MoveTo::create(0,Vec2(0, mVisibleSize.height * 0.72f)),
 				EaseQuinticActionOut::create(RotateTo::create(0.3f, Vec3(0, 0, 0))),
 				nullptr),
+			DelayTime::create(0.6f),
 			Spawn::create(
 				EaseExponentialInOut::create(MoveBy::create(0.6, Vec2(-mKillCountBackground->getContentSize().width, 0))),
 				CallFunc::create([]() 
