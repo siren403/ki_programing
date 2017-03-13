@@ -111,17 +111,16 @@ float Juggler::GetCirclePivot()
 void Juggler::RandomChangeState()
 {
 	//NextState
-	int max = IntUtils::ClampI(GetDeathCount() + 1, 0, mNextStates.size() - 1);
+	/*int max = IntUtils::ClampI(GetDeathCount() + 1, 0, mNextStates.size() - 1);
 	EnemyFiniteState * state = nullptr;
 	int selectStateType = 0;
 	do
 	{
 		selectStateType = mNextStates[random(0, max)];
 		state = GetState(selectStateType);
-	} while (state == mCurrentFiniteState);
+	} while (state == mCurrentFiniteState);*/
 
-	//max = 2;
-	//int selectStateType = mNextStates[random(0, (int)mNextStates.size() - 1)];
+	int selectStateType = mNextStates[random(0, (int)mNextStates.size() - 1)];
 	ChangeState(selectStateType);
 }
 

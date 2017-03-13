@@ -3,11 +3,16 @@
 #include "StopWatch.h"
 #include "DataManager.h"
 #include "GameSharing.h"
+#include "SimpleAudioEngine.h"
+
+using namespace CocosDenshion;
 
 #pragma execution_character_set("utf-8")
 
 #define UNIFORM_LENS_OUTLINE 0.001
 #define UNIFORM_LENS_SIZE 1.5f
+
+#define SOUND_GAME_START "sound/NFF-accept.wav"
 
 Scene * SceneTitle::createScene()
 {
@@ -86,6 +91,13 @@ bool SceneTitle::init()
 
 #pragma endregion
 
+#pragma region Sound
+
+	SimpleAudioEngine::getInstance()->preloadEffect(SOUND_GAME_START);
+
+#pragma endregion
+
+
 #pragma region UpdateFunctions
 	mExclamationMark = Sprite::create("ui/exclamation_mark.png");
 	mExclamationMark->setPosition(mVisibleSize.width * 0.5, mVisibleSize.height * 0.55);
@@ -97,6 +109,7 @@ bool SceneTitle::init()
 	{
 		if (mIsTouchBegan)
 		{
+			SimpleAudioEngine::getInstance()->playEffect(SOUND_GAME_START);
 			Director::getInstance()->replaceScene(TransitionFade::create(1, ScenePlay::createScene()));
 			//mTitleScriptLabel->setString("\n");
 			//mTitleNameLabel->runAction(FadeOut::create(0.3f));
@@ -186,11 +199,6 @@ bool SceneTitle::init()
 
 #pragma region GooglePlay
 
-	//auto btn = MenuItemLabel::create()
-	/*auto icon = Sprite::create("ui/archievements.png");
-	icon->setPosition(mVisibleSize.width * 0.1f, mVisibleSize.height*0.1f);
-	mRenderNode->addChild(icon);*/
-
 	auto btnArchievements = MenuItemImage::create("ui/archievements.png", "ui/archievements.png", [](Ref * sender) 
 	{
 		GameSharing::ShowAchievementsUI();
@@ -204,32 +212,12 @@ bool SceneTitle::init()
 	btnLeaderboard->setPosition(mVisibleSize.width * 0.15f, mVisibleSize.height*0.04f);
 	btnLeaderboard->setScale(CC_CONTENT_SCALE_FACTOR() * 0.3f);
 
-	/*auto btnBoard = MenuItemFont::create("leaderboard", [](Ref * sender) 
-	{
-		GameSharing::ShowLeaderboards(0);
-	});
-	btnBoard->setColor(Color3B::RED);
-	btnBoard->setPosition(mCenterPosition.x, mVisibleSize.height*0.9f);*/
-	/*auto btnArchievements = MenuItemFont::create("archievements", [](Ref * sender)
-	{
-		GameSharing::ShowAchievementsUI();
-	});
-	btnArchievements->setPosition(mCenterPosition.x, mVisibleSize.height*0.8f);
-	btnArchievements->setColor(Color3B::RED);*/
-
-	/*auto btnsubmit = MenuItemFont::create("submit", [](Ref * sender)
-	{
-		GameSharing::SubmitScore(777, 0);
-		GameSharing::UnlockAchivement(0);
-	});*/
-	//btnsubmit->setPosition(mCenterPosition.x, mVisibleSize.height * 0.7f);
-	//btnsubmit->setColor(Color3B::RED);
-
 	auto google = Menu::create(btnLeaderboard, btnArchievements, nullptr);
 	google->setPosition(Vec2::ZERO);
 	mRenderNode->addChild(google, screenBezel->getLocalZOrder() + 1);
 
 #pragma endregion
+
 
 
 	this->scheduleUpdate();

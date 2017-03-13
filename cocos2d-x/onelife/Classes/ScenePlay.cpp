@@ -11,7 +11,9 @@
 #include "SceneTitle.h"
 #include "SWDrawCircle.h"
 #include "EffectEnemyKill.h"
+#include "SimpleAudioEngine.h"
 
+using namespace CocosDenshion;
 
 #define ZORDER_MAP 0
 #define ZORDER_PLAYER 1
@@ -23,6 +25,9 @@
 #define FOLLOW_RATIO_ARROW 0.43
 #define GAMEEND_ENEMY_DEATH_COUNT 4
 #define PLYER_HIT_CIRCLE_COLOR Color3B(110,110,110)
+#define SOUND_BGM_PLAY "sound/Laser_Groove.mp3"
+#define SOUND_SE_HIT_PLAYER "sound/NFF-exploding-baloon.wav"
+#define SOUND_SE_HIT_ENEMY "sound/NFF-stuff-up.wav"
 
 Scene * ScenePlay::createScene()
 {
@@ -44,6 +49,15 @@ bool ScenePlay::init()
 	srand(time(nullptr));
 
 	mVisibleSize = Director::getInstance()->getVisibleSize();
+
+#pragma region Sound
+	auto audio = SimpleAudioEngine::getInstance();
+	audio->preloadBackgroundMusic(SOUND_BGM_PLAY);
+	audio->preloadEffect(SOUND_SE_HIT_PLAYER);
+	audio->preloadEffect(SOUND_SE_HIT_ENEMY);
+	
+#pragma endregion
+
 
 	//root
 	mRenderNode = Node::create();
@@ -254,6 +268,7 @@ void ScenePlay::onEnter()
 	touchListener->onTouchEnded = CC_CALLBACK_2(ScenePlay::onTouchEnded, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
+	SimpleAudioEngine::getInstance()->playBackgroundMusic(SOUND_BGM_PLAY);
 }
 
 void ScenePlay::onExit()
@@ -264,6 +279,8 @@ void ScenePlay::onExit()
 	CC_SAFE_DELETE(mRollCircle);
 
 	ActorManager::GetInstance()->OnReferenceReset();
+
+
 	LayerColor::onExit();
 }
 
@@ -329,9 +346,9 @@ void ScenePlay::GameOverSequence()
 	mIsPlaying = false;
 	mPlayer->SetIsControl(false);
 	
-	mPlayerHitCircle->GetSprite()->setPosition(mPlayer->getPosition());
-	
+	SimpleAudioEngine::getInstance()->playEffect(SOUND_SE_HIT_PLAYER);
 
+	mPlayerHitCircle->GetSprite()->setPosition(mPlayer->getPosition());
 
 	auto gameOverSeq = Sequence::create(
 		Spawn::create(CreateCameraShake(), CreateHitCircle(), nullptr),
@@ -347,12 +364,15 @@ void ScenePlay::GameOverSequence()
 
 void ScenePlay::RoomClearSequence()
 {
+
 	mIsPlaying = false;
 	mKillCount++;
 
+	SimpleAudioEngine::getInstance()->playEffect(SOUND_SE_HIT_ENEMY);
+	SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
+
 	auto lastSeq = Spawn::create(
 		mEFEnemyKill->CreateAction(mPlayer->getPosition(), mCurrentEnemy->getPosition()),
-		//DelayTime::create(0.5f),
 		CreateCameraShake(),
 		ActionFloat::create(1.0f, 1, 0, [this](float value) 
 	{
@@ -365,12 +385,10 @@ void ScenePlay::RoomClearSequence()
 
 	if (DataManager::GetInstance()->GetMapData(mCurrentRoomIndex))
 	{
-		if (mCurrentEnemy->GetDeathCount() < GAMEEND_ENEMY_DEATH_COUNT)
+		/*if (mCurrentEnemy->GetDeathCount() < GAMEEND_ENEMY_DEATH_COUNT)
 		{
 			clearSeq = Sequence::create(
 				lastSeq,
-				//FadeIn::create(0.15),
-				//CallFunc::create([this]() { Director::getInstance()->end(); }),
 				CallFunc::create([this]() 
 			{
 				ShowKillCount();
@@ -383,7 +401,9 @@ void ScenePlay::RoomClearSequence()
 		{
 			ShowGameResult();
 			mPlayNode->runAction(lastSeq);
-		}
+		}*/
+		ShowGameResult();
+		mPlayNode->runAction(lastSeq);
 	}
 	else
 	{
@@ -405,8 +425,8 @@ FiniteTimeAction * ScenePlay::CreateCameraShake()
 	{
 		float shake = sin(value*10.0f) * powf(0.5f, value);
 		Vec2 pos = mPlayNode->getPosition();
-		pos.x += 4 * shake;
-		pos.y += 4 * shake;
+		pos.x += 6 * shake;
+		pos.y += 6 * shake;
 		mPlayNode->setPosition(pos);
 	});
 	return shake;
@@ -467,11 +487,12 @@ void ScenePlay::ShowKillCount()
 
 void ScenePlay::ShowGameResult()
 {
-	mKillCountLabel->setString(StringUtils::format("%d", mKillCount));
+	//mKillCountLabel->setString(StringUtils::format("%d", mKillCount));
+	mKillCountLabel->setString("\n");
 	mKillCountBackground->runAction(
 		Sequence::create(
 			EaseExponentialInOut::create(MoveTo::create(0.7f, Vec2(0, mKillCountBackground->getPosition().y))),
-			DelayTime::create(1),
+			//DelayTime::create(1),
 			RotateTo::create(0.15f,Vec3(110,0,0)),
 			CallFunc::create([this]() 
 			{	

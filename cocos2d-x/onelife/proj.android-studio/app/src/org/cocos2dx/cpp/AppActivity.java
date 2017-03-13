@@ -166,7 +166,6 @@ public class AppActivity extends BaseGameActivity {
 
         adView.setAdUnitId(AD_UNIT_ID);
 
-
         //이 구문은 테스트를 위한 용도이다 테스트에 쓸 디바이스들을 등록할 수 있다
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
