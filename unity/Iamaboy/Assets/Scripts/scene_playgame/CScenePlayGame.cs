@@ -6,24 +6,28 @@ using UnityEngine.UI;
 
 public class CScenePlayGame : MonoBehaviour
 {
+    private const int ENEMY_SLIME_COUNT = 3;
+    private const int ENEMY_REDSLIME_COUNT = 3;
 
     //Prefab Link
     public CAlberto PFAlberto = null;
+
     public CSlime PFSlime = null;
+    public CRedSlime PFRedSlime = null;
+    public CSkeleton PFSKeleton = null;
+    public CRabbit PFRabbit = null;
+
     public CBullet PFBullet = null;
 
 
+    //Instance
     public CUIPlayGame mpUIPlayGame = null;
-
     [SerializeField]
     private CAlberto mpAlberto = null;
     public CAlberto mAlberto { get { return mpAlberto; } }
-
-    public CSlime mpSlime = null;
-
     public GameObject mpPanelGameOver = null;
-
     public Text mpTextScore = null;
+    public List<CEnemy> mEnemyList = null;
 
     // Use this for initialization
     void Start()
@@ -37,15 +41,34 @@ public class CScenePlayGame : MonoBehaviour
         mpAlberto.SetScene(this);
         mpAlberto.CreateMy();
 
-        mpSlime = Instantiate<CSlime>(PFSlime, new Vector3(2,0,0), Quaternion.identity);
-        mpSlime.SetScene(this);
-        mpSlime.CreateMy();
+
+        mEnemyList = new List<CEnemy>();
+
+        CEnemy tpEnemy = null;
+        for (int i = 0; i < ENEMY_SLIME_COUNT; i++)
+        {
+            tpEnemy = Instantiate(PFSKeleton, new Vector3((3 + i * 0.5f), 0, 0), Quaternion.identity);
+            tpEnemy.SetScene(this);
+            tpEnemy.CreateMy();
+            mEnemyList.Add(tpEnemy);
+        }
+
+        for (int i = 0; i < ENEMY_REDSLIME_COUNT; i++)
+        {
+            tpEnemy = Instantiate(PFRabbit, new Vector3(-(3 + i * 0.5f), 0, 0), Quaternion.identity);
+            tpEnemy.SetScene(this);
+            tpEnemy.CreateMy();
+            mEnemyList.Add(tpEnemy);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        mpSlime.UpdateMy();
+        for(int ti = 0;ti < mEnemyList.Count;ti++)
+        {
+            mEnemyList[ti].UpdateMy();
+        }
     }
 
     public void ShowGameOver()
@@ -61,7 +84,10 @@ public class CScenePlayGame : MonoBehaviour
         mpAlberto.SetState(CAlberto.STATE.IDLE);
         mpAlberto.DoAni();
 
-        mpSlime.transform.position = new Vector3(2, 0, 0);
+        for (int i = 0; i < mEnemyList.Count; i++)
+        {
+            mEnemyList[i].transform.position = new Vector3(2 + i * 0.5f, 0, 0);
+        }
         CMyMgr.GetInst().mScore = 0;
         mpTextScore.text = CMyMgr.GetInst().mScore.ToString();
     }

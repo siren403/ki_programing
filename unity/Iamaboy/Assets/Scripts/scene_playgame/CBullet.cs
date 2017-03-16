@@ -63,6 +63,7 @@ public class CBullet : MonoBehaviour
             Debug.Log("CBullet.OnTriggerEnter2D");
             mpScene.AddScore();
             Destroy(this.gameObject);
+            collision.gameObject.SetActive(false);
         }
     }
 }

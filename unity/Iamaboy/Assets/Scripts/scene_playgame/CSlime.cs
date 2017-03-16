@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CSlime : MonoBehaviour
+public class CSlime : CEnemy
 {
-    private CScenePlayGame mpScene = null;
+   
 
-    protected Animator mpAnimator = null;
 
     // Use this for initialization
     void Start()
@@ -20,17 +19,12 @@ public class CSlime : MonoBehaviour
 
     }
 
-    public void CreateMy()
+    public override void CreateMy()
     {
-        mpAnimator = GetComponentInChildren<Animator>();
+        base.CreateMy();
     }
-    public void UpdateMy()
+    public override void UpdateMy()
     {
-        this.transform.position = Vector3.MoveTowards(this.transform.position,
-            mpScene.mAlberto.transform.position, 0.01f);
-    }
-    public void SetScene(CScenePlayGame tpScene)
-    {
-        mpScene = tpScene;
+        base.UpdateMy();   
     }
 }

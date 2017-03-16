@@ -1,0 +1,504 @@
+fileFormatVersion: 2
+guid: 88024f7d226d54c46a26c8dcab7fd89e
+timeCreated: 1489647600
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: zombie_3_dead_0
+    21300002: zombie_3_dead_1
+    21300004: zombie_3_dead_2
+    21300006: zombie_3_dead_3
+    21300008: zombie_3_dead_4
+    21300010: zombie_3_dead_5
+    21300012: zombie_3_dead_6
+    21300014: zombie_3_dead_7
+    21300016: zombie_3_dead_8
+    21300018: zombie_3_dead_9
+    21300020: zombie_3_dead_10
+    21300022: zombie_3_dead_11
+    21300024: zombie_3_dead_12
+    21300026: zombie_3_dead_13
+    21300028: zombie_3_dead_14
+    21300030: zombie_3_dead_15
+    21300032: zombie_3_dead_16
+    21300034: zombie_3_dead_17
+    21300036: zombie_3_dead_18
+    21300038: zombie_3_dead_19
+    21300040: zombie_3_dead_20
+    21300042: zombie_3_dead_21
+    21300044: zombie_3_dead_22
+    21300046: zombie_3_dead_23
+    21300048: zombie_3_dead_24
+    21300050: zombie_3_dead_25
+    21300052: zombie_3_dead_26
+    21300054: zombie_3_dead_27
+    21300056: zombie_3_dead_28
+    21300058: zombie_3_dead_29
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: 47
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: zombie_3_dead_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1801
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_1
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 1801
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_2
+      rect:
+        serializedVersion: 2
+        x: 742
+        y: 1801
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_3
+      rect:
+        serializedVersion: 2
+        x: 1113
+        y: 1801
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_4
+      rect:
+        serializedVersion: 2
+        x: 1484
+        y: 1801
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1554
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_6
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 1554
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_7
+      rect:
+        serializedVersion: 2
+        x: 742
+        y: 1554
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_8
+      rect:
+        serializedVersion: 2
+        x: 1113
+        y: 1554
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_9
+      rect:
+        serializedVersion: 2
+        x: 1484
+        y: 1554
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1307
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_11
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 1307
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_12
+      rect:
+        serializedVersion: 2
+        x: 742
+        y: 1307
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_13
+      rect:
+        serializedVersion: 2
+        x: 1113
+        y: 1307
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_14
+      rect:
+        serializedVersion: 2
+        x: 1484
+        y: 1307
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1060
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_16
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 1060
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_17
+      rect:
+        serializedVersion: 2
+        x: 742
+        y: 1060
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_18
+      rect:
+        serializedVersion: 2
+        x: 1113
+        y: 1060
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_19
+      rect:
+        serializedVersion: 2
+        x: 1484
+        y: 1060
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 813
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_21
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 813
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_22
+      rect:
+        serializedVersion: 2
+        x: 742
+        y: 813
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_23
+      rect:
+        serializedVersion: 2
+        x: 1113
+        y: 813
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_24
+      rect:
+        serializedVersion: 2
+        x: 1484
+        y: 813
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_25
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 566
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_26
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 566
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_27
+      rect:
+        serializedVersion: 2
+        x: 742
+        y: 566
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_28
+      rect:
+        serializedVersion: 2
+        x: 1113
+        y: 566
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: zombie_3_dead_29
+      rect:
+        serializedVersion: 2
+        x: 1484
+        y: 566
+        width: 371
+        height: 247
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
