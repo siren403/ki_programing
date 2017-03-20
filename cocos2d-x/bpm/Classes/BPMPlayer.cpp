@@ -59,4 +59,3 @@ void BPMPlayer::Stop()
 	mIsUpdate = false;
 	mCurrentTime = 0;
 }
-
