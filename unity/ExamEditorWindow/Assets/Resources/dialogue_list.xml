@@ -1,0 +1,18 @@
+<DialogueInfoList>
+  <DialogueInfo>
+    <mId>2</mId>
+    <mDialogue>2번째 대화입니다.</mDialogue>
+  </DialogueInfo>
+  <DialogueInfo>
+    <mId>3</mId>
+    <mDialogue>3번째 대화입니다.</mDialogue>
+  </DialogueInfo>
+  <DialogueInfo>
+    <mId>4</mId>
+    <mDialogue>4번째 대화입니다.</mDialogue>
+  </DialogueInfo>
+  <DialogueInfo>
+    <mId>5</mId>
+    <mDialogue>5번째 대화입니다.</mDialogue>
+  </DialogueInfo>
+</DialogueInfoList>

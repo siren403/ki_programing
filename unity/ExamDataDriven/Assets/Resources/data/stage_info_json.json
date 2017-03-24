@@ -1,0 +1,28 @@
+{
+    "stage_info":
+    [
+        {
+        "id":0,
+        "total_enemy_count":2,
+
+        "unit_info":[{"x":100, "y":100},
+                          {"x":200, "y":100}]
+        },
+        {
+        "id":1,
+        "total_enemy_count":3,
+
+         "unit_info":[{"x":100, "y":100},
+                           {"x":200, "y":100},
+                           {"x":300, "y":100}]
+
+        },
+        {
+        "id":2,
+        "total_enemy_count":1,
+
+        "unit_info":[{"x":100, "y":100}]
+        }
+     
+    ]
+}

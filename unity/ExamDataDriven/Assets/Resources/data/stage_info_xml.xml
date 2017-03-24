@@ -1,0 +1,53 @@
+<response>
+    <stage_info_list>
+        
+	<stage_info>
+        <id>0</id>
+        <total_enemy_count>2</total_enemy_count>
+        
+        <unit_info_list>
+            <unit_info>
+                <x>100</x>
+                <y>100</y>
+            </unit_info>
+            <unit_info>
+                <x>200</x>
+                <y>100</y>
+            </unit_info>
+        </unit_info_list>
+    </stage_info>
+    
+    <stage_info>
+        <id>1</id>
+        <total_enemy_count>3</total_enemy_count>
+        
+        <unit_info_list>
+            <unit_info>
+                <x>100</x>
+                <y>100</y>
+            </unit_info>
+            <unit_info>
+                <x>200</x>
+                <y>100</y>
+            </unit_info>
+            <unit_info>
+                <x>300</x>
+                <y>100</y>
+            </unit_info>
+        </unit_info_list>
+    </stage_info>
+    
+    <stage_info>
+        <id>2</id>
+        <total_enemy_count>1</total_enemy_count>
+        
+        <unit_info_list>
+            <unit_info>
+                <x>100</x>
+                <y>100</y>
+            </unit_info>
+        </unit_info_list>
+    </stage_info>
+    
+    </stage_info_list>
+</response>
