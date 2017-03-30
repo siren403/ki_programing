@@ -19,10 +19,22 @@ public class CMissile : MonoBehaviour
         }
     }
 
-    // Use this for initialization
-    void Start()
+    private string mTargetTag = string.Empty;
+
+    private SpriteRenderer _mSpriteRenderer = null;
+    private SpriteRenderer mSpriteRenderer
     {
+        get
+        {
+            if(_mSpriteRenderer == null)
+            {
+                _mSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            }
+            return _mSpriteRenderer;
+        }
     }
+
+    private int mATK = 0;
 
     void Update()
     {
@@ -45,10 +57,29 @@ public class CMissile : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void SetTargetTag(string tag)
     {
-        if(collision.CompareTag("tagWall"))
+        mTargetTag = tag;
+    }
+    public void SetATK(int tATK)
+    {
+        mATK = tATK;
+    }
+    public void SetColor(Color tColor)
+    {
+        mSpriteRenderer.color = tColor;
+    }
+
+    private void OnTriggerEnter2D(Collider2D tCollision)
+    {
+        if(tCollision.CompareTag("tagWall"))
         {
+            Destroy(this.gameObject);
+        }
+        else if(tCollision.CompareTag(mTargetTag))
+        {
+            CUnit tUnit = tCollision.GetComponent<CUnit>();
+            tUnit.Hit(this.mATK);
             Destroy(this.gameObject);
         }
     }
