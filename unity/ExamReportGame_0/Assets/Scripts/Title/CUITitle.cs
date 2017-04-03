@@ -23,10 +23,18 @@ public class CUITitle : MonoBehaviour
             .Subscribe((t) => OnClickBtnStartGame())
             .AddTo(this.gameObject);
 
-        mTxtHighScore.text = string.Format("HighScore : {0}", CGameDataMgr.GetInst().HighScore.Value);
-        mTxtGold.text = string.Format("Gold : {0}", CGameDataMgr.GetInst().Gold.Value);
+        SetTextHighScore(CGameDataMgr.GetInst().HighScore.Value);
+        SetTextGold(CGameDataMgr.GetInst().Gold.Value);
     }
 
+    private void SetTextHighScore(int value)
+    {
+        mTxtHighScore.text = string.Format("HighScore : {0}", value);
+    }
+    private void SetTextGold(int value)
+    {
+        mTxtGold.text = string.Format("Gold : {0}", value);
+    }
 
     public void OnClickBtnStartGame()
     {
@@ -50,5 +58,13 @@ public class CUITitle : MonoBehaviour
         SceneManager.LoadScene("CScenePlayGame");
         SceneManager.LoadScene("CScenePlayGameUI",LoadSceneMode.Additive);
         SceneManager.LoadScene("CScenePlayGameMap",LoadSceneMode.Additive);
+    }
+
+    public void OnClickBtnReset()
+    {
+        CGameDataMgr.GetInst().HighScore.Value = 0;
+        CGameDataMgr.GetInst().Gold.Value = 0;
+        SetTextHighScore(CGameDataMgr.GetInst().HighScore.Value);
+        SetTextGold(CGameDataMgr.GetInst().Gold.Value);
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CircleCollider2D))]
+
 public class CDetector2D : MonoBehaviour
 {
     public delegate void TriggerFunc(Collider2D other);

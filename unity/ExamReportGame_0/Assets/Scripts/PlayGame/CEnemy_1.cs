@@ -40,7 +40,7 @@ public class CEnemy_1 : CEnemy
 
     protected override IEnumerator DeadStateFunc()
     {
-        yield return base.DeadStateFunc();
+        yield return StartCoroutine(base.DeadStateFunc());
         mScene.OnGameClear();
     }
 }

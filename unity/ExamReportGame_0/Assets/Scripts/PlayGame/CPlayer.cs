@@ -17,7 +17,7 @@ public class CPlayer : CUnit
     private float mMapWidth = 1.6f;
     private float mMapHeight = 0.8f;
 
-    public float mFireDelay = 0.35f;
+    public float mFireDelay = 0.12f;
     private float mFireTime = 0.0f;
 
     public Transform mFireTransform = null;

@@ -74,13 +74,20 @@ public class CScenePlayGame : MonoBehaviour
     }
     public void OnGameClear()
     {
+        StartCoroutine(SeqGameClear());
+    }
+    private IEnumerator SeqGameClear()
+    {
         CGameDataMgr.GetInst().Gold.Value += mCurrentGold.Value;
 
         int prevScore = CGameDataMgr.GetInst().HighScore.Value;
-        if(prevScore < mCurrentScore.Value)
+
+        if (prevScore < mCurrentScore.Value)
         {
             CGameDataMgr.GetInst().HighScore.Value = mCurrentScore.Value;
         }
+
+        yield return new WaitForSeconds(2.3f);
 
         SceneManager.LoadScene("CSceneTitle");
     }
