@@ -43,7 +43,19 @@ public class AssetBundleTool : EditorWindow
             BuildTarget tBuildTarget;
             tBuildTarget = BuildTarget.StandaloneWindows64;
 
-            BuildPipeline.BuildAssetBundles(PATH, tOptions, tBuildTarget);
+            AssetBundleManifest manifest = BuildPipeline.BuildAssetBundles(PATH, tOptions, tBuildTarget);
+
+            foreach(var bundle in manifest.GetAllAssetBundles())
+            {
+                Debug.Log(bundle);
+                foreach(var dep in manifest.GetAllDependencies(bundle))
+                {
+                    Debug.Log(dep);
+                }
+                Debug.Log("----------------------");
+                foreach (var variant in manifest.GetAllAssetBundlesWithVariant())
+                    Debug.Log(variant);
+            }
 
             OpenDirectory();
 

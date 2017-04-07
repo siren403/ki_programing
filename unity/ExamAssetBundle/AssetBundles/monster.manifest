@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3143703397
+CRC: 3548093789
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 31851613f237fc6946b613e1b2a71c6e
+    Hash: 00143b311185eb56b7949aaf04b2cc3b
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 996491ade7eab721c34768565f5a0c10
+    Hash: f131d604cde7225bb90269222099b3e4
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -21,8 +21,6 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
-- Class: 74
-  Script: {instanceID: 0}
 - Class: 90
   Script: {instanceID: 0}
 - Class: 95
@@ -30,5 +28,5 @@ ClassTypes:
 - Class: 137
   Script: {instanceID: 0}
 Assets:
-- Assets/Level 1 Monster Pack/Models/Bat_Level_1.fbx
+- Assets/Level 1 Monster Pack/Prefabs/Bat/Bat_Green.prefab
 Dependencies: []
