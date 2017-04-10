@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3548093789
+CRC: 393783056
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 00143b311185eb56b7949aaf04b2cc3b
+    Hash: bae60d8c25c580054bcb217164e3bd43
   TypeTreeHash:
     serializedVersion: 2
     Hash: f131d604cde7225bb90269222099b3e4
@@ -28,5 +28,5 @@ ClassTypes:
 - Class: 137
   Script: {instanceID: 0}
 Assets:
-- Assets/Level 1 Monster Pack/Prefabs/Bat/Bat_Green.prefab
+- Assets/Scene/Bat_Green.prefab
 Dependencies: []

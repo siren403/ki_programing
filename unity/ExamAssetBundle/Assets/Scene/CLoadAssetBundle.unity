@@ -118,7 +118,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59827a174a3e0904ba4211caaf7075c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sample: {fileID: 0}
+  mLoadType: 1
+  SampleURL: http://cjcj09.dothome.co.kr/AssetBundles/bat
 --- !u!4 &527592125
 Transform:
   m_ObjectHideFlags: 0

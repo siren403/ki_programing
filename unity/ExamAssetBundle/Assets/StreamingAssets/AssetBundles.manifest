@@ -1,7 +1,16 @@
 ManifestFileVersion: 0
-CRC: 2813405111
+CRC: 569704315
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: monster
+      Name: bat
+      Dependencies: {}
+    Info_1:
+      Name: ghost
+      Dependencies: {}
+    Info_2:
+      Name: rabbit
+      Dependencies: {}
+    Info_3:
+      Name: slime
       Dependencies: {}
