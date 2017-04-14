@@ -7,3 +7,5 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scene/CLoadAssetBundle.unity
+  - enabled: 1
+    path: Assets/Scene/CSceneEmpty.unity
